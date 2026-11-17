@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deep Learning Unit IV Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:wght@600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: a contents rail on the left, one reading column on the right.
+     Every topic repeats the same ten numbered blocks. Light theme only, as requested. */
+  color-scheme: light;
+  --bg:#f3f5f9; --paper:#ffffff; --ink:#18223a; --muted:#57627a; --line:#d6dce8;
+  --accent:#2b54c9; --accent-soft:#e6ecfb;
+  --warm:#c2410c; --warm-soft:#fdeee4;
+  --good:#1b7f4b; --good-soft:#e3f4ea;
+  --mark:#fff1bf;
+  --font-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --font-body:"Atkinson Hyperlegible","Segoe UI",Arial,sans-serif;
+  --font-mono:"JetBrains Mono",Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--font-body)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:3px}
+.shell{display:grid;grid-template-columns:268px minmax(0,1fr)}
+
+/* contents rail */
+.rail{position:sticky;top:0;align-self:start;max-height:100vh;overflow:auto;padding:22px 16px 24px;background:var(--paper);border-right:1px solid var(--line)}
+.rail .brand{font:700 20px/1.2 var(--font-display);margin:0 0 2px}
+.rail .sub{font-size:13px;color:var(--muted);margin:0 0 14px}
+.rail ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.rail li{display:flex;align-items:center;gap:6px}
+.rail a{flex:1;display:block;padding:7px 9px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.3}
+.rail a:hover{background:var(--bg)}
+.rail a.on{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.rail a .n{font:600 12px var(--font-mono);color:var(--muted);margin-right:6px}
+.rail input[type=checkbox]{width:17px;height:17px;accent-color:var(--good);flex:none;margin:0}
+.rail .prog{margin:14px 0 0;font-size:13px;color:var(--muted)}
+.rail .hint{font-size:12px;color:var(--muted);margin:4px 0 0}
+
+main{padding:30px clamp(16px,4vw,52px) 90px;max-width:960px;min-width:0}
+h1{font:700 clamp(30px,5vw,46px)/1.08 var(--font-display);margin:6px 0 10px;text-wrap:balance}
+h2{font:700 clamp(25px,3.6vw,34px)/1.15 var(--font-display);margin:4px 0 0;text-wrap:balance}
+h3,h4{text-wrap:balance}
+p,li{max-width:72ch}
+.eyebrow{font:600 12px var(--font-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin:0}
+.syllabus{color:var(--muted);font-size:15.5px;margin:0 0 14px}
+.inside{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.inside li{font:600 13px var(--font-mono);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+.how{margin:18px 0 0;font-size:15.5px}
+.how ol{margin:8px 0 0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 16px;counter-reset:b}
+.how li{counter-increment:b;font-size:14.5px}
+.how li::before{content:counter(b);font:600 11px var(--font-mono);background:var(--ink);color:#fff;border-radius:4px;padding:1px 5px;margin-right:7px}
+
+.block{margin-top:44px;scroll-margin-top:70px}
+.topic{margin-top:64px;padding-top:18px;border-top:3px solid var(--ink);scroll-margin-top:60px}
+.sec{margin-top:30px}
+.sec>h3{display:flex;align-items:center;gap:10px;font:700 18px/1.3 var(--font-display);margin:0 0 10px}
+.sec>h3 b{font:600 12px var(--font-mono);color:#fff;background:var(--ink);border-radius:4px;padding:2px 0;width:28px;text-align:center;flex:none}
+.sec h4{font:700 15px var(--font-body);margin:0 0 6px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.sec ol,.sec ul{margin:0;padding-left:22px}
+.sec li{margin:4px 0}
+.sec p{margin:0 0 10px}
+
+.sec-def .def{margin:0;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--ink);border-radius:0 8px 8px 0;padding:14px 18px;font-size:18.5px;line-height:1.5}
+.sec-def mark{background:linear-gradient(transparent 58%,var(--mark) 58%);color:inherit}
+
+.diagram{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto}
+.diagram svg{display:block;width:100%;min-width:600px;height:auto}
+.diagram figcaption,.demo figcaption{font-size:14px;color:var(--muted);margin-top:8px}
+.dg text{font-family:var(--font-body);font-size:13px;fill:var(--ink)}
+.dg .m{fill:var(--muted);font-size:12px}
+.dg .s{font-size:11.5px;fill:var(--muted)}
+.dg .b{font-weight:700}
+.dg .ta{fill:var(--accent)} .dg .tw{fill:var(--warm)} .dg .tg{fill:var(--good)}
+.dg .k{stroke:var(--ink);fill:none;stroke-width:1.6}
+.dg .kl{stroke:#9aa5ba;fill:none;stroke-width:1.3}
+.dg .ka{stroke:var(--accent);fill:none;stroke-width:2.2}
+.dg .kw{stroke:var(--warm);fill:none;stroke-width:2.2}
+.dg .kg{stroke:var(--good);fill:none;stroke-width:2.2}
+.dg .dash{stroke-dasharray:6 5}
+.dg .node{fill:var(--paper);stroke:var(--ink);stroke-width:1.8}
+.dg .box{fill:var(--paper);stroke:var(--ink);stroke-width:1.6}
+.dg .pa{fill:var(--accent)} .dg .pw{fill:var(--warm)}
+.dg a{cursor:pointer}
+.dg a:hover .box{fill:var(--accent-soft)}
+
+.demo{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px}
+.demo canvas{display:block;width:100%;background:#fbfcfe;border:1px solid var(--line);border-radius:6px}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;margin-top:12px}
+.ctl{display:flex;align-items:center;gap:8px;font-size:15px}
+.ctl output,.ctl .val{font:600 14px var(--font-mono);font-variant-numeric:tabular-nums;min-width:44px}
+input[type=range]{accent-color:var(--accent);width:150px}
+select{font:15px var(--font-body);padding:6px 8px;border:1px solid var(--ink);border-radius:6px;background:var(--paper);color:var(--ink)}
+button{font:700 15px var(--font-body);padding:8px 14px;border-radius:6px;border:1.5px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}
+button.ghost{background:var(--paper);color:var(--ink)}
+button:disabled{opacity:.45;cursor:default}
+.readout{margin:12px 0 0;font:14px/1.7 var(--font-mono);font-variant-numeric:tabular-nums;background:var(--bg);border-radius:6px;padding:8px 12px;overflow-x:auto}
+.readout b{color:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;margin-top:10px}
+.legend i{display:inline-block;width:22px;height:4px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.observe{margin:12px 0 0;border-left:4px solid var(--good);background:var(--good-soft);padding:10px 14px;border-radius:0 6px 6px 0;font-size:15.5px;max-width:none}
+.stepbox{margin-top:12px;border:1px solid var(--line);border-radius:6px;padding:12px 14px;background:var(--bg);min-height:118px}
+.stepbox .phase{display:inline-block;font:600 12px var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:#fff;border-radius:4px;padding:2px 8px;margin-right:8px}
+.stepbox .ttl{font-weight:700}
+.stepbox .eq{font:14.5px/1.75 var(--font-mono);margin:8px 0 0;overflow-x:auto;white-space:nowrap}
+.stepbox .why{font-size:15px;margin:8px 0 0;color:var(--muted)}
+
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px}
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:18px}
+.three>div{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px;border-top:4px solid var(--good)}
+.three>div:nth-child(2){border-top-color:var(--warm)}
+.three>div:nth-child(3){border-top-color:var(--accent)}
+.three li{font-size:15.5px}
+
+.tablewrap{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th,td{border-bottom:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+tr:last-child td{border-bottom:0}
+thead th{background:#e9edf5;font-weight:700}
+tbody th{font-weight:700;background:#f6f8fb;width:24%}
+td.num,th.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.formulas{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:4px 16px;overflow-x:auto}
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.sym{margin-top:12px}
+.sym td:first-child{width:92px;white-space:nowrap}
+.worked{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 18px}
+.worked,.two>div,.three>div,.qa,.long,.sec-def .def,.sec-mem,.observe,.sheet .grid>div{overflow-x:auto}
+.worked .given{color:var(--muted);font-size:15.5px}
+.worked ol{padding-left:22px}
+.worked .ans{font-weight:700;border-top:1px dashed var(--line);padding-top:8px;margin:10px 0 0}
+.note{font-size:15px;color:var(--muted);margin-top:10px}
+
+.sec-exam{background:var(--accent-soft);border-radius:8px;padding:16px 18px 18px}
+.qa{margin:0 0 12px;background:var(--paper);border-radius:6px;padding:10px 14px}
+.qa .q{font-weight:700;margin:0 0 4px}
+.qa .q span,.long .q span{font:600 11.5px var(--font-mono);background:var(--accent);color:#fff;border-radius:4px;padding:2px 7px;margin-right:8px;white-space:nowrap}
+.qa .a{margin:0}
+.long{background:var(--paper);border-radius:6px;padding:12px 14px;border:2px solid var(--accent)}
+.long .q{font-weight:700;margin:0 0 8px}
+.long .q span{background:var(--ink)}
+.long ol{padding-left:22px}
+.long .draw{margin:10px 0 0;font-size:15.5px}
+
+.sec-mem{border:2px dashed var(--warm);background:var(--warm-soft);border-radius:8px;padding:14px 18px}
+.sec-mem>h3 b{background:var(--warm)}
+.sec-mem p{margin:0 0 6px}
+
+/* quiz */
+.quiz-top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin:10px 0 16px}
+.score{font:600 15px var(--font-mono)}
+.mcq{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:12px}
+.mcq .qt{font-weight:700;margin:0 0 10px}
+.mcq .qt span{font:600 12px var(--font-mono);color:var(--muted);margin-right:8px}
+.mcq .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+.mcq .opts button{background:var(--paper);color:var(--ink);border:1.5px solid var(--line);text-align:left;font-weight:400;line-height:1.35}
+.mcq .opts button:hover:not(:disabled){border-color:var(--ink)}
+.mcq .opts button:disabled{opacity:1}
+.mcq .opts button.right{background:var(--good-soft);border-color:var(--good);font-weight:700}
+.mcq .opts button.wrong{background:var(--warm-soft);border-color:var(--warm)}
+.mcq .fb{margin:10px 0 0;font-size:15.5px;padding:8px 12px;border-radius:6px}
+.mcq .fb.ok{background:var(--good-soft)} .mcq .fb.no{background:var(--warm-soft)}
+
+/* revision sheet */
+.sheet{background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:18px 20px}
+.sheet .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px 26px}
+.sheet h3{font:700 16px var(--font-display);margin:0 0 4px;color:var(--accent)}
+.sheet ul{margin:0;padding-left:18px}
+.sheet li{font-size:15px;margin:2px 0}
+.sheet .last{margin-top:16px;border-top:1px dashed var(--line);padding-top:12px}
+
+
+/* Unit II additions */
+.timeline{position:relative;min-width:800px;height:200px;margin:4px 0 0}
+.timeline .axis{position:absolute;left:0;right:0;top:98px;height:4px;background:var(--line);border-radius:2px}
+.timeline .winter{position:absolute;top:90px;height:20px;background:repeating-linear-gradient(135deg,#dfe6f3 0 6px,#eef2f9 6px 12px);border-radius:4px}
+.timeline .winter span{position:absolute;top:34px;left:50%;transform:translateX(-50%);font:600 11px var(--font-mono);color:var(--muted);white-space:nowrap}
+.tl-item{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;color:var(--ink);padding:0;font-weight:400;width:88px;cursor:pointer}
+.tl-item .yr{font:700 14px var(--font-mono);background:var(--paper);border:1.5px solid var(--ink);border-radius:999px;padding:2px 9px}
+.tl-item .nm{font-size:12.5px;line-height:1.25;text-align:center}
+.tl-item .dot{width:14px;height:14px;border-radius:50%;background:var(--paper);border:3px solid var(--ink)}
+.tl-item.up{top:6px}.tl-item.up .dot{order:3}
+.tl-item.down{top:93px}.tl-item.down .dot{order:-1}
+.tl-item.key .yr{background:var(--ink);color:#fff}
+.tl-item.key .dot{background:var(--accent);border-color:var(--accent)}
+.tl-item.sel .yr{background:var(--accent);border-color:var(--accent);color:#fff}
+.tl-item.sel .dot{background:var(--warm);border-color:var(--warm)}
+.tl-card{margin-top:12px;border:1px solid var(--line);border-left:5px solid var(--accent);background:var(--bg);border-radius:0 8px 8px 0;padding:12px 16px;min-height:120px}
+.tl-card h3{font:700 18px var(--font-display);margin:0 0 4px}
+.tl-card .who{font-size:14.5px;color:var(--muted);margin:0 0 6px}
+.tl-card p{margin:0 0 6px}
+.mini{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:8px;margin-top:12px}
+.mini canvas{background:#fbfcfe;border:2px solid var(--line);border-radius:6px;width:100%;cursor:pointer}
+.mini canvas.ok{border-color:var(--good)} .mini canvas.no{border-color:var(--warm)} .mini canvas.cur{outline:3px solid var(--accent);outline-offset:1px}
+.subdemo{margin-top:22px}
+.subdemo>h4{font:700 16px var(--font-display);margin:0 0 8px;color:var(--ink);text-transform:none;letter-spacing:0}
+.gridwrap{overflow-x:auto}
+.conv{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.conv table{width:auto;border-collapse:separate;border-spacing:3px;font:600 14px var(--font-mono)}
+.conv td{width:34px;height:34px;padding:0;text-align:center;vertical-align:middle;border:1px solid var(--line);border-radius:4px;background:var(--paper)}
+.conv td.on{outline:3px solid var(--accent);outline-offset:-1px}
+.conv td.pad{background:#eef1f6;color:#9aa5ba}
+.conv td.cur{outline:3px solid var(--warm);outline-offset:-1px}
+.conv .cap{font:700 13.5px var(--font-body);margin:0 0 4px}
+.conv .op{align-self:center;font:700 22px var(--font-body);color:var(--muted)}
+
+/* Unit V additions */
+.tokens{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin:4px 0 0}
+.tk{display:inline-flex;flex-direction:column;align-items:center;gap:3px;border:1px solid var(--line);border-radius:6px;padding:5px 9px;background:var(--paper);font-size:16.5px;min-width:44px}
+.tk small{font:600 11.5px var(--font-mono);color:var(--muted)}
+.tk.e-PER{background:#e6ecfb;border-color:#2b54c9}.tk.e-PER small{color:#2b54c9}
+.tk.e-ORG{background:#fdeee4;border-color:#c2410c}.tk.e-ORG small{color:#c2410c}
+.tk.e-LOC{background:#e3f4ea;border-color:#1b7f4b}.tk.e-LOC small{color:#1b7f4b}
+.tk.e-DATE{background:#efe9f8;border-color:#6b4fa3}.tk.e-DATE small{color:#6b4fa3}
+.span-view{font-size:18px;line-height:2.4;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+.span-view .ent{border-radius:5px;padding:3px 6px;border:1.5px solid}
+.span-view .ent b{font:700 11px var(--font-mono);margin-left:6px;vertical-align:2px}
+.ent.e-PER{background:#e6ecfb;border-color:#2b54c9}.ent.e-PER b{color:#2b54c9}
+.ent.e-ORG{background:#fdeee4;border-color:#c2410c}.ent.e-ORG b{color:#c2410c}
+.ent.e-LOC{background:#e3f4ea;border-color:#1b7f4b}.ent.e-LOC b{color:#1b7f4b}
+.ent.e-DATE{background:#efe9f8;border-color:#6b4fa3}.ent.e-DATE b{color:#6b4fa3}
+.seg{display:inline-flex;flex-wrap:wrap;max-width:100%;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden}
+select{max-width:100%}
+.ctl{flex-wrap:wrap;max-width:100%}
+.seg button{border:0;border-radius:0;background:var(--paper);color:var(--ink);font-weight:600;padding:7px 12px}
+.seg button+button{border-left:1.5px solid var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.emb table{border-collapse:separate;border-spacing:2px;width:auto;font:600 12.5px var(--font-mono)}
+.emb td,.emb th{padding:0;border:0;text-align:center;vertical-align:middle;height:28px}
+.emb td.c{width:44px;border-radius:3px}
+.emb th.w{font:600 14px var(--font-body);text-align:right;padding-right:8px;background:none}
+.emb tr.on td.c{outline:2.5px solid var(--warm);outline-offset:-1px}
+.emb td.fm{width:56px;border:1px solid var(--line);border-radius:4px;background:var(--paper)}
+.emb td.fm.cur{outline:2.5px solid var(--warm)} .emb td.fm.max{background:var(--good-soft);border-color:var(--good)}
+
+/* Unit III additions */
+.archcard{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:18px;margin-top:12px}
+@media (max-width:640px){.archcard{grid-template-columns:1fr}}
+.archcard dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:15.5px}
+.archcard dt{font-weight:700;color:var(--muted)}
+.archcard dd{margin:0}
+.archcard .big{font:700 30px var(--font-display);margin:0}
+.archcard ul{margin:6px 0 0;padding-left:20px}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 18px;margin-top:10px}
+.calc label{display:flex;flex-direction:column;gap:4px;font-size:14.5px;font-weight:700}
+.calc input[type=number]{font:600 16px var(--font-mono);padding:6px 8px;border:1.5px solid var(--ink);border-radius:6px;width:100%;background:var(--paper);color:var(--ink)}
+.bnt td{width:40px;height:34px;text-align:center;font:600 13.5px var(--font-mono);border:1px solid var(--line);border-radius:4px;background:var(--paper);padding:0}
+.bnt td.hl{background:var(--accent-soft);outline:2.5px solid var(--accent);outline-offset:-2px}
+.bnt table{border-collapse:separate;border-spacing:3px;width:auto}
+
+/* Unit IV additions */
+.lstm .fl{transition:opacity .2s}
+.lstm.focus .fl{opacity:.18}
+.lstm.focus .fl.on{opacity:1}
+.lstm .gate{cursor:pointer}
+.lstm .gate:hover rect,.lstm .gate:hover circle{stroke-width:3}
+.lstm .gate:focus-visible{outline:none}
+.lstm .gate:focus-visible rect,.lstm .gate:focus-visible circle{stroke:var(--accent);stroke-width:3.4}
+.qg{display:grid;grid-template-columns:repeat(4,minmax(64px,1fr));gap:4px;max-width:440px}
+.qg button{position:relative;aspect-ratio:1;border:1.5px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);font:600 11px var(--font-mono);padding:0}
+.qg button.goal{background:var(--good-soft);border-color:var(--good)}
+.qg button.pit{background:var(--warm-soft);border-color:var(--warm)}
+.qg button.wall{background:#5b6578;border-color:#5b6578;color:#fff}
+.qg button.sel{outline:3px solid var(--accent);outline-offset:1px}
+.qg button.agent::after{content:"";position:absolute;width:30%;height:30%;left:35%;top:35%;border-radius:50%;background:var(--accent)}
+.qg .arr{font:700 22px var(--font-body);color:var(--accent)}
+
+@media (max-width:900px){
+  .shell{display:block}
+  .rail{position:sticky;top:0;z-index:5;max-height:none;padding:8px 12px;border-right:0;border-bottom:1px solid var(--line)}
+  .rail .brand,.rail .sub,.rail .prog,.rail .hint{display:none}
+  .rail ol{flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:2px}
+  .rail li{flex:none}
+  .rail a{white-space:nowrap;font-size:14px;padding:6px 8px}
+}
+</style>
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'},options:{enableMenu:false}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--ink)"/></marker>
+<marker id="ahA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--accent)"/></marker>
+<marker id="ahW" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--warm)"/></marker>
+<marker id="ahG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--good)"/></marker>
+</defs></svg>
+
+<div class="shell">
+<nav class="rail" aria-label="Contents">
+  <p class="brand">Deep Learning</p>
+  <p class="sub">Unit IV study guide</p>
+  <ol id="toc">
+    <li><a href="#glance">Unit at a glance</a></li>
+    <li><a href="#t-nc"><span class="n">1</span>Non-convex optimization</a><input type="checkbox" id="rev-1" aria-label="Mark non-convex optimization as revised"></li>
+    <li><a href="#t-opt"><span class="n">2</span>Stochastic optimization</a><input type="checkbox" id="rev-2" aria-label="Mark stochastic optimization as revised"></li>
+    <li><a href="#t-gen"><span class="n">3</span>Generalization</a><input type="checkbox" id="rev-3" aria-label="Mark generalization as revised"></li>
+    <li><a href="#t-stn"><span class="n">4</span>Spatial transformer</a><input type="checkbox" id="rev-4" aria-label="Mark spatial transformer networks as revised"></li>
+    <li><a href="#t-rnn"><span class="n">5</span>Recurrent networks</a><input type="checkbox" id="rev-5" aria-label="Mark recurrent networks as revised"></li>
+    <li><a href="#t-lstm"><span class="n">6</span>LSTM</a><input type="checkbox" id="rev-6" aria-label="Mark LSTM as revised"></li>
+    <li><a href="#t-lm"><span class="n">7</span>RNN language models</a><input type="checkbox" id="rev-7" aria-label="Mark RNN language models as revised"></li>
+    <li><a href="#t-rl"><span class="n">8</span>Deep reinforcement learning</a><input type="checkbox" id="rev-8" aria-label="Mark deep reinforcement learning as revised"></li>
+    <li><a href="#quiz">Self-test quiz</a></li>
+    <li><a href="#revision">Last-minute revision</a></li>
+  </ol>
+  <p class="prog" id="prog">0 of 8 topics revised</p>
+  <p class="hint">Tick a topic when you have revised it. Ticks are remembered in this browser.</p>
+</nav>
+
+<main>
+<header>
+  <p class="eyebrow">Deep Learning · Unit IV · 9 hours</p>
+  <h1>Optimization in Deep Learning</h1>
+  <p class="syllabus">Non-convex optimization for deep networks · Stochastic optimization · Generalization in neural networks · Spatial transformer networks · Recurrent networks · LSTM · Recurrent neural network language models · Word-level RNNs · Deep reinforcement learning.</p>
+  <ul class="inside">
+    <li>8 topics</li><li>9 interactive demos</li><li>24 two-mark answers</li><li>8 long-answer outlines</li><li>10 MCQs</li>
+  </ul>
+  <div class="how">
+    Every topic has the same ten blocks, in the order you would build an answer. Word-level RNNs are covered inside Topic 7 (RNN language models), with a word-level vs character-level comparison.
+    <ol><li>Definition</li><li>Diagram</li><li>Demo</li><li>Explanation</li><li>Formulas</li><li>Worked example</li><li>Pros, cons, uses</li><li>Comparison</li><li>Exam corner</li><li>Memory trick</li></ol>
+  </div>
+</header>
+
+<!-- ================= UNIT AT A GLANCE ================= -->
+<section class="block" id="glance">
+  <p class="eyebrow">Concept map</p>
+  <h2>Unit at a glance</h2>
+  <p>The first three topics are about <em>how</em> deep networks are trained: the loss surface is non-convex, we descend it with stochastic optimizers, and we want the result to generalize. The rest are models whose training raises special optimization problems: a spatial transformer must be differentiable end to end, RNNs suffer vanishing gradients that the LSTM fixes, language models are RNNs trained to predict the next word, and deep RL optimizes a reward instead of a labelled loss.</p>
+  <figure class="diagram">
+    <svg class="dg" viewBox="0 0 900 290" role="img" aria-label="Concept map of Unit IV: optimization topics (non-convex loss, stochastic optimizers, generalization) feed into the models: spatial transformer networks, recurrent networks leading to LSTM leading to RNN language models, and deep reinforcement learning.">
+      <rect x="8" y="10" width="884" height="96" rx="10" class="kl dash"/><text x="20" y="31" class="s b">HOW WE TRAIN (optimization)</text>
+      <a href="#t-nc"><rect class="box" x="40" y="42" width="230" height="52" rx="8"/><text x="155" y="64" text-anchor="middle" class="b">1 · Non-convex loss</text><text x="155" y="82" text-anchor="middle" class="s">local minima, saddles, plateaus</text></a>
+      <a href="#t-opt"><rect class="box" x="335" y="42" width="230" height="52" rx="8"/><text x="450" y="64" text-anchor="middle" class="b">2 · Stochastic optimizers</text><text x="450" y="82" text-anchor="middle" class="s">SGD, Momentum, RMSProp, Adam</text></a>
+      <a href="#t-gen"><rect class="box" x="630" y="42" width="230" height="52" rx="8"/><text x="745" y="64" text-anchor="middle" class="b">3 · Generalization</text><text x="745" y="82" text-anchor="middle" class="s">train vs validation, early stopping</text></a>
+      <g class="k"><line x1="270" y1="68" x2="333" y2="68" marker-end="url(#ah)"/><line x1="565" y1="68" x2="628" y2="68" marker-end="url(#ah)"/></g>
+      <text x="302" y="60" text-anchor="middle" class="s">descend</text><text x="597" y="60" text-anchor="middle" class="s">well</text>
+      <line class="kg" x1="450" y1="108" x2="450" y2="132" marker-end="url(#ahG)"/><text x="462" y="126" class="s tg">applied to the models below</text>
+      <rect x="8" y="136" width="884" height="146" rx="10" class="kl dash"/><text x="20" y="157" class="s b">MODELS WITH SPECIAL OPTIMIZATION NEEDS</text>
+      <a href="#t-stn"><rect class="box" x="24" y="172" width="170" height="56" rx="8"/><text x="109" y="196" text-anchor="middle" class="b">4 · Spatial transformer</text><text x="109" y="214" text-anchor="middle" class="s">learnable warping</text></a>
+      <a href="#t-rnn"><rect class="box" x="230" y="172" width="150" height="56" rx="8" style="fill:var(--accent-soft)"/><text x="305" y="196" text-anchor="middle" class="b">5 · RNN</text><text x="305" y="214" text-anchor="middle" class="s">BPTT, vanishing grad.</text></a>
+      <a href="#t-lstm"><rect class="box" x="414" y="172" width="150" height="56" rx="8" style="fill:var(--accent-soft)"/><text x="489" y="196" text-anchor="middle" class="b">6 · LSTM</text><text x="489" y="214" text-anchor="middle" class="s">gates fix it</text></a>
+      <a href="#t-lm"><rect class="box" x="598" y="172" width="150" height="56" rx="8" style="fill:var(--accent-soft)"/><text x="673" y="196" text-anchor="middle" class="b">7 · RNN LM</text><text x="673" y="214" text-anchor="middle" class="s">word-level RNNs</text></a>
+      <a href="#t-rl"><rect class="box" x="776" y="172" width="104" height="56" rx="8" style="fill:var(--warm-soft)"/><text x="828" y="196" text-anchor="middle" class="b">8 · Deep RL</text><text x="828" y="214" text-anchor="middle" class="s">DQN</text></a>
+      <g class="ka"><line x1="380" y1="200" x2="412" y2="200" marker-end="url(#ahA)"/><line x1="564" y1="200" x2="596" y2="200" marker-end="url(#ahA)"/></g>
+      <text x="489" y="256" text-anchor="middle" class="s">sequence models: an RNN with LSTM cells trained to predict the next word</text>
+    </svg>
+    <figcaption>Click a box to jump to that topic.</figcaption>
+  </figure>
+</section>
+
+<!-- ================= TOPIC 1: NON-CONVEX ================= -->
+<section class="topic" id="t-nc">
+  <p class="eyebrow">Topic 1 of 8 · Optimization</p>
+  <h2>Non-convex Optimization for Deep Networks</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">The loss function of a deep network is <mark>non-convex</mark> in its weights: unlike a single bowl, its surface has many <mark>local minima, saddle points and flat plateaus</mark>, so gradient-based training can only guarantee reaching a point where the gradient is near zero, not the global minimum.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 280" role="img" aria-label="Left: a one-dimensional loss curve showing a plateau, a local minimum, a hump, and the global minimum, compared with a convex bowl. Right: a saddle point, where the surface curves up in one direction and down in the other.">
+        <line class="k" x1="30" y1="230" x2="560" y2="230" marker-end="url(#ah)"/><line class="k" x1="30" y1="230" x2="30" y2="20" marker-end="url(#ah)"/>
+        <text x="560" y="250" text-anchor="end" class="m">weight w</text><text x="38" y="22" class="m">loss L(w)</text>
+        <path class="kw" style="stroke-width:3" d="M40,70 C80,72 120,74 160,78 C200,82 215,150 250,160 C285,170 300,110 330,105 C365,100 380,205 430,212 C470,218 500,140 545,40"/>
+        <path class="kl dash" d="M60,40 Q290,330 530,40"/><text x="440" y="34" class="s">convex bowl: one minimum</text>
+        <text x="100" y="62" text-anchor="middle" class="b">plateau</text><text x="100" y="98" text-anchor="middle" class="s">gradient ≈ 0, slow</text>
+        <circle cx="250" cy="160" r="6" style="fill:var(--accent)"/><text x="250" y="186" text-anchor="middle" class="b ta">local minimum</text>
+        <circle cx="430" cy="212" r="6" style="fill:var(--good)"/><text x="430" y="200" text-anchor="middle" class="b tg">global minimum</text>
+        <text x="330" y="92" text-anchor="middle" class="s">hump (barrier)</text>
+        <g transform="translate(600,20)">
+          <rect width="290" height="252" rx="8" class="box" style="fill:#f6f8fc"/>
+          <text x="145" y="24" text-anchor="middle" class="b">Saddle point (2-D)</text>
+          <g class="kl"><path d="M40,60 Q145,130 250,60"/><path d="M40,90 Q145,130 250,90"/><path d="M40,200 Q145,130 250,200"/><path d="M40,170 Q145,130 250,170"/></g>
+          <circle cx="145" cy="130" r="6" style="fill:var(--warm)"/>
+          <line class="kw" x1="145" y1="130" x2="145" y2="56" marker-end="url(#ahW)"/><line class="kw" x1="145" y1="130" x2="145" y2="204" marker-end="url(#ahW)"/>
+          <line class="ka" x1="145" y1="130" x2="70" y2="130" marker-end="url(#ahA)"/><line class="ka" x1="145" y1="130" x2="220" y2="130" marker-end="url(#ahA)"/>
+          <text x="155" y="64" class="s tw">loss goes down</text><text x="282" y="118" text-anchor="end" class="s ta">loss goes up</text>
+          <text x="145" y="222" text-anchor="middle" class="s">∇L = 0, but not a minimum:</text><text x="145" y="238" text-anchor="middle" class="s">Hessian has + and − eigenvalues</text>
+        </g>
+      </svg>
+      <figcaption>Draw the wavy curve with three labels (plateau, local minimum, global minimum) next to the dashed convex bowl, and the saddle box on the right.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: drop a ball on a non-convex surface</h3>
+    <figure class="demo">
+      <canvas id="ncC" data-ratio="0.6" data-ratio-sm="0.95" aria-label="A loss surface map with a global minimum, a local minimum, a saddle point and a flat plateau. Click to start gradient descent from that point."></canvas>
+      <div class="controls">
+        <label class="ctl" for="ncNoise">Gradient noise (SGD) <input type="range" id="ncNoise" min="0" max="0.6" step="0.05" value="0"><span class="val" id="ncNoisev"></span></label>
+        <button class="ghost" id="ncEx1" type="button">Start near the saddle</button>
+        <button class="ghost" id="ncEx2" type="button">Start on the plateau</button>
+        <button class="ghost" id="ncClear" type="button">Clear paths</button>
+      </div>
+      <p class="readout" id="ncOut"></p>
+      <p class="observe"><strong>What to observe.</strong> Click anywhere to run gradient descent from that spot. Where you start decides where you end: one basin leads to the deep global minimum, the other to a shallower local minimum. A start on the saddle's ridge slides along slowly before choosing a side, and a start on the flat plateau barely moves because the gradient there is almost zero. Add gradient noise (as in SGD) and the ball escapes the saddle quickly.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>A convex loss is a single bowl: roll downhill and you reach the bottom.</li>
+          <li>A deep network's loss is a mountain range with millions of dimensions: valleys, ridges, flat fields.</li>
+          <li>Gradient descent only sees the local slope, so it can stop in a small valley (local minimum), pause at a mountain pass (saddle point), or crawl across a flat field (plateau).</li>
+          <li>Good news: in huge networks most local minima are almost as good as the global one. The real slow-downs are saddles and plateaus.</li>
+          <li>Noise from mini-batches, momentum, good initialization and adaptive learning rates help escape them.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li><strong>Convexity:</strong> \(f(\lambda a+(1-\lambda)b)\le\lambda f(a)+(1-\lambda)f(b)\); every local minimum is global. Neural nets break this because of non-linear activations and weight-space symmetries (swapping hidden units gives the same function).</li>
+          <li><strong>Critical point:</strong> ∇L = 0. The Hessian H decides its type: all eigenvalues positive → local minimum; all negative → maximum; mixed signs → saddle.</li>
+          <li><strong>Saddles dominate</strong> in high dimensions (Dauphin et al., 2014): for a random critical point to be a minimum, all eigenvalues must be positive, which becomes very unlikely as dimension grows.</li>
+          <li><strong>Plateaus</strong> arise from saturated sigmoid/tanh units and poor initialization; gradients vanish there.</li>
+          <li><strong>Other difficulties:</strong> ill-conditioning (very different curvature in different directions → zigzagging), cliffs and exploding gradients (fixed by gradient clipping).</li>
+          <li><strong>Remedies:</strong> SGD noise, momentum, adaptive methods (Adam), batch norm, residual connections, careful initialization, learning-rate schedules.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\textbf{Convex:}\quad f(\lambda a+(1-\lambda)b)\le\lambda f(a)+(1-\lambda)f(b),\quad 0\le\lambda\le1\]
+      \[\textbf{Critical point:}\ \ \nabla L(w^*)=0\qquad \textbf{Hessian:}\ \ H_{ij}=\frac{\partial^2L}{\partial w_i\,\partial w_j}\]
+      \[\textbf{Second-order view:}\quad L(w^*+\Delta)\approx L(w^*)+\tfrac12\Delta^\top H\Delta\qquad \textbf{Gradient clipping:}\ \ g\leftarrow g\cdot\frac{\tau}{\lVert g\rVert}\ \text{if}\ \lVert g\rVert&gt;\tau\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(w^*\)</td><td>A critical point of the loss.</td></tr>
+        <tr><td>\(H\)</td><td>Hessian: matrix of second derivatives (curvature).</td></tr>
+        <tr><td>\(\Delta\)</td><td>A small step away from \(w^*\).</td></tr>
+        <tr><td>\(\tau\)</td><td>Clipping threshold for the gradient norm.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">Find and classify the critical points of \(f(x,y)=x^4-2x^2+y^2\).</p>
+      <ol>
+        <li>Gradient: \(\partial f/\partial x=4x^3-4x=4x(x^2-1)\), \(\partial f/\partial y=2y\).</li>
+        <li>Setting both to 0: y = 0 and x ∈ {−1, 0, 1}. Critical points (−1, 0), (0, 0), (1, 0).</li>
+        <li>Hessian: \(H=\begin{bmatrix}12x^2-4&amp;0\\0&amp;2\end{bmatrix}\).</li>
+        <li>At (±1, 0): H = diag(8, 2), both positive → local minima, with f = 1 − 2 + 0 = −1 (both are global minima here).</li>
+        <li>At (0, 0): H = diag(−4, 2), mixed signs → saddle point, f = 0.</li>
+      </ol>
+      <p class="ans">Answer: minima at (±1, 0) with f = −1; saddle at (0, 0) with f = 0. Gradient descent started exactly at (0, y) would slide to (0, 0) and stall; a tiny push in x escapes.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Challenges, remedies, consequences</h3>
+    <div class="three">
+      <div><h4>Challenges</h4><ul>
+        <li>Local minima (usually not the main problem in big nets).</li>
+        <li>Saddle points and plateaus slow training.</li>
+        <li>Ill-conditioning; cliffs and exploding gradients.</li></ul></div>
+      <div><h4>Remedies</h4><ul>
+        <li>Mini-batch noise (SGD); momentum.</li>
+        <li>Adaptive methods (RMSProp, Adam).</li>
+        <li>Good init, batch norm, residual links, gradient clipping.</li></ul></div>
+      <div><h4>Consequences</h4><ul>
+        <li>No guarantee of the global optimum.</li>
+        <li>Different random seeds give different solutions.</li>
+        <li>Flat (wide) minima tend to generalize better than sharp ones.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison: types of critical point</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>Gradient</th><th>Hessian eigenvalues</th><th>Effect on gradient descent</th></tr></thead>
+      <tbody>
+        <tr><th>Global minimum</th><td>0</td><td>All ≥ 0, lowest loss</td><td>The goal</td></tr>
+        <tr><th>Local minimum</th><td>0</td><td>All &gt; 0</td><td>Gets stuck (usually acceptable in large nets)</td></tr>
+        <tr><th>Saddle point</th><td>0</td><td>Mixed + and −</td><td>Slows down a lot; noise helps escape</td></tr>
+        <tr><th>Plateau</th><td>≈ 0 over a region</td><td>≈ 0</td><td>Very slow progress</td></tr>
+        <tr><th>Cliff</th><td>Huge</td><td>Very large</td><td>Huge jump; fixed by gradient clipping</td></tr>
+      </tbody></table></div>
+    <div class="tablewrap" style="margin-top:12px"><table>
+      <thead><tr><th>Point</th><th>Convex optimization</th><th>Non-convex (deep learning)</th></tr></thead>
+      <tbody>
+        <tr><th>Local = global?</th><td>Yes</td><td>No</td></tr>
+        <tr><th>Starting point matters?</th><td>No</td><td>Yes</td></tr>
+        <tr><th>Examples</th><td>Linear / logistic regression, SVM</td><td>Multi-layer networks, CNNs, RNNs</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>Why is the loss of a deep network non-convex?</p><p class="a">Because of the composition of non-linear activations and the symmetries in weight space: permuting hidden units gives many equivalent minima, and a function with several separate minima cannot be convex.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>What is a saddle point?</p><p class="a">A point where the gradient is zero but which is a minimum along some directions and a maximum along others; its Hessian has both positive and negative eigenvalues. In high dimensions saddles are far more common than local minima.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>What is gradient clipping?</p><p class="a">Rescaling the gradient when its norm exceeds a threshold τ, g ← g·τ/‖g‖, to stop huge updates at cliffs; commonly used for RNNs.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Discuss the challenges of non-convex optimization in deep networks and how they are addressed.</p>
+      <ol>
+        <li><strong>Introduction:</strong> convex vs non-convex, with the definition.</li>
+        <li><strong>Diagram:</strong> loss curve with local minimum, global minimum, plateau; saddle sketch.</li>
+        <li><strong>Local minima:</strong> why they are less harmful in large networks.</li>
+        <li><strong>Saddle points:</strong> Hessian test; dominance in high dimensions.</li>
+        <li><strong>Plateaus, ill-conditioning, cliffs, exploding and vanishing gradients.</strong></li>
+        <li><strong>Worked example:</strong> classify critical points of x⁴ − 2x² + y².</li>
+        <li><strong>Remedies:</strong> SGD noise, momentum, adaptive methods, init, BN, clipping, schedules.</li>
+        <li><strong>Flat vs sharp minima;</strong> conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"Valleys, Passes and Fields."</strong> Local minima are valleys, saddles are mountain passes, plateaus are flat fields.</p>
+    <p>Hessian test: <strong>all + = valley, all − = peak, mixed = pass</strong>.</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 2: STOCHASTIC OPTIMIZATION ================= -->
+<section class="topic" id="t-opt">
+  <p class="eyebrow">Topic 2 of 8 · Optimization</p>
+  <h2>Stochastic Optimization: SGD, Momentum, RMSProp, Adam</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">Stochastic optimization trains a network by repeatedly updating the weights with <mark>gradients estimated from random mini-batches</mark>; improved optimizers add <mark>momentum</mark> (a running average of gradients) and/or <mark>adaptive per-parameter learning rates</mark> (RMSProp), and Adam combines both.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw: the family tree</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 250" role="img" aria-label="Optimizer family tree: SGD splits into two lines. Adding velocity gives Momentum and then Nesterov. Adapting per-parameter learning rates gives AdaGrad and then RMSProp. Adam combines Momentum and RMSProp with bias correction.">
+        <rect class="box" x="20" y="100" width="150" height="54" rx="8"/><text x="95" y="124" text-anchor="middle" class="b">SGD</text><text x="95" y="142" text-anchor="middle" class="s">w ← w − η g</text>
+        <rect class="box" x="240" y="30" width="170" height="54" rx="8" style="fill:var(--accent-soft)"/><text x="325" y="54" text-anchor="middle" class="b">Momentum</text><text x="325" y="72" text-anchor="middle" class="s">average of gradients</text>
+        <rect class="box" x="470" y="30" width="150" height="54" rx="8" style="fill:var(--accent-soft)"/><text x="545" y="54" text-anchor="middle" class="b">Nesterov</text><text x="545" y="72" text-anchor="middle" class="s">look-ahead gradient</text>
+        <rect class="box" x="240" y="170" width="170" height="54" rx="8" style="fill:var(--warm-soft)"/><text x="325" y="194" text-anchor="middle" class="b">AdaGrad</text><text x="325" y="212" text-anchor="middle" class="s">sum of squared grads</text>
+        <rect class="box" x="470" y="170" width="150" height="54" rx="8" style="fill:var(--warm-soft)"/><text x="545" y="194" text-anchor="middle" class="b">RMSProp</text><text x="545" y="212" text-anchor="middle" class="s">moving average of g²</text>
+        <rect class="box" x="690" y="98" width="190" height="58" rx="8" style="fill:#efe9f8;stroke-width:2.4"/><text x="785" y="122" text-anchor="middle" class="b">Adam</text><text x="785" y="140" text-anchor="middle" class="s">momentum + RMSProp</text>
+        <g class="k"><path d="M170,118 L238,64" marker-end="url(#ah)"/><path d="M170,136 L238,190" marker-end="url(#ah)"/><line x1="410" y1="57" x2="468" y2="57" marker-end="url(#ah)"/><line x1="410" y1="197" x2="468" y2="197" marker-end="url(#ah)"/><path d="M410,48 C560,0 680,40 740,96" marker-end="url(#ah)"/><path d="M620,197 C690,190 740,180 770,158" marker-end="url(#ah)"/></g>
+        <text x="196" y="80" text-anchor="end" class="s ta">+ velocity</text><text x="190" y="196" text-anchor="end" class="s tw">+ per-parameter</text><text x="190" y="212" text-anchor="end" class="s tw">rate</text>
+        <text x="660" y="28" class="s">first moment m</text><text x="664" y="214" class="s">second moment v</text>
+      </svg>
+      <figcaption>Top line: smooth the direction. Bottom line: scale the step per parameter. Adam does both, with bias correction.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: optimizer race on the Rosenbrock valley</h3>
+    <figure class="demo">
+      <canvas id="raceC" data-ratio="0.56" data-ratio-sm="1.05" aria-label="Contour plot of the Rosenbrock function with animated paths of SGD, Momentum, RMSProp and Adam, and a loss-versus-step chart."></canvas>
+      <div class="legend">
+        <span><i style="background:#8a94a8"></i>SGD (η = 0.004)</span><span><i style="background:var(--accent)"></i>Momentum (η = 0.0015, β = 0.9)</span><span><i style="background:var(--good)"></i>RMSProp (η = 0.01)</span><span><i style="background:var(--warm)"></i>Adam (η = 0.05)</span>
+      </div>
+      <div class="controls">
+        <button id="racePlay" type="button">Play race</button>
+        <label class="ctl" for="raceSteps">Steps <input type="range" id="raceSteps" min="0" max="400" step="1" value="400"><span class="val" id="raceStepsv"></span></label>
+        <label class="ctl" for="raceStart">Start <select id="raceStart"><option value="-1.6,2.4">(−1.6, 2.4)</option><option value="1.8,-0.6">(1.8, −0.6)</option><option value="-0.4,-0.6">(−0.4, −0.6)</option></select></label>
+      </div>
+      <p class="readout" id="raceOut"></p>
+      <p class="observe"><strong>What to observe.</strong> The Rosenbrock function \((1-x)^2+10(y-x^2)^2\) has a long, curved, nearly flat valley with its minimum at (1, 1), marked ×. Plain SGD falls into the valley quickly and then crawls along its floor. Momentum builds up speed along the valley but overshoots and oscillates. RMSProp rescales each direction so it is not slowed by the steep walls. Adam combines both and, from the default start, reaches (1, 1) first; change the start to see that the ranking is not fixed. Each optimizer uses a typical stable learning rate for it, so this compares sensible settings rather than one shared learning rate.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li><strong>SGD:</strong> look at a small random batch, compute the slope, take a step downhill. Cheap but noisy and slow in narrow valleys.</li>
+          <li><strong>Momentum:</strong> like a heavy ball, keep part of the previous step. Speeds up in consistent directions and damps zigzags.</li>
+          <li><strong>AdaGrad / RMSProp:</strong> give each weight its own step size; weights with big, frequent gradients take smaller steps.</li>
+          <li><strong>Adam:</strong> momentum for the direction plus RMSProp for the step size, with a correction for the first few steps. The default choice for many models.</li>
+          <li><strong>Learning-rate schedules</strong> (step decay, cosine, warm-up) shrink η over time so the weights settle.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li>Mini-batch gradient \(g_t=\frac1m\sum_{i\in B}\nabla L_i\) is an unbiased estimate of the full gradient; its noise helps escape saddles.</li>
+          <li><strong>Momentum</strong> (Polyak): \(v_t=\beta v_{t-1}+g_t\), \(w\leftarrow w-\eta v_t\); effective step ≈ η/(1 − β) in a constant direction (10× for β = 0.9).</li>
+          <li><strong>Nesterov</strong> evaluates the gradient at the look-ahead point \(w-\eta\beta v_{t-1}\).</li>
+          <li><strong>AdaGrad</strong> divides by \(\sqrt{\sum g^2}\); good for sparse features but the rate keeps shrinking. <strong>RMSProp</strong> (Hinton) uses an exponential moving average instead.</li>
+          <li><strong>Adam</strong> (Kingma and Ba, 2015): moments m and v with β₁ = 0.9, β₂ = 0.999, bias-corrected, ε = 10⁻⁸. AdamW decouples weight decay.</li>
+          <li>SGD with momentum often generalizes slightly better on vision tasks; Adam converges faster and needs less tuning.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\textbf{SGD:}\ \ w\leftarrow w-\eta\,g_t\qquad\qquad \textbf{Momentum:}\ \ v_t=\beta v_{t-1}+g_t,\ \ w\leftarrow w-\eta\,v_t\]
+      \[\textbf{RMSProp:}\ \ s_t=\rho\,s_{t-1}+(1-\rho)\,g_t^2,\qquad w\leftarrow w-\frac{\eta}{\sqrt{s_t}+\varepsilon}\,g_t\]
+      \[\textbf{Adam:}\ \ m_t=\beta_1m_{t-1}+(1-\beta_1)g_t,\ \ v_t=\beta_2v_{t-1}+(1-\beta_2)g_t^2,\ \ \hat m_t=\frac{m_t}{1-\beta_1^t},\ \ \hat v_t=\frac{v_t}{1-\beta_2^t},\ \ w\leftarrow w-\frac{\eta\,\hat m_t}{\sqrt{\hat v_t}+\varepsilon}\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(g_t\)</td><td>Mini-batch gradient at step t.</td></tr>
+        <tr><td>\(\eta\)</td><td>Learning rate.</td></tr>
+        <tr><td>\(v_t\) (momentum)</td><td>Velocity: decaying sum of past gradients; β ≈ 0.9.</td></tr>
+        <tr><td>\(s_t\)</td><td>Moving average of squared gradients; ρ ≈ 0.9.</td></tr>
+        <tr><td>\(m_t,\ v_t\) (Adam)</td><td>First and second moment estimates; β₁ = 0.9, β₂ = 0.999.</td></tr>
+        <tr><td>\(\hat m_t,\ \hat v_t\)</td><td>Bias-corrected moments (they start at 0).</td></tr>
+        <tr><td>\(\varepsilon\)</td><td>Small constant (10⁻⁸) to avoid division by zero.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">Weights w = (1, 1), first gradient g₁ = (2, −4), η = 0.1. Compute the first update for SGD, RMSProp (ρ = 0.9) and Adam. Then do a second momentum step (β = 0.9) with g₂ = (1, −1).</p>
+      <ol>
+        <li>SGD: w = (1, 1) − 0.1(2, −4) = (0.8, 1.4).</li>
+        <li>RMSProp: s₁ = 0.1·g² = (0.4, 1.6); √s₁ = (0.632, 1.265); step = 0.1·(2/0.632, −4/1.265) = (0.316, −0.316); w = (0.684, 1.316).</li>
+        <li>Adam: m₁ = 0.1g = (0.2, −0.4), v₁ = 0.001g² = (0.004, 0.016); m̂ = (2, −4), v̂ = (4, 16); step = 0.1·(2/2, −4/4) = (0.1, −0.1); w = (0.9, 1.1). The first Adam step is η in the direction of sign(g) for every weight.</li>
+        <li>Momentum step 1 is the same as SGD: v₁ = g₁, w = (0.8, 1.4).</li>
+        <li>Momentum step 2: v₂ = 0.9(2, −4) + (1, −1) = (2.8, −4.6); w = (0.8, 1.4) − 0.1(2.8, −4.6) = (0.52, 1.86).</li>
+      </ol>
+      <p class="ans">Answer: SGD (0.8, 1.4); RMSProp (0.684, 1.316); Adam (0.9, 1.1); momentum after two steps (0.52, 1.86).</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li><strong>SGD:</strong> simple, little memory, good generalization.</li>
+        <li><strong>Momentum:</strong> faster in ravines, damps oscillation.</li>
+        <li><strong>Adam:</strong> fast, robust defaults, per-parameter rates.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li><strong>SGD:</strong> slow, sensitive to η.</li>
+        <li><strong>AdaGrad:</strong> learning rate decays to almost zero.</li>
+        <li><strong>Adam:</strong> extra memory (m, v); sometimes generalizes worse.</li></ul></div>
+      <div><h4>Where used</h4><ul>
+        <li>SGD + momentum: ResNet image classifiers.</li>
+        <li>RMSProp: RNNs, deep RL (DQN).</li>
+        <li>Adam / AdamW: Transformers, GANs, most new models.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison of optimizers</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Optimizer</th><th>Keeps</th><th>Per-parameter rate?</th><th>Strength</th><th>Weakness</th></tr></thead>
+      <tbody>
+        <tr><th>SGD</th><td>Nothing</td><td>No</td><td>Simple, generalizes well</td><td>Slow; zigzags in ravines</td></tr>
+        <tr><th>Momentum</th><td>Velocity v</td><td>No</td><td>Accelerates, smooths</td><td>Can overshoot</td></tr>
+        <tr><th>Nesterov</th><td>Velocity v</td><td>No</td><td>Corrects overshoot early</td><td>Slightly more complex</td></tr>
+        <tr><th>AdaGrad</th><td>Sum of g²</td><td>Yes</td><td>Good for sparse features</td><td>Rate shrinks to zero</td></tr>
+        <tr><th>RMSProp</th><td>Average of g²</td><td>Yes</td><td>Fixes AdaGrad's decay</td><td>No momentum term</td></tr>
+        <tr><th>Adam</th><td>m and v</td><td>Yes</td><td>Fast, little tuning</td><td>More memory; may generalize worse</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>How does momentum improve SGD?</p><p class="a">It accumulates a velocity v = βv + g, an exponentially weighted sum of past gradients, so steps grow in directions where gradients agree and oscillations cancel in directions where they flip sign.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why does Adam use bias correction?</p><p class="a">m and v start at zero, so early estimates are biased towards zero. Dividing by (1 − β₁ᵗ) and (1 − β₂ᵗ) corrects this, which matters most in the first steps.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>What is the drawback of AdaGrad that RMSProp fixes?</p><p class="a">AdaGrad divides by the square root of the sum of all past squared gradients, which only grows, so the learning rate decays towards zero. RMSProp uses an exponential moving average, so old gradients are forgotten.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain stochastic optimization methods for deep learning: SGD, momentum, RMSProp and Adam.</p>
+      <ol>
+        <li><strong>Introduction:</strong> batch vs stochastic vs mini-batch gradient descent.</li>
+        <li><strong>SGD:</strong> update rule; noise; learning rate.</li>
+        <li><strong>Momentum and Nesterov:</strong> equations, heavy-ball analogy.</li>
+        <li><strong>AdaGrad and RMSProp:</strong> per-parameter rates.</li>
+        <li><strong>Adam:</strong> full algorithm with bias correction.</li>
+        <li><strong>Family-tree diagram</strong> and Rosenbrock comparison sketch.</li>
+        <li><strong>Worked example:</strong> one step of each.</li>
+        <li><strong>Learning-rate schedules;</strong> comparison table; conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> the family tree, plus contour paths if time allows.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"Adam = Momentum + RMSProp."</strong> M for Momentum is the first moment, the "S" in RMS is the squares, the second moment.</p>
+    <p><strong>Heavy ball rolling (momentum), with its own shoes for every terrain (adaptive rates).</strong></p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 3: GENERALIZATION ================= -->
+<section class="topic" id="t-gen">
+  <p class="eyebrow">Topic 3 of 8 · Optimization</p>
+  <h2>Generalization in Neural Networks</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">Generalization is a trained network's ability to <mark>perform well on new, unseen data</mark>, not just the training data; it is measured by the <mark>generalization gap</mark> between training and validation (or test) error and is improved by more data, regularization and early stopping.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 260" role="img" aria-label="Error against training epochs: training error keeps falling, validation error falls then rises. The lowest validation error marks the early stopping point; the gap between the curves is the generalization gap.">
+        <line class="k" x1="60" y1="220" x2="620" y2="220" marker-end="url(#ah)"/><line class="k" x1="60" y1="220" x2="60" y2="20" marker-end="url(#ah)"/>
+        <text x="620" y="240" text-anchor="end" class="m">training epochs →</text><text x="68" y="22" class="m">error</text>
+        <path class="ka" style="stroke-width:3" d="M66,40 C140,140 240,186 610,204"/>
+        <path class="kw" style="stroke-width:3" d="M66,46 C140,140 220,162 270,160 S420,130 610,70"/>
+        <line class="kg dash" x1="270" y1="30" x2="270" y2="220"/><circle cx="270" cy="160" r="6" style="fill:var(--good)"/>
+        <text x="270" y="24" text-anchor="middle" class="tg b">early stopping point</text>
+        <text x="600" y="196" text-anchor="end" class="ta b">training error</text><text x="604" y="62" text-anchor="end" class="tw b">validation error</text>
+        <line class="k" x1="500" y1="98" x2="500" y2="192" marker-start="url(#ah)" marker-end="url(#ah)"/><text x="508" y="150" class="s">generalization gap</text>
+        <text x="160" y="214" text-anchor="middle" class="s">underfitting</text><text x="420" y="214" text-anchor="middle" class="s">overfitting</text>
+        <g transform="translate(660,24)">
+          <rect width="230" height="196" rx="8" class="box" style="fill:#f6f8fc"/>
+          <text x="115" y="24" text-anchor="middle" class="b">Improve generalization</text>
+          <text x="14" y="52" class="s">• more data, data augmentation</text><text x="14" y="74" class="s">• weight decay (L2), dropout</text><text x="14" y="96" class="s">• early stopping</text><text x="14" y="118" class="s">• batch norm, smaller model</text><text x="14" y="140" class="s">• ensembles, transfer learning</text>
+          <text x="115" y="176" text-anchor="middle" class="s b">split: train / validation / test</text>
+        </g>
+      </svg>
+      <figcaption>The most-asked figure for this topic. Two curves, the gap arrow, and the dashed line at the validation minimum.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: learning curves and early stopping</h3>
+    <figure class="demo">
+      <canvas id="genC" data-ratio="0.5" data-ratio-sm="0.9" aria-label="Training and validation loss over epochs with the best epoch and the early-stopping epoch marked."></canvas>
+      <div class="controls">
+        <label class="ctl" for="gCap">Model capacity <input type="range" id="gCap" min="0" max="1" step="0.05" value="0.7"><span class="val" id="gCapv"></span></label>
+        <label class="ctl" for="gData">Training data size <input type="range" id="gData" min="0" max="1" step="0.05" value="0.3"><span class="val" id="gDatav"></span></label>
+        <label class="ctl" for="gReg">Regularization <input type="range" id="gReg" min="0" max="1" step="0.05" value="0.1"><span class="val" id="gRegv"></span></label>
+        <label class="ctl" for="gPat">Patience <input type="range" id="gPat" min="1" max="15" step="1" value="5"><span class="val" id="gPatv"></span></label>
+      </div>
+      <p class="readout" id="genOut"></p>
+      <p class="observe"><strong>What to observe.</strong> With a big model and little data, validation loss starts rising after a few epochs while training loss keeps falling: overfitting. Early stopping keeps the weights from the best validation epoch (green) and stops training once there has been no improvement for "patience" epochs (orange). More data or more regularization delays and shrinks the rise; too little capacity leaves both losses high (underfitting). The curves are a simple illustrative model, not a real training run.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>A model that memorises answers scores 100% on practice questions but fails the real exam.</li>
+          <li>We keep some data aside (validation set) as a mock exam during training.</li>
+          <li>Training error keeps dropping; validation error drops and then starts to rise when the model begins memorising noise.</li>
+          <li>Stop when the validation error is lowest: early stopping.</li>
+          <li>More data, simpler models, dropout and weight decay all shrink the gap.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li><strong>Gap:</strong> \(R(f)-\hat R(f)\), where R is expected (test) risk and \(\hat R\) is training risk.</li>
+          <li><strong>Bias–variance trade-off:</strong> expected error = bias² + variance + noise.</li>
+          <li><strong>Capacity bounds</strong> (VC dimension, Unit II) are loose for deep nets: Zhang et al. (2017) showed networks can fit random labels yet generalize on real ones.</li>
+          <li><strong>Implicit regularization:</strong> SGD prefers flat minima; <strong>double descent</strong> (Belkin et al., 2019): test error can fall again past the interpolation point.</li>
+          <li><strong>Early stopping:</strong> monitor validation loss; stop after p epochs (patience) without improvement; restore best weights. For simple models it acts like L2 regularization.</li>
+          <li><strong>Practice:</strong> train/validation/test split, k-fold cross-validation for small data; tune on validation, report test once.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\hat R(f)=\frac1N\sum_{i=1}^{N}L(f(x_i),y_i)\qquad R(f)=\mathbb E_{(x,y)\sim p}\bigl[L(f(x),y)\bigr]\qquad \text{gap}=R(f)-\hat R(f)\]
+      \[\mathbb E\bigl[(y-\hat f(x))^2\bigr]=\text{Bias}^2+\text{Variance}+\sigma^2\]
+      \[\textbf{Early stopping:}\ \ t^*=\arg\min_t L_{\text{val}}(t),\quad\text{stop at the first }t\text{ with }t-t_{\text{best}}\ge p\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(\hat R(f)\)</td><td>Training (empirical) risk.</td></tr>
+        <tr><td>\(R(f)\)</td><td>Expected risk on the true data distribution (estimated by the test set).</td></tr>
+        <tr><td>\(\sigma^2\)</td><td>Irreducible noise.</td></tr>
+        <tr><td>\(t^*,\ p\)</td><td>Best epoch; patience (epochs to wait without improvement).</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">Validation losses over 8 epochs: 0.90, 0.72, 0.60, 0.55, 0.54, 0.56, 0.59, 0.63. Training loss at epoch 8 is 0.20. With patience 3, when does training stop and which weights are kept? What is the gap at epoch 8, and at the best epoch if the training loss there was 0.40?</p>
+      <ol>
+        <li>Best validation loss so far: 0.54 at epoch 5.</li>
+        <li>Epochs 6, 7, 8 do not improve on 0.54: three epochs without improvement = patience 3.</li>
+        <li>Training stops after epoch 8; the weights from epoch 5 are restored.</li>
+        <li>Gap at epoch 8: 0.63 − 0.20 = 0.43. Gap at epoch 5: 0.54 − 0.40 = 0.14.</li>
+      </ol>
+      <p class="ans">Answer: stop after epoch 8, keep epoch 5; the gap grows from 0.14 to 0.43 as the model overfits.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Ways to improve, pitfalls, uses</h3>
+    <div class="three">
+      <div><h4>Improve generalization</h4><ul>
+        <li>More data; data augmentation.</li>
+        <li>L2 / weight decay, dropout, batch norm.</li>
+        <li>Early stopping; ensembles; transfer learning.</li></ul></div>
+      <div><h4>Pitfalls</h4><ul>
+        <li>Tuning on the test set (data leakage).</li>
+        <li>Train and test from different distributions (dataset shift).</li>
+        <li>Too much regularization → underfitting.</li></ul></div>
+      <div><h4>Why it matters</h4><ul>
+        <li>Medical and safety systems must work on new patients and roads.</li>
+        <li>Model selection depends on validation performance.</li>
+        <li>Explains why deep nets need lots of data.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>Underfitting</th><th>Good generalization</th><th>Overfitting</th></tr></thead>
+      <tbody>
+        <tr><th>Training error</th><td>High</td><td>Low</td><td>Very low</td></tr>
+        <tr><th>Validation error</th><td>High</td><td>Low, close to training</td><td>High, far above training</td></tr>
+        <tr><th>Bias / variance</th><td>High bias</td><td>Balanced</td><td>High variance</td></tr>
+        <tr><th>Fix</th><td>Bigger model, train longer</td><td>Keep it</td><td>More data, regularize, stop early</td></tr>
+      </tbody></table></div>
+    <div class="tablewrap" style="margin-top:12px"><table>
+      <thead><tr><th>Data split</th><th>Used for</th><th>Typical share</th></tr></thead>
+      <tbody>
+        <tr><th>Training set</th><td>Learning the weights</td><td>70–80%</td></tr>
+        <tr><th>Validation set</th><td>Early stopping, hyperparameters, model choice</td><td>10–15%</td></tr>
+        <tr><th>Test set</th><td>Final unbiased estimate, used once</td><td>10–15%</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>What is the generalization gap?</p><p class="a">The difference between a model's error on unseen data (validation or test) and its error on the training data. A large gap means overfitting.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Explain early stopping.</p><p class="a">Validation loss is monitored during training; when it has not improved for a set number of epochs (the patience), training stops and the weights from the epoch with the lowest validation loss are restored.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why are separate validation and test sets needed?</p><p class="a">The validation set is used repeatedly to choose hyperparameters and the stopping epoch, so it becomes optimistically biased. The untouched test set gives an honest final estimate.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Discuss generalization in neural networks and the techniques used to improve it.</p>
+      <ol>
+        <li><strong>Definition:</strong> training vs expected risk; generalization gap.</li>
+        <li><strong>Learning-curve diagram</strong> with early stopping (block 2).</li>
+        <li><strong>Underfitting vs overfitting;</strong> bias–variance decomposition.</li>
+        <li><strong>Capacity and data size</strong>; VC-style bounds and their limits for deep nets.</li>
+        <li><strong>Regularization:</strong> L2, dropout, augmentation, batch norm.</li>
+        <li><strong>Early stopping</strong> with the worked example.</li>
+        <li><strong>Modern view:</strong> flat minima, implicit regularization of SGD, double descent.</li>
+        <li><strong>Data splits and cross-validation;</strong> conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"Practice paper vs real exam."</strong> Training error is the practice paper, validation is the mock, test is the real exam: sit it once.</p>
+    <p><strong>"Stop at the bottom of the U"</strong> (the validation curve).</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 4: STN ================= -->
+<section class="topic" id="t-stn">
+  <p class="eyebrow">Topic 4 of 8 · Architectures</p>
+  <h2>Spatial Transformer Networks</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">A spatial transformer (Jaderberg et al., 2015) is a <mark>differentiable module that learns to warp its input</mark>, for example rotate, scale, translate or crop it, using three parts: a <mark>localisation network</mark> that predicts transform parameters θ, a <mark>grid generator</mark> that maps output pixel positions to input positions, and a <mark>sampler</mark> that reads the input at those positions by bilinear interpolation.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 270" role="img" aria-label="Spatial transformer: the input feature map U goes to a localisation network which outputs the transform parameters theta. The grid generator uses theta to map a regular output grid to sampling positions in U. The sampler reads U at those positions with bilinear interpolation to produce the output V. All parts are differentiable.">
+        <rect class="box" x="16" y="70" width="110" height="110" rx="6" style="fill:#fff5df"/><text x="71" y="200" text-anchor="middle" class="b">Input U</text>
+        <g transform="translate(36,90) rotate(-20 35 35)"><rect width="70" height="70" class="kl dash" style="fill:none;stroke:var(--warm);stroke-width:2"/><g class="kl" style="stroke:var(--warm)"><line x1="23" y1="0" x2="23" y2="70"/><line x1="47" y1="0" x2="47" y2="70"/><line x1="0" y1="23" x2="70" y2="23"/><line x1="0" y1="47" x2="70" y2="47"/></g></g>
+        <rect class="box" x="200" y="20" width="190" height="60" rx="8" style="fill:var(--accent-soft)"/><text x="295" y="45" text-anchor="middle" class="b">Localisation net</text><text x="295" y="64" text-anchor="middle" class="s">small CNN / FC → θ (6 numbers)</text>
+        <rect class="box" x="450" y="20" width="190" height="60" rx="8" style="fill:var(--accent-soft)"/><text x="545" y="45" text-anchor="middle" class="b">Grid generator</text><text x="545" y="64" text-anchor="middle" class="s">T_θ(G): output → input coords</text>
+        <rect class="box" x="450" y="150" width="190" height="60" rx="8" style="fill:var(--warm-soft)"/><text x="545" y="175" text-anchor="middle" class="b">Sampler</text><text x="545" y="194" text-anchor="middle" class="s">bilinear interpolation of U</text>
+        <rect class="box" x="720" y="120" width="110" height="110" rx="6" style="fill:var(--good-soft)"/><text x="775" y="250" text-anchor="middle" class="b">Output V</text>
+        <g class="kl" style="stroke:var(--good)"><line x1="757" y1="120" x2="757" y2="230"/><line x1="793" y1="120" x2="793" y2="230"/><line x1="720" y1="157" x2="830" y2="157"/><line x1="720" y1="193" x2="830" y2="193"/></g>
+        <g class="k"><path d="M126,100 L198,60" marker-end="url(#ah)"/><line x1="390" y1="50" x2="448" y2="50" marker-end="url(#ah)"/><line x1="545" y1="80" x2="545" y2="148" marker-end="url(#ah)"/><path d="M126,160 L448,180" marker-end="url(#ah)"/><line x1="640" y1="180" x2="718" y2="178" marker-end="url(#ah)"/></g>
+        <text x="420" y="42" text-anchor="middle" class="s b">θ</text><text x="556" y="118" class="s">sampling grid</text><text x="280" y="186" class="s">U is also fed to the sampler</text>
+        <text x="450" y="256" text-anchor="middle" class="s tw b">every part is differentiable, so θ is learned by backprop from the main task loss, with no labels for θ</text>
+      </svg>
+      <figcaption>End-to-end: U → localisation net → θ → grid generator → sampler (with U) → V → rest of the CNN. The orange grid on U shows where the output pixels are sampled from.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: undo a rotated, shifted digit</h3>
+    <figure class="demo">
+      <canvas id="stnC" data-ratio="0.46" data-ratio-sm="0.9" aria-label="Left: input image with the sampling grid drawn on it. Right: the output produced by bilinear sampling."></canvas>
+      <div class="controls">
+        <label class="ctl" for="stR">Rotation <input type="range" id="stR" min="-60" max="60" step="1" value="0"><span class="val" id="stRv"></span></label>
+        <label class="ctl" for="stS">Scale <input type="range" id="stS" min="0.4" max="1.4" step="0.02" value="1"><span class="val" id="stSv"></span></label>
+        <label class="ctl" for="stX">Shift x <input type="range" id="stX" min="-0.6" max="0.6" step="0.02" value="0"><span class="val" id="stXv"></span></label>
+        <label class="ctl" for="stY">Shift y <input type="range" id="stY" min="-0.6" max="0.6" step="0.02" value="0"><span class="val" id="stYv"></span></label>
+        <button id="stAuto" type="button">Show what a trained STN learns</button>
+      </div>
+      <p class="readout" id="stnOut"></p>
+      <p class="observe"><strong>What to observe.</strong> The input is a "7" that has been rotated, shrunk and pushed off-centre. Your sliders set θ. The orange grid on the left shows where each output pixel is read from (the grid generator), and the right panel is the sampler's bilinear output. When the grid lines up with the digit, the output is an upright, centred, full-size 7, which is what a trained localisation network learns to do automatically for every input. The sampling here is real bilinear interpolation on a 64×64 image.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>CNNs struggle when objects are tilted, small or off-centre; pooling gives only a little invariance.</li>
+          <li>An STN is a small helper network placed inside the CNN that looks at the image and decides how to straighten it.</li>
+          <li>It outputs a few numbers: how much to rotate, zoom and shift.</li>
+          <li>It then re-draws the image (or feature map) with that correction, so the rest of the network sees a tidy, centred object.</li>
+          <li>Nobody tells it the right angle: it learns because straighter inputs make the classifier's loss lower.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li><strong>Localisation net:</strong> \(\theta=f_{\text{loc}}(U)\); for an affine transform θ is a 2×3 matrix (6 numbers). Its last layer is initialised to the identity transform.</li>
+          <li><strong>Grid generator:</strong> for each output pixel \((x_i^t,y_i^t)\) in normalised coordinates [−1, 1], compute the source point \((x_i^s,y_i^s)=A_\theta(x_i^t,y_i^t,1)^\top\).</li>
+          <li><strong>Sampler:</strong> \(V_i=\sum_{n,m}U_{nm}\max(0,1-|x_i^s-m|)\max(0,1-|y_i^s-n|)\): bilinear interpolation, differentiable with respect to both U and the coordinates (sub-gradients).</li>
+          <li>Other transforms: attention/crop (scale + translation, 3 numbers), projective (8), thin-plate spline.</li>
+          <li><strong>Results:</strong> better accuracy on distorted MNIST and on Street View House Numbers; multiple STNs in parallel can attend to different parts (fine-grained bird classification).</li>
+          <li><strong>Optimization point:</strong> because sampling is differentiable, the whole system trains end to end with ordinary backprop and SGD.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\begin{pmatrix}x_i^s\\y_i^s\end{pmatrix}=\mathcal T_\theta(G_i)=A_\theta\begin{pmatrix}x_i^t\\y_i^t\\1\end{pmatrix}=\begin{bmatrix}\theta_{11}&amp;\theta_{12}&amp;\theta_{13}\\\theta_{21}&amp;\theta_{22}&amp;\theta_{23}\end{bmatrix}\begin{pmatrix}x_i^t\\y_i^t\\1\end{pmatrix}\]
+      \[\textbf{Rotation + scale + shift:}\quad A_\theta=\begin{bmatrix}s\cos\alpha&amp;-s\sin\alpha&amp;t_x\\s\sin\alpha&amp;s\cos\alpha&amp;t_y\end{bmatrix}\]
+      \[\textbf{Bilinear sampler:}\quad V_i=\sum_{n}^{H}\sum_{m}^{W}U_{nm}\,\max(0,1-|x_i^s-m|)\,\max(0,1-|y_i^s-n|)\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(U,\ V\)</td><td>Input and output feature maps.</td></tr>
+        <tr><td>\(\theta,\ A_\theta\)</td><td>Transform parameters predicted by the localisation net (2×3 for affine).</td></tr>
+        <tr><td>\((x^t,y^t)\)</td><td>Target (output) pixel coordinates, normalised to [−1, 1].</td></tr>
+        <tr><td>\((x^s,y^s)\)</td><td>Source position in U to sample from.</td></tr>
+        <tr><td>\(s,\ \alpha,\ t_x,t_y\)</td><td>Scale, rotation angle, translation.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">(a) θ is a pure 30° rotation. Where in the input is the output point (0.5, 0.5) sampled? (b) The source point lands at (x, y) = (1.3, 2.6) in pixel units, between pixels U(1,2) = 10, U(2,2) = 20, U(1,3) = 30, U(2,3) = 40 (written as U(x, y)). Find the sampled value.</p>
+      <ol>
+        <li>(a) A = [[cos 30°, −sin 30°, 0], [sin 30°, cos 30°, 0]] = [[0.866, −0.5, 0], [0.5, 0.866, 0]].</li>
+        <li>x<sup>s</sup> = 0.866(0.5) − 0.5(0.5) = 0.183; y<sup>s</sup> = 0.5(0.5) + 0.866(0.5) = 0.683.</li>
+        <li>(b) Fractions: dx = 0.3, dy = 0.6. Weights: U(1,2): 0.7 × 0.4 = 0.28; U(2,2): 0.3 × 0.4 = 0.12; U(1,3): 0.7 × 0.6 = 0.42; U(2,3): 0.3 × 0.6 = 0.18 (they add to 1).</li>
+        <li>V = 0.28(10) + 0.12(20) + 0.42(30) + 0.18(40) = 2.8 + 2.4 + 12.6 + 7.2 = 25.0.</li>
+      </ol>
+      <p class="ans">Answer: (a) source (0.183, 0.683); (b) sampled value 25.0. Small changes in θ move the point smoothly, so the output changes smoothly: this is why θ can be learned by gradients.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Learned invariance to rotation, scale, translation.</li>
+        <li>Plug-in module: insert anywhere in a CNN.</li>
+        <li>No extra labels; trained end to end.</li>
+        <li>Can zoom in on the relevant region (attention).</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>Can be unstable to train; needs identity initialisation.</li>
+        <li>May crop away useful parts.</li>
+        <li>Extra computation for sampling.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Distorted digit and house-number recognition.</li>
+        <li>Fine-grained classification (birds).</li>
+        <li>Face alignment, OCR of tilted text, image registration.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>Max pooling</th><th>Data augmentation</th><th>Spatial transformer</th></tr></thead>
+      <tbody>
+        <tr><th>Invariance</th><td>Small shifts only, fixed</td><td>Whatever transforms you add</td><td>Learned, per input</td></tr>
+        <tr><th>Adapts to each image?</th><td>No</td><td>No</td><td>Yes</td></tr>
+        <tr><th>Parameters</th><td>None</td><td>None</td><td>Localisation net</td></tr>
+        <tr><th>Handles large rotations</th><td>No</td><td>Partly</td><td>Yes</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>Name the three components of a spatial transformer.</p><p class="a">The localisation network (predicts transform parameters θ), the grid generator (maps the output grid to sampling positions in the input using θ), and the sampler (produces the output by bilinear interpolation of the input at those positions).</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why must the sampler be differentiable?</p><p class="a">So that the loss gradient can flow through the sampled output back to the sampling coordinates, and hence to θ and the localisation network, allowing the transform to be learned end to end with backpropagation.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>How many parameters define an affine spatial transform?</p><p class="a">Six, arranged as a 2×3 matrix: four for rotation, scale and shear, and two for translation.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain spatial transformer networks with a neat diagram.</p>
+      <ol>
+        <li><strong>Motivation:</strong> CNNs lack invariance to large spatial transforms.</li>
+        <li><strong>Architecture diagram</strong> (block 2).</li>
+        <li><strong>Localisation network:</strong> input, output θ, identity initialisation.</li>
+        <li><strong>Grid generator:</strong> affine equation, normalised coordinates.</li>
+        <li><strong>Sampler:</strong> bilinear interpolation formula; worked example.</li>
+        <li><strong>Training:</strong> differentiability, end-to-end backprop.</li>
+        <li><strong>Types of transform</strong> (affine, attention, projective, TPS).</li>
+        <li><strong>Results and applications;</strong> comparison with pooling; conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"Look, Locate, Lift."</strong> Localisation net looks, grid generator locates where to read, sampler lifts the pixels.</p>
+    <p><strong>A photo straightener built into the network.</strong></p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 5: RNN ================= -->
+<section class="topic" id="t-rnn">
+  <p class="eyebrow">Topic 5 of 8 · Sequence models</p>
+  <h2>Recurrent Neural Networks</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">A recurrent neural network processes a sequence one element at a time, keeping a <mark>hidden state h<sub>t</sub> that is updated from the previous state and the current input with the same weights at every step</mark>; it is trained by backpropagation through time (BPTT), which suffers from vanishing and exploding gradients.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw: folded vs unrolled</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 280" role="img" aria-label="Left: a folded RNN, one cell with a loop back to itself labelled W_hh, input x_t below and output y_t above. Right: the same network unrolled over four time steps, each cell passing h to the next, all sharing the same weights; orange arrows show gradients flowing backwards through time.">
+        <text x="110" y="22" text-anchor="middle" class="b">Folded</text>
+        <rect class="box" x="70" y="110" width="80" height="54" rx="8" style="fill:var(--accent-soft)"/><text x="110" y="142" text-anchor="middle" class="b">h</text>
+        <path class="ka" style="stroke-width:2.2" d="M150,126 C206,126 206,150 152,150" marker-end="url(#ahA)"/><text x="206" y="124" class="s ta b">W_hh</text>
+        <line class="k" x1="110" y1="214" x2="110" y2="166" marker-end="url(#ah)"/><text x="110" y="230" text-anchor="middle">x_t</text><text x="118" y="196" class="s">W_xh</text>
+        <line class="k" x1="110" y1="108" x2="110" y2="62" marker-end="url(#ah)"/><text x="110" y="54" text-anchor="middle">y_t</text><text x="118" y="90" class="s">W_hy</text>
+        <text x="240" y="142" text-anchor="middle" class="b" style="font-size:22px">=</text>
+        <text x="580" y="22" text-anchor="middle" class="b">Unrolled in time (same W at every step)</text>
+        <text x="292" y="142" text-anchor="end" class="s">h₀</text><line class="k" x1="296" y1="137" x2="298" y2="137" marker-end="url(#ah)"/>
+<rect class="box" x="300" y="110" width="80" height="54" rx="8" style="fill:var(--accent-soft)"/><text x="340" y="142" text-anchor="middle" class="b">h₁</text>
+<line class="k" x1="340" y1="214" x2="340" y2="166" marker-end="url(#ah)"/><text x="340" y="230" text-anchor="middle">x₁</text>
+<line class="k" x1="340" y1="108" x2="340" y2="62" marker-end="url(#ah)"/><text x="340" y="54" text-anchor="middle">y₁</text>
+<line class="ka" style="stroke-width:2.2" x1="380" y1="128" x2="428" y2="128" marker-end="url(#ahA)"/><text x="405.0" y="120" text-anchor="middle" class="s ta">W_hh</text>
+<line class="kw dash" x1="428" y1="150" x2="382" y2="150" marker-end="url(#ahW)"/>
+<rect class="box" x="430" y="110" width="80" height="54" rx="8" style="fill:var(--accent-soft)"/><text x="470" y="142" text-anchor="middle" class="b">h₂</text>
+<line class="k" x1="470" y1="214" x2="470" y2="166" marker-end="url(#ah)"/><text x="470" y="230" text-anchor="middle">x₂</text>
+<line class="k" x1="470" y1="108" x2="470" y2="62" marker-end="url(#ah)"/><text x="470" y="54" text-anchor="middle">y₂</text>
+<line class="ka" style="stroke-width:2.2" x1="510" y1="128" x2="558" y2="128" marker-end="url(#ahA)"/><text x="535.0" y="120" text-anchor="middle" class="s ta">W_hh</text>
+<line class="kw dash" x1="558" y1="150" x2="512" y2="150" marker-end="url(#ahW)"/>
+<rect class="box" x="560" y="110" width="80" height="54" rx="8" style="fill:var(--accent-soft)"/><text x="600" y="142" text-anchor="middle" class="b">h₃</text>
+<line class="k" x1="600" y1="214" x2="600" y2="166" marker-end="url(#ah)"/><text x="600" y="230" text-anchor="middle">x₃</text>
+<line class="k" x1="600" y1="108" x2="600" y2="62" marker-end="url(#ah)"/><text x="600" y="54" text-anchor="middle">y₃</text>
+<line class="ka" style="stroke-width:2.2" x1="640" y1="128" x2="688" y2="128" marker-end="url(#ahA)"/><text x="665.0" y="120" text-anchor="middle" class="s ta">W_hh</text>
+<line class="kw dash" x1="688" y1="150" x2="642" y2="150" marker-end="url(#ahW)"/>
+<rect class="box" x="690" y="110" width="80" height="54" rx="8" style="fill:var(--accent-soft)"/><text x="730" y="142" text-anchor="middle" class="b">h₄</text>
+<line class="k" x1="730" y1="214" x2="730" y2="166" marker-end="url(#ah)"/><text x="730" y="230" text-anchor="middle">x₄</text>
+<line class="k" x1="730" y1="108" x2="730" y2="62" marker-end="url(#ah)"/><text x="730" y="54" text-anchor="middle">y₄</text>
+<line class="k" x1="296" y1="137" x2="298" y2="137"/>
+<line class="ka" style="stroke-width:2.2" x1="270" y1="128" x2="298" y2="128" marker-end="url(#ahA)"/>
+<text x="580" y="250" text-anchor="middle" class="s">same W_xh, W_hh, W_hy in every copy</text>
+        <text x="580" y="270" text-anchor="middle" class="s tw b">← backpropagation through time: gradients multiply by W_hh and tanh′ at every step</text>
+      </svg>
+      <figcaption>Folded: one cell with a loop. Unrolled: the loop drawn out as a chain, one copy per time step, all sharing W_xh, W_hh, W_hy.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: the vanishing (and exploding) gradient</h3>
+    <figure class="demo">
+      <canvas id="vgC" data-ratio="0.46" data-ratio-sm="0.85" aria-label="Bar chart on a log scale of how much the final hidden state depends on the hidden state at each earlier time step."></canvas>
+      <div class="controls">
+        <label class="ctl" for="vgW">Recurrent weight w<sub>hh</sub> <input type="range" id="vgW" min="0.2" max="2.5" step="0.05" value="0.9"><span class="val" id="vgWv"></span></label>
+        <label class="ctl" for="vgAct">Activation <select id="vgAct"><option value="tanh">tanh</option><option value="lin">linear (no squashing)</option></select></label>
+        <label class="ctl" for="vgT">Sequence length T <input type="range" id="vgT" min="10" max="50" step="5" value="30"><span class="val" id="vgTv"></span></label>
+      </div>
+      <p class="readout" id="vgOut"></p>
+      <p class="observe"><strong>What to observe.</strong> Each bar is |∂h<sub>T</sub>/∂h<sub>k</sub>|: how much a change at step k still affects the last step. It is a product of one factor w<sub>hh</sub>·tanh′ per step, so it changes exponentially with distance. With tanh the factors are below 1 (tanh′ ≤ 1), so the early bars shrink to almost nothing: the network cannot learn long-range dependencies. Switch to linear and push w<sub>hh</sub> above 1: the bars explode instead, which is why RNNs use gradient clipping.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>Sentences, speech and stock prices are sequences where order matters.</li>
+          <li>An RNN reads one item at a time and keeps a memory (hidden state) of what it has seen.</li>
+          <li>At each step: new memory = squash(old memory × W + current input × U).</li>
+          <li>The same weights are reused at every step, so it handles any length.</li>
+          <li>To train, unroll it like a deep network and backpropagate. But the gradient gets multiplied many times, so it fades (or blows up) over long distances.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li>\(h_t=\tanh(W_{hh}h_{t-1}+W_{xh}x_t+b_h)\), \(y_t=W_{hy}h_t+b_y\); parameters shared across time.</li>
+          <li><strong>Configurations:</strong> one-to-many (captioning), many-to-one (sentiment), many-to-many (tagging, translation).</li>
+          <li><strong>BPTT:</strong> unroll over T steps; \(\partial L/\partial W=\sum_t\partial L_t/\partial W\). Truncated BPTT limits the unroll length.</li>
+          <li>\(\frac{\partial h_T}{\partial h_k}=\prod_{t=k+1}^{T}\text{diag}(\tanh'(a_t))\,W_{hh}\): if the largest singular value of W_hh times tanh′ is below 1 the gradient vanishes; above 1 it can explode (Bengio et al., 1994; Pascanu et al., 2013).</li>
+          <li><strong>Fixes:</strong> gradient clipping (exploding); LSTM / GRU gates, careful initialisation (identity / orthogonal), ReLU RNNs (vanishing).</li>
+          <li><strong>Bidirectional</strong> RNNs read both ways; <strong>deep</strong> RNNs stack layers.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[h_t=\tanh(W_{hh}h_{t-1}+W_{xh}x_t+b_h)\qquad y_t=\text{softmax}(W_{hy}h_t+b_y)\qquad L=\sum_{t=1}^{T}L_t\]
+      \[\frac{\partial L}{\partial W_{hh}}=\sum_{t=1}^{T}\sum_{k=1}^{t}\frac{\partial L_t}{\partial h_t}\,\frac{\partial h_t}{\partial h_k}\,\frac{\partial h_k}{\partial W_{hh}}\qquad\qquad \frac{\partial h_t}{\partial h_k}=\prod_{j=k+1}^{t}W_{hh}^\top\,\text{diag}\bigl(1-h_j^2\bigr)\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(x_t,\ h_t,\ y_t\)</td><td>Input, hidden state and output at time t.</td></tr>
+        <tr><td>\(W_{xh},\ W_{hh},\ W_{hy}\)</td><td>Input-to-hidden, hidden-to-hidden (recurrent) and hidden-to-output weights, shared over time.</td></tr>
+        <tr><td>\(1-h_j^2\)</td><td>Derivative of tanh at step j (at most 1).</td></tr>
+        <tr><td>\(T\)</td><td>Sequence length.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">A one-unit RNN: \(h_t=\tanh(0.5\,h_{t-1}+x_t)\), h₀ = 0, inputs x = (1, 0.5, −1). Compute h₁, h₂, h₃ and the gradient ∂h₃/∂h₁.</p>
+      <ol>
+        <li>h₁ = tanh(0 + 1) = 0.7616.</li>
+        <li>h₂ = tanh(0.5 × 0.7616 + 0.5) = tanh(0.8808) = 0.7068.</li>
+        <li>h₃ = tanh(0.5 × 0.7068 − 1) = tanh(−0.6466) = −0.5694.</li>
+        <li>∂h₃/∂h₂ = 0.5 × (1 − 0.5694²) = 0.5 × 0.6758 = 0.3379; ∂h₂/∂h₁ = 0.5 × (1 − 0.7068²) = 0.5 × 0.5004 = 0.2502.</li>
+        <li>∂h₃/∂h₁ = 0.3379 × 0.2502 = 0.0845. After only 2 steps the influence has dropped to about 8%; over 20 steps it would be around 10⁻¹².</li>
+      </ol>
+      <p class="ans">Answer: h = (0.762, 0.707, −0.569); ∂h₃/∂h₁ = 0.0845.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Handles variable-length sequences.</li>
+        <li>Shares parameters across time.</li>
+        <li>Has memory of past inputs.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>Vanishing / exploding gradients; short memory.</li>
+        <li>Sequential, so slow to train (no parallelism over time).</li>
+        <li>Hard to capture very long dependencies.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Language modelling, text generation.</li>
+        <li>Speech recognition, handwriting.</li>
+        <li>Time-series forecasting, sequence tagging.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>Feed-forward network</th><th>Recurrent network</th></tr></thead>
+      <tbody>
+        <tr><th>Input</th><td>Fixed size</td><td>Sequence of any length</td></tr>
+        <tr><th>Memory</th><td>None</td><td>Hidden state h<sub>t</sub></td></tr>
+        <tr><th>Weights over time</th><td>-</td><td>Shared</td></tr>
+        <tr><th>Training</th><td>Backprop</td><td>Backprop through time</td></tr>
+        <tr><th>Main problem</th><td>Overfitting</td><td>Vanishing / exploding gradients</td></tr>
+      </tbody></table></div>
+    <div class="tablewrap" style="margin-top:12px"><table>
+      <thead><tr><th>Problem</th><th>Cause</th><th>Fix</th></tr></thead>
+      <tbody>
+        <tr><th>Vanishing gradient</th><td>Product of many factors &lt; 1</td><td>LSTM / GRU, identity init, ReLU, skip connections</td></tr>
+        <tr><th>Exploding gradient</th><td>Product of many factors &gt; 1</td><td>Gradient clipping, smaller learning rate</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>What is backpropagation through time?</p><p class="a">Training an RNN by unrolling it over the sequence into a deep feed-forward network with shared weights, backpropagating the summed loss through all time steps, and adding up the gradients for each shared weight.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why do RNNs suffer from vanishing gradients?</p><p class="a">The gradient from a late step to an early step is a product of one Jacobian per step (W_hh times tanh′). When these factors are below 1 the product shrinks exponentially with distance, so early inputs get almost no learning signal.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Give two RNN configurations with examples.</p><p class="a">Many-to-one: sentiment classification of a review. Many-to-many: part-of-speech tagging or machine translation. (One-to-many: image captioning.)</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain recurrent neural networks, backpropagation through time and the vanishing gradient problem.</p>
+      <ol>
+        <li><strong>Introduction:</strong> sequence data; limits of feed-forward nets.</li>
+        <li><strong>Folded and unrolled diagrams.</strong></li>
+        <li><strong>Forward equations;</strong> parameter sharing.</li>
+        <li><strong>RNN configurations</strong> (one-to-many, many-to-one, many-to-many).</li>
+        <li><strong>BPTT:</strong> gradient expression, truncated BPTT.</li>
+        <li><strong>Vanishing and exploding gradients:</strong> product of Jacobians; worked example.</li>
+        <li><strong>Remedies:</strong> clipping, LSTM / GRU, initialisation.</li>
+        <li><strong>Applications;</strong> conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> folded = unrolled from block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"Same weights, every step, carrying a memory."</strong></p>
+    <p><strong>Chinese whispers:</strong> a message passed through many people fades (vanishing) or gets wildly exaggerated (exploding).</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 6: LSTM ================= -->
+<section class="topic" id="t-lstm">
+  <p class="eyebrow">Topic 6 of 8 · Sequence models</p>
+  <h2>Long Short-Term Memory (LSTM)</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">An LSTM (Hochreiter and Schmidhuber, 1997) is a recurrent unit with a separate <mark>cell state c<sub>t</sub></mark> and three sigmoid <mark>gates (forget, input, output)</mark> that decide what to erase, what to write and what to reveal; because the cell state is updated by addition, gradients can flow across many time steps without vanishing.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw (click a gate)</h3>
+    <figure class="diagram">
+      <svg class="dg lstm" id="lstmSvg" viewBox="0 0 900 360" role="img" aria-label="LSTM cell. The cell state runs along the top from c t-1 to c t, passing a multiply node with the forget gate and an add node where the input gate times the candidate is added. The previous hidden state and the input are concatenated along the bottom and feed four layers: forget gate sigma, input gate sigma, candidate tanh, and output gate sigma. The new cell state passes through tanh and is multiplied by the output gate to give h t. Click a gate to highlight its data flow.">
+        <rect x="140" y="40" width="620" height="280" rx="18" style="fill:#f6f8fc;stroke:var(--line);stroke-width:1.5"/>
+        <!-- cell state line -->
+        <g class="fl" data-g="f i g c"><line class="k" style="stroke-width:3.4" x1="70" y1="80" x2="248" y2="80"/><line class="k" style="stroke-width:3.4" x1="272" y1="80" x2="418" y2="80"/><line class="k" style="stroke-width:3.4" x1="442" y1="80" x2="828" y2="80" marker-end="url(#ah)"/><text x="60" y="76" text-anchor="end" class="b">c<tspan dy="4" style="font-size:10px">t−1</tspan></text><text x="836" y="76" class="b">c<tspan dy="4" style="font-size:10px">t</tspan></text><text x="600" y="68" class="s">cell state: the "conveyor belt"</text></g>
+        <!-- input bus -->
+        <g class="fl" data-g="f i g o"><line class="k" x1="70" y1="300" x2="560" y2="300"/><text x="60" y="304" text-anchor="end" class="b">h<tspan dy="4" style="font-size:10px">t−1</tspan></text>
+          <line class="k" x1="190" y1="352" x2="190" y2="302"/><text x="190" y="350" text-anchor="middle" class="b" dx="22">x<tspan dy="4" style="font-size:10px">t</tspan></text>
+          <text x="140" y="292" class="s">[h<tspan dy="3" style="font-size:9px">t−1</tspan><tspan dy="-3">, x</tspan><tspan dy="3" style="font-size:9px">t</tspan><tspan dy="-3">]</tspan></text></g>
+        <!-- forget -->
+        <g class="fl" data-g="f"><line class="k" x1="260" y1="300" x2="260" y2="232"/><line class="kw" x1="260" y1="196" x2="260" y2="94" marker-end="url(#ahW)"/></g>
+        <g class="gate" data-g="f" tabindex="0" role="button" aria-label="Forget gate"><rect x="236" y="196" width="48" height="36" rx="6" class="box" style="fill:var(--warm-soft)"/><text x="260" y="219" text-anchor="middle" class="b">σ</text><text x="260" y="250" text-anchor="middle" class="s tw b" dx="-26">f<tspan dy="3" style="font-size:9px">t</tspan></text></g>
+        <g class="fl" data-g="f c"><circle cx="260" cy="80" r="12" class="box" style="fill:#fff"/><text x="260" y="86" text-anchor="middle" class="b">×</text></g>
+        <!-- input + candidate -->
+        <g class="fl" data-g="i"><line class="k" x1="360" y1="300" x2="360" y2="232"/><path class="ka" d="M360,196 V150 H416" marker-end="url(#ahA)"/></g>
+        <g class="gate" data-g="i" tabindex="0" role="button" aria-label="Input gate"><rect x="336" y="196" width="48" height="36" rx="6" class="box" style="fill:var(--accent-soft)"/><text x="360" y="219" text-anchor="middle" class="b">σ</text><text x="334" y="250" text-anchor="middle" class="s ta b">i<tspan dy="3" style="font-size:9px">t</tspan></text></g>
+        <g class="fl" data-g="g"><line class="k" x1="470" y1="300" x2="470" y2="232"/><path class="ka" d="M470,196 V150 H444" marker-end="url(#ahA)"/></g>
+        <g class="gate" data-g="g" tabindex="0" role="button" aria-label="Candidate values"><rect x="446" y="196" width="48" height="36" rx="6" class="box" style="fill:var(--accent-soft)"/><text x="470" y="219" text-anchor="middle" class="b" style="font-size:12px">tanh</text><text x="500" y="250" text-anchor="middle" class="s ta b">c̃<tspan dy="3" style="font-size:9px">t</tspan></text></g>
+        <g class="fl" data-g="i g c"><circle cx="430" cy="150" r="12" class="box" style="fill:#fff"/><text x="430" y="156" text-anchor="middle" class="b">×</text><line class="ka" x1="430" y1="138" x2="430" y2="94" marker-end="url(#ahA)"/><circle cx="430" cy="80" r="12" class="box" style="fill:#fff"/><text x="430" y="86" text-anchor="middle" class="b">+</text></g>
+        <!-- output -->
+        <g class="fl" data-g="o"><line class="k" x1="560" y1="300" x2="610" y2="300"/><line class="k" x1="610" y1="300" x2="610" y2="232"/><path class="kg" d="M610,196 V176 H668" marker-end="url(#ahG)"/></g>
+        <g class="gate" data-g="o" tabindex="0" role="button" aria-label="Output gate"><rect x="586" y="196" width="48" height="36" rx="6" class="box" style="fill:var(--good-soft)"/><text x="610" y="219" text-anchor="middle" class="b">σ</text><text x="584" y="250" text-anchor="middle" class="s tg b">o<tspan dy="3" style="font-size:9px">t</tspan></text></g>
+        <g class="fl" data-g="o c"><line class="k" x1="680" y1="80" x2="680" y2="104"/><rect x="656" y="106" width="48" height="30" rx="6" class="box"/><text x="680" y="126" text-anchor="middle" class="b" style="font-size:12px">tanh</text><line class="k" x1="680" y1="136" x2="680" y2="162" marker-end="url(#ah)"/><circle cx="680" cy="176" r="12" class="box" style="fill:#fff"/><text x="680" y="182" text-anchor="middle" class="b">×</text>
+          <path class="kg" style="stroke-width:3" d="M680,188 V300 H828" marker-end="url(#ahG)"/><text x="836" y="304" class="b">h<tspan dy="4" style="font-size:10px">t</tspan></text><path class="kg" d="M760,300 V20" marker-end="url(#ahG)"/><text x="770" y="24" class="s">to output / next layer</text></g>
+        <!-- live values -->
+        <g class="s" style="font-family:var(--font-mono)"><text id="lv-f" x="286" y="214" class="s tw b"></text><text id="lv-i" x="386" y="214" class="s ta b"></text><text id="lv-g" x="498" y="214" class="s ta b"></text><text id="lv-o" x="636" y="214" class="s tg b"></text><text id="lv-c" x="836" y="98" class="s b"></text><text id="lv-h" x="836" y="322" class="s tg b"></text><text id="lv-cp" x="60" y="98" text-anchor="end" class="s"></text><text id="lv-hp" x="60" y="322" text-anchor="end" class="s"></text><text id="lv-x" x="230" y="348" class="s"></text></g>
+      </svg>
+      <figcaption>Click (or Tab to and press Enter on) any gate to highlight its data flow; click it again to see everything. Live values from the sliders in block 3 are printed next to each gate.</figcaption>
+    </figure>
+    <div class="stepbox" id="lstmEq" aria-live="polite"></div>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: drive the cell with numbers</h3>
+    <figure class="demo">
+      <div class="controls" style="margin-top:0">
+        <label class="ctl" for="lxT">x<sub>t</sub> <input type="range" id="lxT" min="-2" max="2" step="0.1" value="1"><span class="val" id="lxTv"></span></label>
+        <label class="ctl" for="lhP">h<sub>t−1</sub> <input type="range" id="lhP" min="-1" max="1" step="0.1" value="0.5"><span class="val" id="lhPv"></span></label>
+        <label class="ctl" for="lcP">c<sub>t−1</sub> <input type="range" id="lcP" min="-2" max="2" step="0.1" value="0.8"><span class="val" id="lcPv"></span></label>
+        <label class="ctl" for="lbF">forget-gate bias b<sub>f</sub> <input type="range" id="lbF" min="-4" max="4" step="0.5" value="0"><span class="val" id="lbFv"></span></label>
+      </div>
+      <canvas id="lstmMem" data-ratio="0.32" data-ratio-sm="0.6" style="margin-top:10px" aria-label="How much of an initial memory remains after many steps for an LSTM cell state and a simple RNN."></canvas>
+      <p class="readout" id="lstmOut"></p>
+      <p class="observe"><strong>What to observe.</strong> One-unit LSTM with fixed weights (listed below). The four gate values appear on the diagram above. In the chart, a value is stored at step 0 and then 30 steps of zero input follow: the LSTM cell keeps f<sup>t</sup> of it each step, so a forget gate near 1 (raise b<sub>f</sub>) preserves it almost perfectly, while a simple tanh RNN with weight 0.9 lets it fade. That is why LSTMs remember for long and why practitioners initialise b<sub>f</sub> to 1 or more.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>The cell state is a conveyor belt carrying long-term memory through time with only small, controlled changes.</li>
+          <li><strong>Forget gate:</strong> for each memory slot, how much to keep (1) or erase (0).</li>
+          <li><strong>Input gate + candidate:</strong> what new information to write, and how much of it.</li>
+          <li><strong>Output gate:</strong> how much of the (squashed) memory to show as the hidden state h<sub>t</sub>.</li>
+          <li>Gates are sigmoids (between 0 and 1), so they act like learned valves.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li>Each gate is a sigmoid layer over \([h_{t-1},x_t]\); the candidate uses tanh.</li>
+          <li>\(c_t=f_t\odot c_{t-1}+i_t\odot\tilde c_t\): an additive update, not repeated matrix multiplication.</li>
+          <li>\(\partial c_t/\partial c_{t-1}=f_t\) (ignoring indirect paths): if the forget gate stays near 1, the gradient passes through many steps almost unchanged (the "constant error carousel").</li>
+          <li>Parameters: 4 weight matrices, so \(4(n(n+d)+n)\) for n units and d inputs, four times a simple RNN.</li>
+          <li><strong>Variants:</strong> peephole connections (gates see c), GRU (Cho et al., 2014: update and reset gates, no separate cell state, fewer parameters), bidirectional and stacked LSTMs.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[f_t=\sigma(W_f[h_{t-1},x_t]+b_f)\qquad i_t=\sigma(W_i[h_{t-1},x_t]+b_i)\qquad \tilde c_t=\tanh(W_c[h_{t-1},x_t]+b_c)\]
+      \[c_t=f_t\odot c_{t-1}+i_t\odot\tilde c_t\qquad o_t=\sigma(W_o[h_{t-1},x_t]+b_o)\qquad h_t=o_t\odot\tanh(c_t)\]
+      \[\textbf{Parameters}=4\bigl(n(n+d)+n\bigr)\qquad\qquad \textbf{GRU:}\ \ h_t=(1-z_t)\odot h_{t-1}+z_t\odot\tilde h_t\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(f_t,\ i_t,\ o_t\)</td><td>Forget, input and output gates (each between 0 and 1).</td></tr>
+        <tr><td>\(\tilde c_t\)</td><td>Candidate values to add (between −1 and 1).</td></tr>
+        <tr><td>\(c_t,\ h_t\)</td><td>Cell state (long-term memory) and hidden state (output).</td></tr>
+        <tr><td>\([h_{t-1},x_t]\)</td><td>Concatenation of previous hidden state and current input.</td></tr>
+        <tr><td>\(\odot\)</td><td>Element-wise multiplication.</td></tr>
+        <tr><td>\(n,\ d\)</td><td>Number of LSTM units; input size.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">One-unit LSTM with x<sub>t</sub> = 1, h<sub>t−1</sub> = 0.5, c<sub>t−1</sub> = 0.8 and weights (on [x, h]): forget (0.5, 0.5), b = 0; input (1, −1), b = 0; candidate (1, 1), b = 0; output (0.5, 1), b = −0.5. These are the demo's defaults.</p>
+      <ol>
+        <li>f = σ(0.5·1 + 0.5·0.5) = σ(0.75) = 0.679.</li>
+        <li>i = σ(1 − 0.5) = σ(0.5) = 0.622; c̃ = tanh(1 + 0.5) = tanh(1.5) = 0.905.</li>
+        <li>c<sub>t</sub> = 0.679 × 0.8 + 0.622 × 0.905 = 0.543 + 0.563 = 1.107.</li>
+        <li>o = σ(0.5 + 0.5 − 0.5) = σ(0.5) = 0.622.</li>
+        <li>h<sub>t</sub> = 0.622 × tanh(1.107) = 0.622 × 0.803 = 0.500.</li>
+        <li>Parameter count for n = 128 units, d = 100 inputs: 4(128 × 228 + 128) = 4 × 29,312 = 117,248.</li>
+      </ol>
+      <p class="ans">Answer: f = 0.679, i = 0.622, c̃ = 0.905, o = 0.622, c<sub>t</sub> = 1.107, h<sub>t</sub> = 0.500; 117,248 parameters.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Learns long-range dependencies (hundreds of steps).</li>
+        <li>Largely solves vanishing gradients.</li>
+        <li>Gates make memory control learnable.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>4× the parameters and computation of a simple RNN.</li>
+        <li>Still sequential, so slower than Transformers.</li>
+        <li>Very long sequences remain hard.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Speech recognition, machine translation (pre-Transformer).</li>
+        <li>Language models, text generation.</li>
+        <li>Handwriting recognition, time-series forecasting.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison: RNN vs LSTM vs GRU</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>Simple RNN</th><th>LSTM</th><th>GRU</th></tr></thead>
+      <tbody>
+        <tr><th>States</th><td>h</td><td>h and c</td><td>h only</td></tr>
+        <tr><th>Gates</th><td>None</td><td>Forget, input, output</td><td>Update, reset</td></tr>
+        <tr><th>Parameters (per unit block)</th><td>1×</td><td>4×</td><td>3×</td></tr>
+        <tr><th>Long-term memory</th><td>Poor</td><td>Very good</td><td>Very good</td></tr>
+        <tr><th>Speed</th><td>Fastest</td><td>Slowest</td><td>In between</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>What is the role of the forget gate?</p><p class="a">It outputs a value between 0 and 1 for each element of the cell state, deciding how much of the previous memory c<sub>t−1</sub> to keep: f<sub>t</sub> = σ(W<sub>f</sub>[h<sub>t−1</sub>, x<sub>t</sub>] + b<sub>f</sub>).</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>How does the LSTM reduce the vanishing gradient problem?</p><p class="a">The cell state is updated additively, c<sub>t</sub> = f<sub>t</sub>c<sub>t−1</sub> + i<sub>t</sub>c̃<sub>t</sub>, so the gradient along it is multiplied only by the forget gate, which can stay near 1, instead of by a weight matrix and tanh′ at every step.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Differentiate LSTM and GRU.</p><p class="a">The LSTM has three gates and separate cell and hidden states. The GRU merges them into one hidden state with two gates (update and reset), so it has fewer parameters and is faster, with similar accuracy on many tasks.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain the architecture of an LSTM cell with a neat diagram and equations.</p>
+      <ol>
+        <li><strong>Motivation:</strong> vanishing gradients in RNNs.</li>
+        <li><strong>Cell diagram</strong> (block 2).</li>
+        <li><strong>Cell state</strong> as a conveyor belt.</li>
+        <li><strong>Forget gate:</strong> equation and role.</li>
+        <li><strong>Input gate and candidate:</strong> equations; cell update.</li>
+        <li><strong>Output gate</strong> and hidden state.</li>
+        <li><strong>Why gradients survive:</strong> additive update.</li>
+        <li><strong>Numerical example;</strong> GRU comparison; applications; conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"Forget, Input, Output" = "FIO": Forget the old, Input the new, Output what is needed.</strong></p>
+    <p>Cell update in words: <strong>"keep some old + add some new"</strong>; output: <strong>"show some of the squashed memory"</strong>.</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 7: RNN LM ================= -->
+<section class="topic" id="t-lm">
+  <p class="eyebrow">Topic 7 of 8 · Sequence models</p>
+  <h2>RNN Language Models and Word-level RNNs</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">An RNN language model estimates the probability of a sentence by <mark>predicting each next word from all the previous words</mark>, \(P(w_1,\dots,w_T)=\prod_tP(w_t\mid w_{&lt;t})\), using an RNN or LSTM whose hidden state summarises the history; in a <mark>word-level RNN</mark> each time step is one word from a fixed vocabulary.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 290" role="img" aria-label="Word-level RNN language model: input words start, the, cat, sat each go through an embedding lookup into an RNN or LSTM chain; at each step a softmax over the vocabulary predicts the next word: the, cat, sat, on. The loss is the negative log probability of the true next word.">
+        <text x="200" y="278" text-anchor="middle" class="b">&lt;s&gt;</text><line class="k" x1="200" y1="264" x2="200" y2="236" marker-end="url(#ah)"/>
+<rect class="box" x="150" y="200" width="100" height="34" rx="6" style="fill:#fff5df"/><text x="200" y="222" text-anchor="middle" class="s">embedding</text>
+<line class="k" x1="200" y1="200" x2="200" y2="170" marker-end="url(#ah)"/>
+<rect class="box" x="150" y="128" width="100" height="40" rx="8" style="fill:var(--accent-soft)"/><text x="200" y="153" text-anchor="middle" class="b">LSTM</text>
+<line class="k" x1="200" y1="128" x2="200" y2="100" marker-end="url(#ah)"/>
+<rect class="box" x="150" y="66" width="100" height="32" rx="6" style="fill:var(--warm-soft)"/><text x="200" y="87" text-anchor="middle" class="s b">softmax |V|</text>
+<line class="k" x1="200" y1="66" x2="200" y2="44" marker-end="url(#ah)"/><text x="200" y="36" text-anchor="middle" class="b ta">P(next) → the</text>
+<line class="k" x1="250" y1="148" x2="318" y2="148" marker-end="url(#ah)"/>
+<text x="370" y="278" text-anchor="middle" class="b">the</text><line class="k" x1="370" y1="264" x2="370" y2="236" marker-end="url(#ah)"/>
+<rect class="box" x="320" y="200" width="100" height="34" rx="6" style="fill:#fff5df"/><text x="370" y="222" text-anchor="middle" class="s">embedding</text>
+<line class="k" x1="370" y1="200" x2="370" y2="170" marker-end="url(#ah)"/>
+<rect class="box" x="320" y="128" width="100" height="40" rx="8" style="fill:var(--accent-soft)"/><text x="370" y="153" text-anchor="middle" class="b">LSTM</text>
+<line class="k" x1="370" y1="128" x2="370" y2="100" marker-end="url(#ah)"/>
+<rect class="box" x="320" y="66" width="100" height="32" rx="6" style="fill:var(--warm-soft)"/><text x="370" y="87" text-anchor="middle" class="s b">softmax |V|</text>
+<line class="k" x1="370" y1="66" x2="370" y2="44" marker-end="url(#ah)"/><text x="370" y="36" text-anchor="middle" class="b ta">P(next) → cat</text>
+<line class="k" x1="420" y1="148" x2="488" y2="148" marker-end="url(#ah)"/>
+<text x="540" y="278" text-anchor="middle" class="b">cat</text><line class="k" x1="540" y1="264" x2="540" y2="236" marker-end="url(#ah)"/>
+<rect class="box" x="490" y="200" width="100" height="34" rx="6" style="fill:#fff5df"/><text x="540" y="222" text-anchor="middle" class="s">embedding</text>
+<line class="k" x1="540" y1="200" x2="540" y2="170" marker-end="url(#ah)"/>
+<rect class="box" x="490" y="128" width="100" height="40" rx="8" style="fill:var(--accent-soft)"/><text x="540" y="153" text-anchor="middle" class="b">LSTM</text>
+<line class="k" x1="540" y1="128" x2="540" y2="100" marker-end="url(#ah)"/>
+<rect class="box" x="490" y="66" width="100" height="32" rx="6" style="fill:var(--warm-soft)"/><text x="540" y="87" text-anchor="middle" class="s b">softmax |V|</text>
+<line class="k" x1="540" y1="66" x2="540" y2="44" marker-end="url(#ah)"/><text x="540" y="36" text-anchor="middle" class="b ta">P(next) → sat</text>
+<line class="k" x1="590" y1="148" x2="658" y2="148" marker-end="url(#ah)"/>
+<text x="710" y="278" text-anchor="middle" class="b">sat</text><line class="k" x1="710" y1="264" x2="710" y2="236" marker-end="url(#ah)"/>
+<rect class="box" x="660" y="200" width="100" height="34" rx="6" style="fill:#fff5df"/><text x="710" y="222" text-anchor="middle" class="s">embedding</text>
+<line class="k" x1="710" y1="200" x2="710" y2="170" marker-end="url(#ah)"/>
+<rect class="box" x="660" y="128" width="100" height="40" rx="8" style="fill:var(--accent-soft)"/><text x="710" y="153" text-anchor="middle" class="b">LSTM</text>
+<line class="k" x1="710" y1="128" x2="710" y2="100" marker-end="url(#ah)"/>
+<rect class="box" x="660" y="66" width="100" height="32" rx="6" style="fill:var(--warm-soft)"/><text x="710" y="87" text-anchor="middle" class="s b">softmax |V|</text>
+<line class="k" x1="710" y1="66" x2="710" y2="44" marker-end="url(#ah)"/><text x="710" y="36" text-anchor="middle" class="b ta">P(next) → on</text>
+<text x="30" y="282" class="s b">WORDS</text><text x="30" y="222" class="s b">EMBED</text><text x="30" y="153" class="s b">RNN</text><text x="30" y="87" class="s b">OUTPUT</text>
+<text x="800" y="153" class="s">h carries</text><text x="800" y="169" class="s">the history</text>
+<text x="455" y="16" text-anchor="middle" class="s tw b">loss = −log P(the) − log P(cat | the) − log P(sat | the cat) − …</text>
+      </svg>
+      <figcaption>Mikolov et al. (2010) introduced the RNN language model. End-to-end: words → one-hot → embedding → RNN / LSTM → softmax over vocabulary → next-word probability → cross-entropy loss (training) or sampling (generation).</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: predicting the next word step by step</h3>
+    <figure class="demo">
+      <canvas id="lmC" data-ratio="0.46" data-ratio-sm="0.9" aria-label="Current input word, hidden state, and the top five next-word probabilities with the true next word highlighted."></canvas>
+      <div class="controls">
+        <button id="lmNext" type="button">Next word</button>
+        <button class="ghost" id="lmReset" type="button">Start again</button>
+      </div>
+      <p class="readout" id="lmOut"></p>
+      <p class="observe"><strong>What to observe.</strong> At each step the model reads one word and outputs a probability for every word in the vocabulary (top five shown). The true next word is outlined. Notice step 6: the input is "the" again, but the predictions differ from step 2 ("mat", "floor" instead of "cat", "dog") because the hidden state remembers "sat on". The loss is −log of the true word's probability, and perplexity = exp(average loss). The probabilities are illustrative, not from a trained model; the arithmetic is real.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>A language model guesses the next word, like your phone keyboard's suggestions.</li>
+          <li>Older n-gram models looked only at the last 2–3 words. An RNN can, in principle, use the whole history.</li>
+          <li>Each word is turned into a vector (embedding), fed into the RNN, and the RNN outputs a probability for every word in the vocabulary.</li>
+          <li>Training: compare the prediction with the actual next word and reduce −log p of it.</li>
+          <li>Generation: pick (or sample) a word, feed it back in, repeat.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li>Chain rule: \(P(w_{1:T})=\prod_tP(w_t\mid w_{1:t-1})\); the RNN approximates each factor by \(\text{softmax}(W_{hy}h_t)\).</li>
+          <li><strong>Embedding:</strong> \(x_t=E\,\text{onehot}(w_t)\), E is |V| × d (often tied with the output matrix).</li>
+          <li><strong>Training:</strong> teacher forcing, cross-entropy, truncated BPTT on long text; dropout between layers (Zaremba et al., 2014).</li>
+          <li><strong>Evaluation:</strong> perplexity \(\text{PPL}=\exp(-\frac1T\sum\log p(w_t))\), the effective number of equally likely choices; lower is better.</li>
+          <li><strong>Word-level challenges:</strong> large vocabulary makes the softmax expensive (|V| × hidden weights); unknown words map to &lt;UNK&gt;. Remedies: hierarchical / sampled softmax, subword units (BPE).</li>
+          <li><strong>Character-level RNNs</strong> (Karpathy, 2015) use a tiny vocabulary and handle any word, but sequences are much longer.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[P(w_1,\dots,w_T)=\prod_{t=1}^{T}P(w_t\mid w_1,\dots,w_{t-1})\]
+      \[x_t=E\,w_t,\qquad h_t=\text{LSTM}(x_t,h_{t-1}),\qquad \hat y_t=\text{softmax}(W_{hy}h_t+b)\in\mathbb R^{|V|}\]
+      \[L=-\frac1T\sum_{t=1}^{T}\log\hat y_t[w_{t+1}]\qquad\qquad \text{PPL}=e^{L}\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(w_t\)</td><td>t-th word (one-hot vector over the vocabulary).</td></tr>
+        <tr><td>\(E\)</td><td>Embedding matrix.</td></tr>
+        <tr><td>\(|V|\)</td><td>Vocabulary size.</td></tr>
+        <tr><td>\(\hat y_t[w]\)</td><td>Predicted probability of word w at step t.</td></tr>
+        <tr><td>PPL</td><td>Perplexity.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">A model assigns the true next words probabilities 0.2, 0.5, 0.4, 0.8. Compute the average loss and perplexity. Then count output-layer parameters for |V| = 10,000 and hidden size 512, and embedding parameters for d = 300.</p>
+      <ol>
+        <li>Losses: −ln 0.2 = 1.609, −ln 0.5 = 0.693, −ln 0.4 = 0.916, −ln 0.8 = 0.223.</li>
+        <li>Average = 3.442/4 = 0.861. Perplexity = e<sup>0.861</sup> = 2.36: the model is as uncertain as choosing among about 2.4 equally likely words.</li>
+        <li>Output layer: 512 × 10,000 + 10,000 = 5,130,000 parameters.</li>
+        <li>Embedding: 10,000 × 300 = 3,000,000 parameters. Together these dominate a small LSTM's size.</li>
+      </ol>
+      <p class="ans">Answer: average loss 0.861, perplexity 2.36; 5.13 M output and 3 M embedding parameters.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Unlimited history in principle (vs fixed n in n-grams).</li>
+        <li>Embeddings share strength between similar words.</li>
+        <li>Lower perplexity than n-gram models.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>Large softmax over the vocabulary is slow.</li>
+        <li>Unknown / rare words.</li>
+        <li>Long-range memory still limited; sequential training.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Speech recognition and keyboard prediction.</li>
+        <li>Machine translation decoders, text generation.</li>
+        <li>Spelling correction; pre-training (ELMo used LSTM LMs).</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison tables</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>Word-level RNN</th><th>Character-level RNN</th></tr></thead>
+      <tbody>
+        <tr><th>One step =</th><td>One word</td><td>One character</td></tr>
+        <tr><th>Vocabulary</th><td>10⁴–10⁵ words</td><td>About 100 characters</td></tr>
+        <tr><th>Sequence length</th><td>Short</td><td>About 5× longer</td></tr>
+        <tr><th>Unknown words</th><td>Mapped to &lt;UNK&gt;</td><td>None: can spell anything</td></tr>
+        <tr><th>Softmax cost</th><td>High</td><td>Low</td></tr>
+        <tr><th>Long-range context</th><td>Easier (fewer steps)</td><td>Harder</td></tr>
+      </tbody></table></div>
+    <div class="tablewrap" style="margin-top:12px"><table>
+      <thead><tr><th>Point</th><th>n-gram model</th><th>RNN language model</th></tr></thead>
+      <tbody>
+        <tr><th>Context</th><td>Last n − 1 words</td><td>All previous words (via h)</td></tr>
+        <tr><th>Unseen word combinations</th><td>Needs smoothing</td><td>Generalizes via embeddings</td></tr>
+        <tr><th>Storage</th><td>Grows with corpus (count tables)</td><td>Fixed number of weights</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>What is a language model?</p><p class="a">A model that assigns a probability to a sequence of words, usually by predicting each word from the previous ones: P(w₁ … w_T) = Π P(w_t | w₁ … w_{t−1}).</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Define perplexity.</p><p class="a">Perplexity = exp(−(1/T) Σ log p(w_t)), the exponential of the average negative log-likelihood per word. It is the effective number of choices the model is unsure between; lower is better.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Compare word-level and character-level RNNs.</p><p class="a">Word-level RNNs predict whole words from a large vocabulary (short sequences, but expensive softmax and unknown words). Character-level RNNs predict characters from a small set (no unknown words, but much longer sequences and harder long-range modelling).</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain recurrent neural network language models and word-level RNNs.</p>
+      <ol>
+        <li><strong>Language modelling:</strong> chain rule; n-gram limitations.</li>
+        <li><strong>RNN LM diagram</strong> (block 2).</li>
+        <li><strong>Embedding layer</strong> and one-hot words.</li>
+        <li><strong>RNN / LSTM layer</strong> equations.</li>
+        <li><strong>Softmax output;</strong> vocabulary cost.</li>
+        <li><strong>Training:</strong> cross-entropy, teacher forcing, BPTT.</li>
+        <li><strong>Evaluation:</strong> perplexity (worked example).</li>
+        <li><strong>Text generation</strong> (greedy, sampling); word vs character level; applications; conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"Your phone keyboard, with a memory."</strong> Read a word, update memory, guess the next.</p>
+    <p><strong>Perplexity = how many words it is "confused between".</strong></p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 8: DEEP RL ================= -->
+<section class="topic" id="t-rl">
+  <p class="eyebrow">Topic 8 of 8 · Reinforcement learning</p>
+  <h2>Deep Reinforcement Learning</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">Reinforcement learning trains an <mark>agent to choose actions in an environment to maximise its total future reward</mark>; deep RL uses a neural network to approximate the value function or policy, as in the <mark>Deep Q-Network (DQN)</mark>, which learned to play Atari games from raw pixels (Mnih et al., 2015).</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw: the RL loop and DQN</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 300" role="img" aria-label="Left: agent-environment loop: the agent observes state s t and reward r t, takes action a t, and the environment returns the next state and reward. Right: DQN: stacked game frames go through a CNN and fully connected layers to output one Q value per action; experience tuples are stored in a replay memory and sampled in mini-batches; a separate target network computes the target r plus gamma times max Q.">
+        <rect class="box" x="30" y="40" width="150" height="56" rx="10" style="fill:var(--accent-soft)"/><text x="105" y="66" text-anchor="middle" class="b">Agent</text><text x="105" y="84" text-anchor="middle" class="s">policy π(a | s)</text>
+        <rect class="box" x="30" y="200" width="150" height="56" rx="10" style="fill:var(--good-soft)"/><text x="105" y="226" text-anchor="middle" class="b">Environment</text><text x="105" y="244" text-anchor="middle" class="s">game, robot, market</text>
+        <path class="kw" d="M180,68 C260,68 260,228 182,228" marker-end="url(#ahW)"/><text x="262" y="152" class="tw b">action a<tspan dy="3" style="font-size:9px">t</tspan></text>
+        <path class="ka" d="M30,228 C-30,228 -30,68 28,68" marker-end="url(#ahA)" transform="translate(40,0)"/>
+        <text x="-4" y="140" class="ta b" transform="translate(40,0)">state s<tspan dy="3" style="font-size:9px">t+1</tspan></text><text x="-4" y="158" class="ta b" transform="translate(40,0)">reward r<tspan dy="3" style="font-size:9px">t+1</tspan></text>
+        <line class="kl dash" x1="320" y1="20" x2="320" y2="290"/>
+        <text x="610" y="22" text-anchor="middle" class="b">Deep Q-Network (DQN)</text>
+        <g transform="translate(340,60)"><rect class="box" x="10" y="0" width="56" height="56" rx="3"/><rect class="box" x="5" y="5" width="56" height="56" rx="3"/><rect class="box" x="0" y="10" width="56" height="56" rx="3" style="fill:#fff5df"/></g>
+        <text x="370" y="148" text-anchor="middle" class="s">4 frames</text><text x="370" y="162" text-anchor="middle" class="s">84×84</text>
+        <path class="box" d="M430,64 L520,80 L520,120 L430,136 Z" style="fill:var(--accent-soft)"/><text x="474" y="104" text-anchor="middle" class="b">CNN</text>
+        <rect class="box" x="540" y="80" width="60" height="40" rx="6"/><text x="570" y="105" text-anchor="middle" class="b">FC</text>
+        <g><rect class="box" x="626" y="56" width="110" height="26" rx="4" style="fill:var(--warm-soft)"/><text x="681" y="74" text-anchor="middle" class="s b">Q(s, left)</text><rect class="box" x="626" y="88" width="110" height="26" rx="4" style="fill:var(--warm-soft)"/><text x="681" y="106" text-anchor="middle" class="s b">Q(s, right)</text><rect class="box" x="626" y="120" width="110" height="26" rx="4" style="fill:var(--warm-soft)"/><text x="681" y="138" text-anchor="middle" class="s b">Q(s, fire)</text></g>
+        <g class="k"><line x1="400" y1="100" x2="428" y2="100" marker-end="url(#ah)"/><line x1="520" y1="100" x2="538" y2="100" marker-end="url(#ah)"/><line x1="600" y1="100" x2="624" y2="100" marker-end="url(#ah)"/></g>
+        <text x="800" y="104" text-anchor="middle" class="s">act: argmax</text><text x="800" y="120" text-anchor="middle" class="s">(ε-greedy)</text>
+        <rect class="box" x="350" y="200" width="200" height="56" rx="8" style="fill:#efe9f8"/><text x="450" y="224" text-anchor="middle" class="b">Replay memory</text><text x="450" y="242" text-anchor="middle" class="s">(s, a, r, s′) tuples, sampled randomly</text>
+        <rect class="box" x="590" y="200" width="290" height="56" rx="8" style="fill:var(--good-soft)"/><text x="735" y="224" text-anchor="middle" class="b">Target network (copy every C steps)</text><text x="735" y="242" text-anchor="middle" class="s">y = r + γ max<tspan dy="3" style="font-size:9px">a′</tspan><tspan dy="-3"> Q</tspan><tspan dy="3" style="font-size:9px">target</tspan><tspan dy="-3">(s′, a′)</tspan></text>
+        <text x="610" y="286" text-anchor="middle" class="s tw b">loss = (y − Q(s, a))², minimised by SGD / RMSProp</text>
+        <line class="kl dash" x1="450" y1="198" x2="450" y2="166" marker-end="url(#ah)"/><line class="kl dash" x1="681" y1="198" x2="681" y2="150" marker-end="url(#ah)"/>
+      </svg>
+      <figcaption>Left: the RL loop (draw for any RL question). Right: DQN's three ingredients: a CNN that outputs Q for every action, experience replay, and a target network.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: Q-learning in a 4×4 grid world</h3>
+    <figure class="demo">
+      <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+        <div class="qg" id="qGrid" aria-label="Grid world. Each cell shows its best action and value."></div>
+        <div style="flex:1;min-width:240px">
+          <div class="controls" style="margin-top:0">
+            <button id="qStep" type="button">One step</button>
+            <button class="ghost" id="qEp" type="button">Run 1 episode</button>
+            <button class="ghost" id="qEp50" type="button">Run 50 episodes</button>
+            <button class="ghost" id="qReset" type="button">Reset Q-table</button>
+          </div>
+          <div class="controls">
+            <label class="ctl" for="qA">α <input type="range" id="qA" min="0.1" max="1" step="0.1" value="0.5"><span class="val" id="qAv"></span></label>
+            <label class="ctl" for="qG">γ <input type="range" id="qG" min="0.5" max="0.99" step="0.01" value="0.9"><span class="val" id="qGv"></span></label>
+            <label class="ctl" for="qE">ε <input type="range" id="qE" min="0" max="1" step="0.05" value="0.2"><span class="val" id="qEv"></span></label>
+          </div>
+          <div class="stepbox" id="qBox" aria-live="polite"></div>
+        </div>
+      </div>
+      <p class="observe"><strong>What to observe.</strong> The agent (blue dot) starts bottom-left; the green cell gives +1, the orange cell −1, every move costs −0.04, and the dark cell is a wall. Each step updates one entry of the Q-table using the rule shown with real numbers. At first the arrows are random; after about 50 episodes the reward has propagated back from the goal and the arrows trace a path around the pit. ε controls exploration: with ε = 0 the agent may never discover the goal. Click any cell to see its four Q-values.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>No labels: the agent tries actions and gets rewards, like training a dog with treats.</li>
+          <li>It learns Q(s, a): "how good is action a in situation s, counting all future rewards?"</li>
+          <li>After each move it nudges Q towards: reward received + discounted best value of where it landed.</li>
+          <li>It mostly picks the best-known action but sometimes explores randomly (ε-greedy).</li>
+          <li>For huge state spaces (game screens), a neural network replaces the table: that is deep RL.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li><strong>MDP:</strong> states S, actions A, transitions P(s′ | s, a), rewards R, discount γ. Return \(G_t=\sum_k\gamma^kr_{t+k+1}\).</li>
+          <li><strong>Bellman optimality:</strong> \(Q^*(s,a)=\mathbb E[r+\gamma\max_{a'}Q^*(s',a')]\).</li>
+          <li><strong>Q-learning</strong> (Watkins, 1989): off-policy temporal-difference update with learning rate α.</li>
+          <li><strong>DQN:</strong> Q(s, a; θ) by a CNN; loss \((y-Q(s,a;\theta))^2\) with target from a frozen copy θ⁻; <strong>experience replay</strong> breaks correlation between consecutive samples; trained with RMSProp; reached human-level play on many of 49 Atari games.</li>
+          <li><strong>Improvements:</strong> Double DQN (reduces over-estimation), Dueling DQN, prioritised replay.</li>
+          <li><strong>Policy-gradient methods</strong> (REINFORCE, actor–critic, PPO) optimize π directly; AlphaGo (2016) combined deep networks with tree search.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[G_t=r_{t+1}+\gamma r_{t+2}+\gamma^2r_{t+3}+\dots=\sum_{k=0}^{\infty}\gamma^kr_{t+k+1}\]
+      \[\textbf{Q-learning:}\quad Q(s,a)\leftarrow Q(s,a)+\alpha\Bigl[r+\gamma\max_{a'}Q(s',a')-Q(s,a)\Bigr]\]
+      \[\textbf{DQN loss:}\quad L(\theta)=\mathbb E_{(s,a,r,s')\sim D}\Bigl[\bigl(r+\gamma\max_{a'}Q(s',a';\theta^-)-Q(s,a;\theta)\bigr)^2\Bigr]\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(s,\ a,\ r,\ s'\)</td><td>State, action, reward, next state.</td></tr>
+        <tr><td>\(Q(s,a)\)</td><td>Expected return of taking a in s and acting well afterwards.</td></tr>
+        <tr><td>\(\alpha\)</td><td>Learning rate of the update.</td></tr>
+        <tr><td>\(\gamma\)</td><td>Discount factor (0–1): how much future rewards count.</td></tr>
+        <tr><td>\(\varepsilon\)</td><td>Exploration probability in ε-greedy.</td></tr>
+        <tr><td>\(\theta,\ \theta^-\)</td><td>Online network weights; frozen target network weights.</td></tr>
+        <tr><td>\(D\)</td><td>Replay memory.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">(a) Rewards along an episode are 0, 0, 1 with γ = 0.9. Find the return from the start. (b) Q(s, right) = 0.5; the agent moves right, gets r = 0, and the best Q-value in the new state is 0.8. With α = 0.5 and γ = 0.9, update Q(s, right).</p>
+      <ol>
+        <li>(a) G = 0 + 0.9 × 0 + 0.9² × 1 = 0.81.</li>
+        <li>(b) Target = r + γ max Q(s′, ·) = 0 + 0.9 × 0.8 = 0.72.</li>
+        <li>TD error = 0.72 − 0.5 = 0.22.</li>
+        <li>New Q = 0.5 + 0.5 × 0.22 = 0.61.</li>
+      </ol>
+      <p class="ans">Answer: G = 0.81; Q(s, right) rises from 0.5 to 0.61.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Learns from interaction, without labelled data.</li>
+        <li>Handles raw, high-dimensional input (pixels).</li>
+        <li>Can discover strategies beyond human play.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>Needs huge numbers of trials (sample inefficient).</li>
+        <li>Unstable training; reward design is hard.</li>
+        <li>Exploration vs exploitation trade-off.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Games: Atari (DQN), Go (AlphaGo).</li>
+        <li>Robotics and control.</li>
+        <li>Recommendation, resource and traffic management; fine-tuning language models from feedback.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>Supervised learning</th><th>Reinforcement learning</th></tr></thead>
+      <tbody>
+        <tr><th>Feedback</th><td>Correct label for each input</td><td>Scalar reward, often delayed</td></tr>
+        <tr><th>Data</th><td>Fixed dataset, i.i.d.</td><td>Generated by the agent's own actions</td></tr>
+        <tr><th>Goal</th><td>Minimise prediction error</td><td>Maximise cumulative reward</td></tr>
+      </tbody></table></div>
+    <div class="tablewrap" style="margin-top:12px"><table>
+      <thead><tr><th>Point</th><th>Tabular Q-learning</th><th>Deep Q-Network</th></tr></thead>
+      <tbody>
+        <tr><th>Q stored as</th><td>Table, one entry per (s, a)</td><td>Neural network Q(s, a; θ)</td></tr>
+        <tr><th>State space</th><td>Small, discrete</td><td>Huge (images)</td></tr>
+        <tr><th>Generalizes to unseen states?</th><td>No</td><td>Yes</td></tr>
+        <tr><th>Stability tricks</th><td>Not needed</td><td>Experience replay, target network</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>Write the Q-learning update rule.</p><p class="a">Q(s, a) ← Q(s, a) + α[r + γ max<sub>a′</sub> Q(s′, a′) − Q(s, a)], where α is the learning rate and γ the discount factor; the bracket is the temporal-difference error.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>What is experience replay?</p><p class="a">Storing past transitions (s, a, r, s′) in a memory buffer and training on random mini-batches from it. This breaks the correlation between consecutive samples and reuses data, stabilising DQN training.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why does DQN use a target network?</p><p class="a">If the same network produced both Q(s, a) and the target, the target would shift at every update and training could oscillate or diverge. A periodically copied, frozen target network keeps targets stable.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain deep reinforcement learning with reference to the Deep Q-Network.</p>
+      <ol>
+        <li><strong>RL basics:</strong> agent, environment, state, action, reward; loop diagram.</li>
+        <li><strong>MDP and return;</strong> discount factor (worked example).</li>
+        <li><strong>Value functions</strong> and the Bellman equation.</li>
+        <li><strong>Q-learning:</strong> update rule, ε-greedy (worked update).</li>
+        <li><strong>Why deep:</strong> large state spaces; function approximation.</li>
+        <li><strong>DQN architecture</strong> (block diagram): CNN, Q outputs.</li>
+        <li><strong>Experience replay and target network;</strong> loss function.</li>
+        <li><strong>Extensions, applications, challenges;</strong> conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagrams to draw:</strong> both halves of block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"SARS′": State, Action, Reward, next State</strong>, the tuple stored in replay memory.</p>
+    <p>Q-update in words: <strong>"old + α × (surprise)"</strong>, where surprise = reward + discounted best future − old.</p>
+  </div>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section class="topic" id="quiz">
+  <p class="eyebrow">Self-test</p>
+  <h2>Ten-question quiz</h2>
+  <div class="quiz-top">
+    <p class="score" id="quizScore" aria-live="polite">Score 0 / 10 · 0 answered</p>
+    <button class="ghost" id="quizReset" type="button">Reset quiz</button>
+  </div>
+  <div id="quizBody"></div>
+</section>
+
+<!-- ================= REVISION ================= -->
+<section class="topic" id="revision">
+  <p class="eyebrow">Read this last</p>
+  <h2>Last-minute revision</h2>
+  <div class="sheet" style="margin-top:16px">
+    <div class="grid">
+      <div><h3>1 · Non-convex optimization</h3><ul>
+        <li>Many minima, saddles, plateaus, cliffs.</li>
+        <li>Hessian: all + min, all − max, mixed saddle.</li>
+        <li>Saddles dominate in high dimensions.</li>
+        <li>Fixes: SGD noise, momentum, Adam, init, BN, clipping.</li></ul></div>
+      <div><h3>2 · Optimizers</h3><ul>
+        <li>SGD: w −= ηg. Momentum: v = βv + g.</li>
+        <li>RMSProp: s = ρs + (1−ρ)g², step g/√s.</li>
+        <li>Adam: m, v, bias correction; β₁ 0.9, β₂ 0.999.</li>
+        <li>Adam = Momentum + RMSProp.</li></ul></div>
+      <div><h3>3 · Generalization</h3><ul>
+        <li>Gap = test error − train error.</li>
+        <li>Bias² + variance + noise.</li>
+        <li>Early stopping: patience, restore best.</li>
+        <li>More data, L2, dropout, augmentation.</li></ul></div>
+      <div><h3>4 · Spatial transformer</h3><ul>
+        <li>Localisation net → θ (2×3).</li>
+        <li>Grid generator: (x<sup>s</sup>, y<sup>s</sup>) = A<sub>θ</sub>(x<sup>t</sup>, y<sup>t</sup>, 1).</li>
+        <li>Bilinear sampler; differentiable end to end.</li></ul></div>
+      <div><h3>5 · RNN</h3><ul>
+        <li>h<sub>t</sub> = tanh(W<sub>hh</sub>h<sub>t−1</sub> + W<sub>xh</sub>x<sub>t</sub>).</li>
+        <li>Shared weights; BPTT.</li>
+        <li>∂h<sub>T</sub>/∂h<sub>k</sub> = product → vanish / explode.</li>
+        <li>Clipping; LSTM / GRU.</li></ul></div>
+      <div><h3>6 · LSTM</h3><ul>
+        <li>f, i, o = σ(W[h, x] + b); c̃ = tanh(…).</li>
+        <li>c<sub>t</sub> = f⊙c<sub>t−1</sub> + i⊙c̃; h<sub>t</sub> = o⊙tanh(c<sub>t</sub>).</li>
+        <li>Additive cell update keeps gradients.</li>
+        <li>4× RNN parameters; GRU has 2 gates.</li></ul></div>
+      <div><h3>7 · RNN language model</h3><ul>
+        <li>P(w₁…w<sub>T</sub>) = Π P(w<sub>t</sub> | w<sub>&lt;t</sub>).</li>
+        <li>Embed → LSTM → softmax over |V|.</li>
+        <li>Perplexity = exp(average −log p).</li>
+        <li>Word-level vs character-level.</li></ul></div>
+      <div><h3>8 · Deep RL</h3><ul>
+        <li>Agent, environment, state, action, reward.</li>
+        <li>Q ← Q + α[r + γ max Q′ − Q].</li>
+        <li>DQN: CNN → Q per action; replay; target net.</li>
+        <li>ε-greedy exploration.</li></ul></div>
+    </div>
+    <p class="last"><strong>Mnemonics:</strong> valleys, passes and fields · Adam = Momentum + RMSProp · stop at the bottom of the U · Look, Locate, Lift (STN) · Chinese whispers (vanishing gradient) · Forget the old, Input the new, Output what is needed · phone keyboard with a memory · SARS′ and "old + α × surprise".</p>
+  </div>
+</section>
+
+</main>
+</div>
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const COL = { ink: cssv('--ink'), muted: cssv('--muted'), line: cssv('--line'), accent: cssv('--accent'), warm: cssv('--warm'), good: cssv('--good'), paper: cssv('--paper'), aSoft: cssv('--accent-soft'), wSoft: cssv('--warm-soft'), gSoft: cssv('--good-soft') };
+const FONT = '"Atkinson Hyperlegible","Segoe UI",Arial,sans-serif';
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const sig = z => 1 / (1 + Math.exp(-z));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const fx = (v, d = 3) => (Math.abs(v) < 0.5 * Math.pow(10, -d) ? 0 : v).toFixed(d).replace('-', '−');
+const sh = v => String(+v.toFixed(4)).replace('-', '−');
+const redraws = [];
+
+function fit(cv) {
+  const dpr = window.devicePixelRatio || 1;
+  const W = cv.clientWidth || 600;
+  let r = +cv.dataset.ratio || 0.6;
+  if (W < 480 && cv.dataset.ratioSm) r = +cv.dataset.ratioSm;
+  const H = Math.round(W * r);
+  cv.style.height = H + 'px';
+  const pw = Math.round(W * dpr), ph = Math.round(H * dpr);
+  if (cv.width !== pw || cv.height !== ph) { cv.width = pw; cv.height = ph; }
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  ctx.setLineDash([]); ctx.globalAlpha = 1;
+  return { ctx, W, H };
+}
+function T(ctx, s, x, y, o = {}) {
+  ctx.font = `${o.bold ? '700 ' : ''}${o.size || 13}px ${FONT}`;
+  ctx.fillStyle = o.c || COL.ink; ctx.textAlign = o.align || 'left'; ctx.textBaseline = o.base || 'alphabetic';
+  ctx.fillText(s, x, y);
+}
+function pill(ctx, s, x, y, o = {}) {
+  const size = o.size || 12;
+  ctx.font = `${o.bold ? '700 ' : ''}${size}px ${FONT}`;
+  const w = ctx.measureText(s).width + 8, h = size + 6;
+  ctx.fillStyle = o.bg || 'rgba(251,252,254,0.94)'; ctx.fillRect(x - w / 2, y - h / 2, w, h);
+  ctx.fillStyle = o.c || COL.ink; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(s, x, y + 0.5);
+}
+function head(ctx, x, y, ang, size = 9) {
+  ctx.beginPath(); ctx.moveTo(x, y);
+  ctx.lineTo(x - size * Math.cos(ang - 0.42), y - size * Math.sin(ang - 0.42));
+  ctx.lineTo(x - size * Math.cos(ang + 0.42), y - size * Math.sin(ang + 0.42));
+  ctx.closePath(); ctx.fillStyle = ctx.strokeStyle; ctx.fill();
+}
+function seg(ctx, x1, y1, x2, y2) { ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); }
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+function stepHTML(phase, col, ttl, eqs, why) { return `<span class="phase" style="background:${col}">${phase}</span><span class="ttl">${ttl}</span>` + eqs.map(e => `<p class="eq">${e}</p>`).join('') + (why ? `<p class="why">${why}</p>` : ''); }
+function segGroup(el, attr, onPick) {
+  const bs = $$('button', el);
+  bs.forEach(b => b.addEventListener('click', () => { bs.forEach(x => x.setAttribute('aria-pressed', x === b)); onPick(b.dataset[attr]); }));
+}
+function gaussRng(rnd) { return () => { let u = 0; while (u === 0) u = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd()); }; }
+const sup = n => String(n).split('').map(c => c === '-' ? '⁻' : '⁰¹²³⁴⁵⁶⁷⁸⁹'[+c]).join('');
+function heat(t) { t = clamp(t, 0, 1); return `hsl(${230 - 200 * t},${45 + 30 * t}%,${30 + 55 * t}%)`; }
+
+/* ================= 1. Non-convex surface ================= */
+(function () {
+  const cv = $('#ncC'), out = $('#ncOut'), nS = $('#ncNoise');
+  const WELLS = [[1.3, 0.9, 0.75, 1.6], [-1.3, -0.6, 0.6, 1.0]], X0 = -3, X1 = 3, Y0 = -2.2, Y1 = 2.2;
+  const G = (x, y, a, b, s) => Math.exp(-((x - a) ** 2 + (y - b) ** 2) / (2 * s * s));
+  const f = (x, y) => WELLS.reduce((v, [a, b, s, h]) => v - h * G(x, y, a, b, s), 0) + 0.03 * (x * x + y * y);
+  const grad = (x, y) => { let gx = 0.06 * x, gy = 0.06 * y; WELLS.forEach(([a, b, s, h]) => { const g = G(x, y, a, b, s); gx += h * g * (x - a) / (s * s); gy += h * g * (y - b) / (s * s); }); return [gx, gy]; };
+  // locate critical points numerically
+  const desc = (p, n = 3000) => { for (let i = 0; i < n; i++) { const g = grad(...p); p = [p[0] - 0.2 * g[0], p[1] - 0.2 * g[1]]; } return p; };
+  const gmin = desc([1.2, 1]), lmin = desc([-1.2, -0.5]);
+  let sad = [0, 0.15]; for (let i = 0; i < 4000; i++) { const e = 1e-4, n2 = (x, y) => { const g = grad(x, y); return g[0] ** 2 + g[1] ** 2; }; const d = [(n2(sad[0] + e, sad[1]) - n2(sad[0] - e, sad[1])) / (2 * e), (n2(sad[0], sad[1] + e) - n2(sad[0], sad[1] - e)) / (2 * e)]; sad = [sad[0] - 2 * d[0], sad[1] - 2 * d[1]]; }
+  const plat = [-2.4, 1.6];
+  let paths = [], raf = 0, img = null;
+  function run(p0) {
+    const g = gaussRng(mulberry32(Math.floor(Math.random() * 1e9))), sn = +nS.value; let p = p0.slice(); const path = [p.slice()];
+    for (let i = 0; i < 260; i++) { const gr = grad(...p); p = [clamp(p[0] - 0.35 * (gr[0] + sn * g()), X0, X1), clamp(p[1] - 0.35 * (gr[1] + sn * g()), Y0, Y1)]; path.push(p.slice()); }
+    return path;
+  }
+  function geom(W, H) { const L = 8, R = 8, T0 = 8, B = 8, pw = W - L - R, ph = H - T0 - B; return { X: x => L + (x - X0) / (X1 - X0) * pw, Y: y => T0 + (1 - (y - Y0) / (Y1 - Y0)) * ph, inv: (px, py) => [X0 + (px - L) / pw * (X1 - X0), Y0 + (1 - (py - T0) / ph) * (Y1 - Y0)] }; }
+  function base(ctx, W, H, g) {
+    const nx = 120, ny = 80, fmin = f(...gmin), fmax = 0.45;
+    for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) { const x = X0 + (i + 0.5) / nx * (X1 - X0), y = Y0 + (j + 0.5) / ny * (Y1 - Y0); ctx.fillStyle = heat((f(x, y) - fmin) / (fmax - fmin)); ctx.fillRect(g.X(X0 + i / nx * (X1 - X0)), g.Y(Y0 + (j + 1) / ny * (Y1 - Y0)), (W - 16) / nx + 0.6, (H - 16) / ny + 0.6); }
+    const lab = (p, t, c) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(g.X(p[0]), g.Y(p[1]), 6, 0, 7); ctx.fill(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke(); pill(ctx, t, g.X(p[0]), g.Y(p[1]) - 18, { size: 12, bold: true, c }); };
+    lab(gmin, `global min (${fx(f(...gmin), 2)})`, COL.good); lab(lmin, `local min (${fx(f(...lmin), 2)})`, COL.accent); lab(sad, 'saddle point', COL.warm);
+    pill(ctx, 'plateau: almost flat', g.X(plat[0]), g.Y(plat[1]) + 22, { size: 12, bold: true, c: COL.muted });
+    T(ctx, 'dark = low loss, light = high loss · click to drop a ball', W - 14, H - 14, { size: 11.5, c: '#fff', align: 'right' });
+  }
+  function draw(k) {
+    const { ctx, W, H } = fit(cv), g = geom(W, H); base(ctx, W, H, g);
+    paths.forEach((pa, pi) => {
+      const n = pi === paths.length - 1 && k !== undefined ? k : pa.length - 1;
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.4; ctx.beginPath(); for (let i = 0; i <= n; i++) i ? ctx.lineTo(g.X(pa[i][0]), g.Y(pa[i][1])) : ctx.moveTo(g.X(pa[i][0]), g.Y(pa[i][1])); ctx.stroke();
+      ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(g.X(pa[0][0]), g.Y(pa[0][1]), 4, 0, 7); ctx.fill();
+      ctx.fillStyle = COL.ink; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(g.X(pa[n][0]), g.Y(pa[n][1]), 6, 0, 7); ctx.fill(); ctx.stroke();
+    });
+    if (!paths.length) { out.textContent = 'Click on the map (or use a button) to start gradient descent.'; return; }
+    const pa = paths[paths.length - 1], n = k !== undefined ? k : pa.length - 1, e = pa[n], gr = grad(...e), gn = Math.hypot(...gr);
+    const d = (p) => Math.hypot(e[0] - p[0], e[1] - p[1]);
+    const where = d(gmin) < 0.25 ? 'the global minimum' : d(lmin) < 0.25 ? 'the local minimum (stuck: a deeper valley exists)' : d(sad) < 0.35 ? 'the saddle point (gradient ≈ 0 but not a minimum)' : gn < 0.02 ? 'a flat plateau (gradient almost zero)' : 'still moving';
+    out.innerHTML = `Start (${fx(pa[0][0], 2)}, ${fx(pa[0][1], 2)}) → after ${n} steps at (${fx(e[0], 2)}, ${fx(e[1], 2)}), loss ${fx(f(...e), 3)}, |∇L| = ${gn < 1e-3 ? gn.toExponential(1) : fx(gn, 3)} → <b>${where}</b>`;
+  }
+  function launch(p) { cancelAnimationFrame(raf); paths.push(run(p)); if (paths.length > 6) paths.shift(); if (reduced) return draw(); let k = 0; const tick = () => { k = Math.min(260, k + 4); draw(k); if (k < 260) raf = requestAnimationFrame(tick); }; tick(); }
+  cv.style.cursor = 'crosshair';
+  cv.addEventListener('click', e => { const r = cv.getBoundingClientRect(), g = geom(r.width, r.height); launch(g.inv(e.clientX - r.left, e.clientY - r.top)); });
+  $('#ncEx1').addEventListener('click', () => launch([sad[0] - 0.55 * (gmin[1] - lmin[1]) / 3, sad[1] + 0.55 * (gmin[0] - lmin[0]) / 3]));
+  $('#ncEx2').addEventListener('click', () => launch(plat));
+  $('#ncClear').addEventListener('click', () => { cancelAnimationFrame(raf); paths = []; draw(); });
+  nS.addEventListener('input', () => { $('#ncNoisev').textContent = fx(+nS.value, 2); });
+  $('#ncNoisev').textContent = fx(+nS.value, 2);
+  paths.push(run([-0.2, 1.8])); redraws.push(() => draw()); draw();
+})();
+
+/* ================= 2. Optimizer race ================= */
+(function () {
+  const cv = $('#raceC'), out = $('#raceOut'), sS = $('#raceSteps'), st = $('#raceStart'), N = 400;
+  const f = (x, y) => (1 - x) ** 2 + 10 * (y - x * x) ** 2, gr = (x, y) => [-2 * (1 - x) - 40 * x * (y - x * x), 20 * (y - x * x)];
+  const OPT = [['SGD', '#8a94a8', 0.004, 'sgd'], ['Momentum', COL.accent, 0.0015, 'mom'], ['RMSProp', COL.good, 0.01, 'rms'], ['Adam', COL.warm, 0.05, 'adam']];
+  let paths, raf = 0;
+  function sim() {
+    const s0 = st.value.split(',').map(Number);
+    paths = OPT.map(([, , lr, k]) => { let p = s0.slice(), v = [0, 0], m = [0, 0], s = [0, 0]; const P = [p.slice()];
+      for (let t = 1; t <= N; t++) { const g = gr(...p);
+        if (k === 'sgd') p = p.map((pi, i) => pi - lr * g[i]);
+        if (k === 'mom') { v = v.map((vi, i) => 0.9 * vi + g[i]); p = p.map((pi, i) => pi - lr * v[i]); }
+        if (k === 'rms') { s = s.map((si, i) => 0.9 * si + 0.1 * g[i] ** 2); p = p.map((pi, i) => pi - lr * g[i] / (Math.sqrt(s[i]) + 1e-8)); }
+        if (k === 'adam') { m = m.map((mi, i) => 0.9 * mi + 0.1 * g[i]); s = s.map((si, i) => 0.999 * si + 0.001 * g[i] ** 2); p = p.map((pi, i) => pi - lr * (m[i] / (1 - 0.9 ** t)) / (Math.sqrt(s[i] / (1 - 0.999 ** t)) + 1e-8)); }
+        p = p.map(v2 => clamp(v2, -5, 5)); P.push(p.slice()); }
+      return P; });
+  }
+  function draw() {
+    const k = +sS.value; $('#raceStepsv').textContent = k;
+    const { ctx, W, H } = fit(cv), stack = W < 560, gap = 14, cw = stack ? W : W * 0.6, chH = stack ? H * 0.62 : H;
+    const X0 = -2, X1 = 2, Y0 = -1, Y1 = 3, sc = Math.min((cw - 10) / (X1 - X0), (chH - 10) / (Y1 - Y0)), ox = (cw - sc * (X1 - X0)) / 2, oy = (chH - sc * (Y1 - Y0)) / 2;
+    const X = x => ox + (x - X0) * sc, Y = y => oy + (Y1 - y) * sc;
+    const nx = 90, ny = 90;
+    for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) { const x = X0 + (i + 0.5) / nx * (X1 - X0), y = Y0 + (j + 0.5) / ny * (Y1 - Y0); ctx.fillStyle = heat(Math.log10(f(x, y) + 1e-3) / 2.4 * 0.5 + 0.35); ctx.fillRect(X(X0 + i / nx * (X1 - X0)), Y(Y0 + (j + 1) / ny * (Y1 - Y0)), sc * (X1 - X0) / nx + 0.6, sc * (Y1 - Y0) / ny + 0.6); }
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.4; const mx = X(1), my = Y(1); seg(ctx, mx - 7, my - 7, mx + 7, my + 7); seg(ctx, mx - 7, my + 7, mx + 7, my - 7);
+    paths.forEach((P, q) => { ctx.strokeStyle = OPT[q][1]; ctx.lineWidth = 2.4; ctx.beginPath(); for (let i = 0; i <= k; i++) i ? ctx.lineTo(X(P[i][0]), Y(P[i][1])) : ctx.moveTo(X(P[i][0]), Y(P[i][1])); ctx.stroke(); ctx.fillStyle = OPT[q][1]; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(X(P[k][0]), Y(P[k][1]), 5.5, 0, 7); ctx.fill(); ctx.stroke(); });
+    // loss chart
+    const lx = stack ? 40 : cw + gap + 34, ly = stack ? chH + 14 : 16, lw = (stack ? W : W - cw - gap) - 44, lh = (stack ? H - chH - 14 : H) - 40;
+    const lo = -8, hi = 2, LY = v => ly + (1 - (Math.log10(Math.max(v, 1e-8)) - lo) / (hi - lo)) * lh, LX = i => lx + i / N * lw;
+    ctx.strokeStyle = '#e3e8f0'; ctx.lineWidth = 1; for (let e = lo; e <= hi; e += 2) { seg(ctx, lx, LY(10 ** e), lx + lw, LY(10 ** e)); T(ctx, '10' + sup(e), lx - 5, LY(10 ** e) + 4, { size: 11, c: COL.muted, align: 'right' }); }
+    T(ctx, 'loss (log scale) vs step', lx, ly - 4, { size: 12, bold: true });
+    paths.forEach((P, q) => { ctx.strokeStyle = OPT[q][1]; ctx.lineWidth = 2; ctx.beginPath(); for (let i = 0; i <= k; i++) { const v = f(...P[i]); i ? ctx.lineTo(LX(i), LY(v)) : ctx.moveTo(LX(i), LY(v)); } ctx.stroke(); });
+    T(ctx, 'step ' + k + ' / ' + N, lx + lw, ly + lh + 16, { size: 11.5, c: COL.muted, align: 'right' });
+    out.innerHTML = paths.map((P, q) => `<b style="color:${OPT[q][1]}">${OPT[q][0]}</b> at (${fx(P[k][0], 2)}, ${fx(P[k][1], 2)}), loss ${f(...P[k]).toExponential(1).replace('-', '−')}`).join(' &nbsp;·&nbsp; ');
+  }
+  function play() { cancelAnimationFrame(raf); if (reduced) { sS.value = N; return draw(); } sS.value = 0; const tick = () => { sS.value = Math.min(N, +sS.value + 3); draw(); if (+sS.value < N) raf = requestAnimationFrame(tick); }; tick(); }
+  $('#racePlay').addEventListener('click', play); sS.addEventListener('input', () => { cancelAnimationFrame(raf); draw(); });
+  st.addEventListener('input', () => { sim(); play(); });
+  sim(); redraws.push(draw); draw();
+})();
+
+/* ================= 3. Generalization ================= */
+(function () {
+  const cv = $('#genC'), out = $('#genOut'), S = { cap: $('#gCap'), data: $('#gData'), reg: $('#gReg'), pat: $('#gPat') }, E = 60;
+  function curves() {
+    const cap = +S.cap.value, data = +S.data.value, reg = +S.reg.value;
+    const floor = 0.04 + 0.42 * (1 - cap) ** 2 + 0.08 * reg, tau = 5 + 8 * (1 - cap);
+    const over = cap * (1 - data) * (1 - 0.85 * reg) * 0.9, t0 = 4 + 26 * data + 18 * reg, g0 = 0.02 + 0.08 * cap * (1 - data);
+    const tr = [], va = [];
+    for (let t = 1; t <= E; t++) { const a = floor + (1 - floor) * Math.exp(-t / tau); tr.push(a); va.push(a + g0 + over * Math.max(0, t - t0) ** 1.3 / 110 + 0.012 * Math.sin(t * 1.7) + 0.008 * Math.sin(t * 4.1)); }
+    return { tr, va };
+  }
+  function draw() {
+    Object.entries(S).forEach(([k, e]) => { $('#g' + k[0].toUpperCase() + k.slice(1) + 'v').textContent = k === 'pat' ? e.value : fx(+e.value, 2); });
+    const { tr, va } = curves(), p = +S.pat.value;
+    let best = 0, stop = E - 1; for (let t = 1; t < E; t++) { if (va[t] < va[best]) best = t; if (t - best >= p) { stop = t; break; } }
+    const { ctx, W, H } = fit(cv), L = 46, R = 14, Tp = 16, B = 30, pw = W - L - R, ph = H - Tp - B, X = t => L + t / (E - 1) * pw, Y = v => Tp + (1 - Math.min(v, 1.2) / 1.2) * ph;
+    ctx.fillStyle = '#f1f3f7'; ctx.fillRect(X(stop), Tp, X(E - 1) - X(stop), ph);
+    ctx.strokeStyle = '#e3e8f0'; ctx.lineWidth = 1; [0, 0.3, 0.6, 0.9, 1.2].forEach(v => { seg(ctx, L, Y(v), L + pw, Y(v)); T(ctx, v.toFixed(1), L - 6, Y(v) + 4, { size: 11.5, c: COL.muted, align: 'right' }); });
+    [1, 10, 20, 30, 40, 50, 60].forEach(e => T(ctx, String(e), X(e - 1), H - 12, { size: 11.5, c: COL.muted, align: 'center' }));
+    T(ctx, 'epoch', L + pw, H - 1, { size: 11.5, c: COL.muted, align: 'right', base: 'bottom' });
+    [[tr, COL.accent, 'training loss'], [va, COL.warm, 'validation loss']].forEach(([a, c, nm]) => { ctx.strokeStyle = c; ctx.lineWidth = 2.6; ctx.beginPath(); a.forEach((v, t) => t ? ctx.lineTo(X(t), Y(v)) : ctx.moveTo(X(t), Y(v))); ctx.stroke(); });
+    ctx.strokeStyle = COL.good; ctx.lineWidth = 2; ctx.setLineDash([5, 4]); seg(ctx, X(best), Tp, X(best), Tp + ph); ctx.setLineDash([]);
+    ctx.strokeStyle = COL.warm; ctx.lineWidth = 2; seg(ctx, X(stop), Tp, X(stop), Tp + ph);
+    pill(ctx, `best epoch ${best + 1}`, clamp(X(best), L + 50, L + pw - 50), Tp + 12, { size: 12, bold: true, c: COL.good });
+    pill(ctx, `stop at ${stop + 1}`, clamp(X(stop), L + 50, L + pw - 50), Tp + 32, { size: 12, bold: true, c: COL.warm });
+    T(ctx, 'training', L + pw - 4, Y(tr[E - 1]) - 6, { size: 12, c: COL.accent, bold: true, align: 'right' });
+    T(ctx, 'validation', L + pw - 4, Y(va[E - 1]) - 6, { size: 12, c: COL.warm, bold: true, align: 'right' });
+    const gap = va[best] - tr[best], gapEnd = va[E - 1] - tr[E - 1];
+    const kind = tr[best] > 0.3 ? 'Underfitting: even the training loss stays high.' : gapEnd > 0.25 ? 'Overfitting after the best epoch: the gap keeps growing.' : 'Good generalization: the gap stays small.';
+    out.innerHTML = `Best validation loss <b>${fx(va[best], 3)}</b> at epoch <b>${best + 1}</b> (gap ${fx(gap, 3)}) · with patience ${p}, training stops at epoch <b>${stop + 1}</b> and restores epoch ${best + 1} · gap if trained to epoch 60: ${fx(gapEnd, 3)}. ${kind}`;
+  }
+  Object.values(S).forEach(e => e.addEventListener('input', draw)); redraws.push(draw); draw();
+})();
+
+/* ================= 4. Spatial transformer ================= */
+(function () {
+  const cv = $('#stnC'), out = $('#stnOut'), S = { r: $('#stR'), s: $('#stS'), x: $('#stX'), y: $('#stY') }, N = 64;
+  const off = document.createElement('canvas'); off.width = N; off.height = N; const oc = off.getContext('2d');
+  oc.fillStyle = '#000'; oc.fillRect(0, 0, N, N); oc.strokeStyle = '#fff'; oc.lineWidth = 7; oc.lineCap = 'round'; oc.lineJoin = 'round';
+  oc.beginPath(); oc.moveTo(14, 12); oc.lineTo(50, 12); oc.lineTo(28, 54); oc.stroke(); oc.lineWidth = 5; oc.beginPath(); oc.moveTo(24, 33); oc.lineTo(44, 33); oc.stroke();
+  const C0 = new Float32Array(N * N); const d0 = oc.getImageData(0, 0, N, N).data; for (let i = 0; i < N * N; i++) C0[i] = d0[i * 4] / 255;
+  const bil = (A, x, y) => { const px = (x + 1) / 2 * (N - 1), py = (y + 1) / 2 * (N - 1), x0 = Math.floor(px), y0 = Math.floor(py), dx = px - x0, dy = py - y0; let v = 0; [[0, 0, (1 - dx) * (1 - dy)], [1, 0, dx * (1 - dy)], [0, 1, (1 - dx) * dy], [1, 1, dx * dy]].forEach(([a, b, w]) => { const xi = x0 + a, yi = y0 + b; if (xi >= 0 && yi >= 0 && xi < N && yi < N) v += w * A[yi * N + xi]; }); return v; };
+  const D = { r: 25 * Math.PI / 180, s: 0.65, x: 0.25, y: -0.2 };
+  const U = new Float32Array(N * N); for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const x = i / (N - 1) * 2 - 1, y = j / (N - 1) * 2 - 1, ux = (x - D.x) / D.s, uy = (y - D.y) / D.s, c = Math.cos(-D.r), s = Math.sin(-D.r); U[j * N + i] = bil(C0, c * ux - s * uy, s * ux + c * uy); }
+  const A = () => { const a = +S.r.value * Math.PI / 180, s = +S.s.value; return [[s * Math.cos(a), -s * Math.sin(a), +S.x.value], [s * Math.sin(a), s * Math.cos(a), +S.y.value]]; };
+  function draw() {
+    S.r.nextElementSibling.textContent = S.r.value + '°'; ['s', 'x', 'y'].forEach(k => { S[k].nextElementSibling.textContent = fx(+S[k].value, 2); });
+    const th = A(), { ctx, W, H } = fit(cv), side = Math.min(H - 30, (W - 40) / 2), ox1 = (W / 2 - side) / 2, ox2 = W / 2 + (W / 2 - side) / 2, oy = 22, cell = side / N;
+    const paint = (arr, ox) => { for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const v = Math.round(20 + 225 * clamp(arr[j * N + i], 0, 1)); ctx.fillStyle = `rgb(${v},${v},${v})`; ctx.fillRect(ox + i * cell, oy + j * cell, cell + 0.5, cell + 0.5); } };
+    paint(U, ox1);
+    const V = new Float32Array(N * N); for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const xt = i / (N - 1) * 2 - 1, yt = j / (N - 1) * 2 - 1; V[j * N + i] = bil(U, th[0][0] * xt + th[0][1] * yt + th[0][2], th[1][0] * xt + th[1][1] * yt + th[1][2]); }
+    paint(V, ox2);
+    const P = (xt, yt) => { const xs = th[0][0] * xt + th[0][1] * yt + th[0][2], ys = th[1][0] * xt + th[1][1] * yt + th[1][2]; return [ox1 + (xs + 1) / 2 * side, oy + (ys + 1) / 2 * side]; };
+    ctx.save(); ctx.beginPath(); ctx.rect(ox1, oy, side, side); ctx.clip(); ctx.strokeStyle = '#ff8a3d'; ctx.lineWidth = 1.4;
+    for (let k = 0; k <= 8; k++) { const t = -1 + k / 4; [[P(t, -1), P(t, 1)], [P(-1, t), P(1, t)]].forEach(([a, b]) => seg(ctx, a[0], a[1], b[0], b[1])); }
+    ctx.lineWidth = 3; ctx.beginPath(); [P(-1, -1), P(1, -1), P(1, 1), P(-1, 1)].forEach((p, i) => i ? ctx.lineTo(...p) : ctx.moveTo(...p)); ctx.closePath(); ctx.stroke(); ctx.restore();
+    T(ctx, 'Input U with sampling grid T_θ(G)', ox1, 14, { size: 12.5, bold: true }); T(ctx, 'Output V (bilinear sampler)', ox2, 14, { size: 12.5, bold: true });
+    const err = Math.hypot(+S.r.value - 25, (+S.s.value - 0.65) * 60, (+S.x.value - 0.25) * 60, (+S.y.value + 0.2) * 60);
+    out.innerHTML = `θ = [[${th[0].map(v => fx(v, 3)).join(', ')}], [${th[1].map(v => fx(v, 3)).join(', ')}]] &nbsp;·&nbsp; ${err < 3 ? '<b>Aligned: the output is an upright, centred 7.</b>' : 'Adjust θ until the orange grid frames the digit.'}`;
+  }
+  Object.values(S).forEach(e => e.addEventListener('input', draw));
+  $('#stAuto').addEventListener('click', () => { S.r.value = 25; S.s.value = 0.65; S.x.value = 0.24; S.y.value = -0.2; draw(); });
+  redraws.push(draw); draw();
+})();
+
+/* ================= 5. Vanishing gradient ================= */
+(function () {
+  const cv = $('#vgC'), out = $('#vgOut'), wS = $('#vgW'), aS = $('#vgAct'), tS = $('#vgT');
+  function draw() {
+    const w = +wS.value, T0 = +tS.value, lin = aS.value === 'lin'; $('#vgWv').textContent = fx(w, 2); $('#vgTv').textContent = T0;
+    const r = mulberry32(5); let h = 0; const d = [];
+    for (let t = 1; t <= T0; t++) { const a = w * h + (r() * 2 - 1) * 0.8; h = lin ? a : Math.tanh(a); d.push(lin ? w : w * (1 - h * h)); }
+    const gk = []; for (let k = 1; k <= T0; k++) { let p = 1; for (let j = k; j < T0; j++) p *= Math.abs(d[j]); gk.push(p); }
+    const { ctx, W, H } = fit(cv), L = 52, R = 10, Tp = 18, B = 30, pw = W - L - R, ph = H - Tp - B, lo = -16, hi = 8, Y = v => Tp + (1 - (clamp(Math.log10(Math.max(v, 1e-30)), lo, hi) - lo) / (hi - lo)) * ph, bw = pw / T0;
+    ctx.strokeStyle = '#e3e8f0'; ctx.lineWidth = 1; for (let e = lo; e <= hi; e += 4) { seg(ctx, L, Y(10 ** e), L + pw, Y(10 ** e)); T(ctx, '10' + sup(e), L - 6, Y(10 ** e) + 4, { size: 11, c: COL.muted, align: 'right' }); }
+    gk.forEach((v, i) => { const y = Y(v), y0 = Y(1); ctx.fillStyle = v < 1e-3 ? COL.accent : v > 1e3 ? COL.warm : COL.good; ctx.fillRect(L + i * bw + 1, Math.min(y, y0), bw - 2, Math.max(2, Math.abs(y0 - y))); });
+    ctx.strokeStyle = COL.ink; ctx.lineWidth = 1.2; seg(ctx, L, Y(1), L + pw, Y(1));
+    T(ctx, 'step k = 1', L, H - 10, { size: 11.5, c: COL.muted }); T(ctx, `k = T = ${T0}`, L + pw, H - 10, { size: 11.5, c: COL.muted, align: 'right' });
+    T(ctx, '|∂h_T / ∂h_k| (log scale)', L, Tp - 4, { size: 12, bold: true });
+    const g1 = gk[0];
+    out.innerHTML = `w<sub>hh</sub> = ${fx(w, 2)}, ${lin ? 'linear' : 'tanh'}: average per-step factor |w·act′| ≈ <b>${fx(Math.exp(d.slice(1).reduce((a, b) => a + Math.log(Math.abs(b)), 0) / (T0 - 1)), 3)}</b> → influence of step 1 on step ${T0}: <b>${g1.toExponential(2).replace('-', '−')}</b> ${g1 < 1e-3 ? '(vanished)' : g1 > 1e3 ? '(exploded: clip it!)' : '(survives)'}`;
+  }
+  [wS, aS, tS].forEach(e => e.addEventListener('input', draw)); redraws.push(draw); draw();
+})();
+
+/* ================= 6. LSTM interactive ================= */
+(function () {
+  const svg = $('#lstmSvg'), eq = $('#lstmEq'), out = $('#lstmOut'), S = { x: $('#lxT'), h: $('#lhP'), c: $('#lcP'), bf: $('#lbF') };
+  const Wt = { f: [0.5, 0.5, 0], i: [1, -1, 0], g: [1, 1, 0], o: [0.5, 1, -0.5] };
+  let focus = null, v = {};
+  function compute() {
+    const x = +S.x.value, h = +S.h.value, c = +S.c.value, bf = +S.bf.value;
+    const z = k => Wt[k][0] * x + Wt[k][1] * h + Wt[k][2];
+    const f = sig(z('f') + bf), i = sig(z('i')), g = Math.tanh(z('g')), o = sig(z('o')), cn = f * c + i * g, hn = o * Math.tanh(cn);
+    v = { x, h, c, bf, f, i, g, o, cn, hn, zf: z('f') + bf, zi: z('i'), zg: z('g'), zo: z('o') };
+  }
+  const INFO = {
+    f: ['Forget gate', COL.warm, v => [`f<sub>t</sub> = σ(W<sub>f</sub>[h<sub>t−1</sub>, x<sub>t</sub>] + b<sub>f</sub>) = σ(0.5·${fx(v.x, 1)} + 0.5·${fx(v.h, 1)} + ${fx(v.bf, 1)}) = σ(${fx(v.zf, 2)}) = <b>${fx(v.f, 3)}</b>`, `keeps ${Math.round(v.f * 100)}% of the old memory: f·c<sub>t−1</sub> = ${fx(v.f * v.c, 3)}`], 'Decides what to erase from the cell state. 1 = keep everything, 0 = forget everything.'],
+    i: ['Input gate', COL.accent, v => [`i<sub>t</sub> = σ(W<sub>i</sub>[h<sub>t−1</sub>, x<sub>t</sub>] + b<sub>i</sub>) = σ(${fx(v.zi, 2)}) = <b>${fx(v.i, 3)}</b>`, `amount written: i·c̃ = ${fx(v.i, 3)} × ${fx(v.g, 3)} = ${fx(v.i * v.g, 3)}`], 'Decides how much of the new candidate information to write into the cell.'],
+    g: ['Candidate values c̃', COL.accent, v => [`c̃<sub>t</sub> = tanh(W<sub>c</sub>[h<sub>t−1</sub>, x<sub>t</sub>] + b<sub>c</sub>) = tanh(${fx(v.zg, 2)}) = <b>${fx(v.g, 3)}</b>`], 'The new information that could be added, between −1 and +1.'],
+    o: ['Output gate', COL.good, v => [`o<sub>t</sub> = σ(W<sub>o</sub>[h<sub>t−1</sub>, x<sub>t</sub>] + b<sub>o</sub>) = σ(${fx(v.zo, 2)}) = <b>${fx(v.o, 3)}</b>`, `h<sub>t</sub> = o<sub>t</sub> ⊙ tanh(c<sub>t</sub>) = ${fx(v.o, 3)} × tanh(${fx(v.cn, 3)}) = <b>${fx(v.hn, 3)}</b>`], 'Decides how much of the squashed memory to reveal as the hidden state.'],
+    c: ['Cell state update', COL.ink, v => [`c<sub>t</sub> = f<sub>t</sub> ⊙ c<sub>t−1</sub> + i<sub>t</sub> ⊙ c̃<sub>t</sub> = ${fx(v.f, 3)}·${fx(v.c, 2)} + ${fx(v.i, 3)}·${fx(v.g, 3)} = <b>${fx(v.cn, 3)}</b>`], 'Additive update: keep some old, add some new. This is the path along which gradients survive.']
+  };
+  function showEq() {
+    const k = focus || 'c', [t, col, fn, why] = INFO[k];
+    eq.innerHTML = stepHTML(focus ? 'Selected' : 'Overview', col, focus ? t : 'Cell state update (click a gate for its equation)', fn(v), why);
+  }
+  function paint() {
+    svg.classList.toggle('focus', !!focus);
+    $$('.fl', svg).forEach(g => g.classList.toggle('on', !!focus && g.dataset.g.split(' ').includes(focus)));
+    $$('.gate', svg).forEach(g => g.setAttribute('aria-pressed', g.dataset.g === focus));
+    const set = (id, s) => { const e = svg.querySelector('#' + id); if (e) e.textContent = s; };
+    set('lv-f', fx(v.f, 2)); set('lv-i', fx(v.i, 2)); set('lv-g', fx(v.g, 2)); set('lv-o', fx(v.o, 2)); set('lv-c', '= ' + fx(v.cn, 3)); set('lv-h', '= ' + fx(v.hn, 3)); set('lv-cp', '= ' + fx(v.c, 2)); set('lv-hp', '= ' + fx(v.h, 2)); set('lv-x', '= ' + fx(v.x, 1));
+    showEq();
+  }
+  function chart() {
+    const { ctx, W, H } = fit($('#lstmMem')), L = 40, R = 12, Tp = 16, B = 24, pw = W - L - R, ph = H - Tp - B, n = 30;
+    let c = 1, h = 0, hr = 1; const cs = [1], rs = [1];
+    for (let t = 0; t < n; t++) { const f = sig(Wt.f[1] * h + v.bf), i = sig(-h), g = Math.tanh(h), o = sig(h - 0.5); c = f * c + i * g * 0; h = o * Math.tanh(c); cs.push(Math.abs(c)); hr = Math.tanh(0.9 * hr); rs.push(Math.abs(hr)); }
+    const X = t => L + t / n * pw, Y = val => Tp + (1 - val) * ph;
+    ctx.strokeStyle = '#e3e8f0'; ctx.lineWidth = 1; [0, 0.5, 1].forEach(q => { seg(ctx, L, Y(q), L + pw, Y(q)); T(ctx, String(q), L - 6, Y(q) + 4, { size: 11, c: COL.muted, align: 'right' }); });
+    [[cs, COL.warm, 'LSTM cell state c'], [rs, COL.accent, 'simple RNN h']].forEach(([a, col, nm], q) => { ctx.strokeStyle = col; ctx.lineWidth = 2.6; ctx.beginPath(); a.forEach((val, t) => t ? ctx.lineTo(X(t), Y(val)) : ctx.moveTo(X(t), Y(val))); ctx.stroke(); T(ctx, `${nm}: ${fx(a[n], 3)}`, L + pw, Y(a[n]) - 8 - q * 16, { size: 12, bold: true, c: col, align: 'right' }); });
+    T(ctx, 'memory left from step 0 (stored value = 1), zero input afterwards', L, Tp - 4, { size: 12, c: COL.muted });
+    T(ctx, 'steps →', L + pw, H - 6, { size: 11, c: COL.muted, align: 'right' });
+  }
+  function all() {
+    compute(); Object.entries({ x: 'lxTv', h: 'lhPv', c: 'lcPv', bf: 'lbFv' }).forEach(([k, id]) => { $('#' + id).textContent = fx(+S[k].value, 1); });
+    paint(); chart();
+    out.innerHTML = `f = <b>${fx(v.f, 3)}</b> · i = <b>${fx(v.i, 3)}</b> · c̃ = <b>${fx(v.g, 3)}</b> · o = <b>${fx(v.o, 3)}</b> → c<sub>t</sub> = <b>${fx(v.cn, 3)}</b>, h<sub>t</sub> = <b>${fx(v.hn, 3)}</b> &nbsp;·&nbsp; weights on [x, h], bias: f (0.5, 0.5, b<sub>f</sub>), i (1, −1, 0), c̃ (1, 1, 0), o (0.5, 1, −0.5)`;
+  }
+  $$('.gate', svg).forEach(g => { const pick = () => { focus = focus === g.dataset.g ? null : g.dataset.g; paint(); }; g.addEventListener('click', pick); g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } }); });
+  Object.values(S).forEach(e => e.addEventListener('input', all));
+  focus = 'f'; redraws.push(chart); all();
+})();
+
+/* ================= 7. RNN language model ================= */
+(function () {
+  const cv = $('#lmC'), out = $('#lmOut');
+  const STEPS = [
+    ['<s>', 'the', [['the', .32], ['a', .18], ['i', .08], ['it', .05], ['this', .04]]],
+    ['the', 'cat', [['cat', .12], ['dog', .10], ['man', .06], ['first', .04], ['mat', .02]]],
+    ['cat', 'sat', [['sat', .22], ['is', .15], ['was', .12], ['ran', .06], ['and', .05]]],
+    ['sat', 'on', [['on', .58], ['down', .21], ['in', .06], ['there', .03], ['quietly', .02]]],
+    ['on', 'the', [['the', .62], ['a', .18], ['his', .05], ['top', .03], ['it', .02]]],
+    ['the', 'mat', [['mat', .21], ['floor', .17], ['table', .09], ['bed', .07], ['chair', .05]]],
+    ['mat', '</s>', [['</s>', .45], ['.', .30], ['and', .08], ['in', .04], ['with', .03]]]
+  ];
+  let k = 0;
+  const esc = s => s.replace('<', '&lt;').replace('>', '&gt;');
+  function draw() {
+    const { ctx, W, H } = fit(cv), stack = W < 520, lw = stack ? W : W * 0.36;
+    if (k === 0) { T(ctx, 'Press "Next word" to feed the first word <s>.', 10, 30, { size: 14, c: COL.muted }); }
+    else {
+      const [inp, tru, top] = STEPS[k - 1];
+      T(ctx, `step ${k}: input`, 10, 22, { size: 12, c: COL.muted }); pill(ctx, inp, 110, 18, { size: 15, bold: true, c: COL.ink, bg: COL.aSoft });
+      T(ctx, 'hidden state h (8 units)', 10, 54, { size: 12, c: COL.muted });
+      const r = mulberry32(31 + k * 7), bh = (stack ? H * 0.32 : H - 90);
+      for (let u = 0; u < 8; u++) { const val = r() * 2 - 1, x = 12 + u * (lw - 24) / 8, w = (lw - 24) / 8 - 6, mid = 64 + bh / 2; ctx.fillStyle = val >= 0 ? COL.accent : COL.warm; ctx.fillRect(x, val >= 0 ? mid - val * bh / 2 : mid, w, Math.abs(val) * bh / 2); }
+      ctx.strokeStyle = COL.line; seg(ctx, 10, 64 + bh / 2, lw - 10, 64 + bh / 2);
+      const ox = stack ? 10 : lw + 30, oy = stack ? 80 + bh : 20, ow = (stack ? W : W - lw - 40) - 110, rowH = Math.min(30, (H - oy - 10) / 5);
+      T(ctx, 'P(next word) top 5', ox, oy, { size: 12.5, bold: true });
+      top.forEach(([w, p], i) => { const y = oy + 10 + i * rowH, bw = p / 0.65 * ow, isT = w === tru; T(ctx, w, ox + 70, y + rowH / 2 + 4, { size: 13.5, align: 'right', bold: isT }); ctx.fillStyle = isT ? COL.good : '#c9d2e3'; ctx.fillRect(ox + 78, y + 3, bw, rowH - 8); if (isT) { ctx.strokeStyle = COL.ink; ctx.lineWidth = 2; ctx.strokeRect(ox + 78, y + 3, bw, rowH - 8); } T(ctx, p.toFixed(2) + (isT ? '  ← true next word' : ''), ox + 84 + bw, y + rowH / 2 + 4, { size: 12, bold: isT, c: isT ? COL.good : COL.muted }); });
+    }
+    const done = STEPS.slice(0, k), nll = done.map(([, t, top]) => -Math.log(top.find(x => x[0] === t)[1])), avg = nll.length ? nll.reduce((a, b) => a + b, 0) / nll.length : 0;
+    out.innerHTML = k === 0 ? 'Sentence: "&lt;s&gt; the cat sat on the mat &lt;/s&gt;"' : `Read so far: <b>${done.map(s => esc(s[0])).join(' ')}</b> · loss this step −ln ${STEPS[k - 1][2].find(x => x[0] === STEPS[k - 1][1])[1]} = <b>${fx(nll[k - 1], 3)}</b> · average loss <b>${fx(avg, 3)}</b> · perplexity e<sup>${fx(avg, 3)}</sup> = <b>${fx(Math.exp(avg), 2)}</b>`;
+    $('#lmNext').disabled = k >= STEPS.length;
+  }
+  $('#lmNext').addEventListener('click', () => { if (k < STEPS.length) { k++; draw(); } });
+  $('#lmReset').addEventListener('click', () => { k = 0; draw(); });
+  k = 6; redraws.push(draw); draw();
+})();
+
+/* ================= 8. Q-learning grid ================= */
+(function () {
+  const grid = $('#qGrid'), box = $('#qBox'), S = { a: $('#qA'), g: $('#qG'), e: $('#qE') };
+  const R = 4, C = 4, GOAL = [0, 3], PIT = [1, 3], WALL = [1, 1], START = [3, 0], ACT = [[-1, 0, '↑', 'up'], [1, 0, '↓', 'down'], [0, -1, '←', 'left'], [0, 1, '→', 'right']];
+  const eq = (a, b) => a[0] === b[0] && a[1] === b[1];
+  let Q, agent, sel = [3, 0], ep = 0, last = null, steps = 0;
+  function reset() { Q = Array.from({ length: R * C }, () => [0, 0, 0, 0]); agent = START.slice(); ep = 0; last = null; steps = 0; }
+  const idx = s => s[0] * C + s[1], term = s => eq(s, GOAL) || eq(s, PIT);
+  function step() {
+    if (term(agent)) { agent = START.slice(); ep++; steps = 0; }
+    const s = agent, q = Q[idx(s)], eps = +S.e.value, al = +S.a.value, ga = +S.g.value;
+    const mx = Math.max(...q), best = q.map((v, i) => v === mx ? i : -1).filter(i => i >= 0);
+    const a = Math.random() < eps ? Math.floor(Math.random() * 4) : best[Math.floor(Math.random() * best.length)];
+    let ns = [s[0] + ACT[a][0], s[1] + ACT[a][1]]; if (ns[0] < 0 || ns[1] < 0 || ns[0] >= R || ns[1] >= C || eq(ns, WALL)) ns = s.slice();
+    const r = eq(ns, GOAL) ? 1 : eq(ns, PIT) ? -1 : -0.04, nmax = term(ns) ? 0 : Math.max(...Q[idx(ns)]), old = q[a], target = r + ga * nmax;
+    q[a] = old + al * (target - old);
+    last = { s, a, r, ns, nmax, old, target, nw: q[a], al, ga, explore: !best.includes(a) };
+    agent = ns; steps++;
+    if (steps > 60) { agent = START.slice(); ep++; steps = 0; }
+  }
+  function episode() { const e0 = ep; let n = 0; while (ep === e0 && n < 200) { step(); n++; if (term(agent)) { ep++; agent = START.slice(); steps = 0; break; } } }
+  function render() {
+    Object.entries(S).forEach(([k, e]) => { $('#q' + k.toUpperCase() + 'v').textContent = fx(+e.value, 2); });
+    grid.innerHTML = '';
+    for (let r = 0; r < R; r++) for (let c = 0; c < C; c++) {
+      const s = [r, c], b = document.createElement('button'); b.type = 'button';
+      const q = Q[idx(s)], mx = Math.max(...q), a = q.indexOf(mx), seen = q.some(v => v !== 0);
+      b.className = (eq(s, GOAL) ? 'goal' : eq(s, PIT) ? 'pit' : eq(s, WALL) ? 'wall' : '') + (eq(s, sel) ? ' sel' : '') + (eq(s, agent) ? ' agent' : '');
+      b.innerHTML = eq(s, GOAL) ? '<span class="arr" style="color:var(--good)">+1</span>' : eq(s, PIT) ? '<span class="arr" style="color:var(--warm)">−1</span>' : eq(s, WALL) ? 'wall' : `<span class="arr">${seen ? ACT[a][2] : '·'}</span><br>${seen ? fx(mx, 2) : ''}`;
+      b.setAttribute('aria-label', `row ${r + 1}, column ${c + 1}` + (eq(s, GOAL) ? ', goal' : eq(s, PIT) ? ', pit' : eq(s, WALL) ? ', wall' : `, best action ${ACT[a][3]}, value ${fx(mx, 2)}`));
+      b.addEventListener('click', () => { sel = s; render(); });
+      grid.appendChild(b);
+    }
+    const q = Q[idx(sel)];
+    const lines = [`Episodes completed: <b>${ep}</b>`, `Q-values of selected cell (${sel[0] + 1}, ${sel[1] + 1}): ${ACT.map((A, i) => `${A[2]} ${fx(q[i], 3)}`).join(' · ')}`];
+    if (last) lines.unshift(`Q(s, ${ACT[last.a][3]}) ← ${fx(last.old, 3)} + ${fx(last.al, 1)}·[${fx(last.r, 2)} + ${fx(last.ga, 2)}·${fx(last.nmax, 3)} − ${fx(last.old, 3)}] = <b>${fx(last.nw, 3)}</b>${last.explore ? ' (random exploratory move)' : ''}`);
+    box.innerHTML = stepHTML(last ? 'Last update' : 'Ready', COL.accent, last ? `Moved ${ACT[last.a][3]} from (${last.s[0] + 1}, ${last.s[1] + 1}) to (${last.ns[0] + 1}, ${last.ns[1] + 1}), reward ${fx(last.r, 2)}` : 'Q-table is all zeros', lines, 'Target = r + γ·max Q(s′, ·); the Q-value moves a fraction α towards it.');
+  }
+  $('#qStep').addEventListener('click', () => { step(); render(); });
+  $('#qEp').addEventListener('click', () => { episode(); render(); });
+  $('#qEp50').addEventListener('click', () => { for (let i = 0; i < 50; i++) episode(); render(); });
+  $('#qReset').addEventListener('click', () => { reset(); render(); });
+  Object.values(S).forEach(e => e.addEventListener('input', render));
+  reset(); render();
+})();
+
+/* ================= Quiz ================= */
+const QUIZ = [
+  { q: 'A critical point whose Hessian has both positive and negative eigenvalues is a', o: ['local minimum', 'local maximum', 'saddle point', 'global minimum'], a: 2, e: 'Mixed curvature: up in some directions, down in others.' },
+  { q: 'Adam combines', o: ['SGD and dropout', 'momentum and RMSProp-style adaptive rates', 'AdaGrad and batch norm', 'Nesterov and L2'], a: 1, e: 'First moment m (momentum) and second moment v (RMSProp), with bias correction.' },
+  { q: 'The main drawback of AdaGrad is that', o: ['it has no learning rate', 'its effective learning rate keeps shrinking towards zero', 'it ignores gradients', 'it needs second derivatives'], a: 1, e: 'The sum of squared gradients only grows; RMSProp uses a moving average instead.' },
+  { q: 'Early stopping keeps the weights from the epoch with the lowest', o: ['training loss', 'validation loss', 'test loss', 'learning rate'], a: 1, e: 'The test set must not be used for any decision.' },
+  { q: 'The three parts of a spatial transformer are', o: ['encoder, decoder, critic', 'localisation net, grid generator, sampler', 'gate, cell, output', 'actor, critic, replay'], a: 1, e: 'θ from the localisation net, sampling grid from the generator, bilinear sampling of the input.' },
+  { q: 'Vanishing gradients in RNNs happen because the gradient is', o: ['added over time steps', 'a product of many factors smaller than 1', 'clipped', 'computed only for the last step'], a: 1, e: '∂h_T/∂h_k multiplies one Jacobian per step.' },
+  { q: 'In an LSTM, the cell state is updated as', o: ['c_t = o_t ⊙ tanh(h_t)', 'c_t = f_t ⊙ c_{t−1} + i_t ⊙ c̃_t', 'c_t = tanh(W c_{t−1})', 'c_t = i_t ⊙ f_t'], a: 1, e: 'Keep some old memory (forget gate) and add some new (input gate × candidate).' },
+  { q: 'A language model assigns the true next words probabilities 0.5, 0.5, 0.5, 0.5. Its perplexity is', o: ['0.5', '1', '2', '4'], a: 2, e: 'Average loss = ln 2, so perplexity = e^(ln 2) = 2.' },
+  { q: 'Q(s,a) = 0.4, r = 0, γ = 0.9, max Q(s′) = 1, α = 0.5. The new Q(s,a) is', o: ['0.45', '0.65', '0.9', '0.4'], a: 1, e: 'Target 0.9; 0.4 + 0.5 × (0.9 − 0.4) = 0.65.' },
+  { q: 'DQN uses experience replay to', o: ['speed up the CNN', 'break correlation between consecutive samples and reuse data', 'avoid using rewards', 'replace the target network'], a: 1, e: 'Random mini-batches from the buffer are closer to i.i.d. and each transition can be used many times.' }
+];
+(function () {
+  const body = $('#quizBody'), score = $('#quizScore'); let right = 0, done = 0;
+  function render() {
+    right = 0; done = 0; body.innerHTML = '';
+    QUIZ.forEach((it, qi) => {
+      const d = document.createElement('div'); d.className = 'mcq';
+      d.innerHTML = `<p class="qt"><span>Q${qi + 1}</span>${it.q}</p><div class="opts">${it.o.map((o, i) => `<button type="button" data-i="${i}">${'ABCD'[i]}. ${o}</button>`).join('')}</div><p class="fb" hidden></p>`;
+      const btns = $$('button', d), fb = $('.fb', d);
+      btns.forEach(b => b.addEventListener('click', () => {
+        const i = +b.dataset.i, ok = i === it.a;
+        btns.forEach(x => { x.disabled = true; }); btns[it.a].classList.add('right'); if (!ok) b.classList.add('wrong');
+        fb.hidden = false; fb.className = 'fb ' + (ok ? 'ok' : 'no');
+        fb.innerHTML = `<strong>${ok ? 'Correct.' : 'Not quite. The answer is ' + 'ABCD'[it.a] + '.'}</strong> ${it.e}`;
+        done++; if (ok) right++; show();
+      }));
+      body.appendChild(d);
+    });
+    show();
+  }
+  function show() { score.textContent = `Score ${right} / ${QUIZ.length} · ${done} answered` + (done === QUIZ.length ? (right >= 8 ? ' · Well prepared' : right >= 5 ? ' · Revise the topics you missed' : ' · Go through the unit once more') : ''); }
+  $('#quizReset').addEventListener('click', render); render();
+})();
+
+/* ================= Contents rail ================= */
+(function () {
+  const KEY = 'dl-unit4-revised', boxes = $$('#toc input[type=checkbox]'), prog = $('#prog');
+  let saved = []; try { saved = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (_) { saved = []; }
+  const show = () => { prog.textContent = `${boxes.filter(b => b.checked).length} of ${boxes.length} topics revised`; };
+  boxes.forEach(b => { b.checked = saved.includes(b.id); b.addEventListener('change', () => { try { localStorage.setItem(KEY, JSON.stringify(boxes.filter(x => x.checked).map(x => x.id))); } catch (_) {} show(); }); });
+  show();
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const el = document.getElementById(a.getAttribute('href').slice(1)); if (!el) return; e.preventDefault(); el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' }); }));
+  const links = $$('#toc a'), map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { links.forEach(l => l.classList.remove('on')); const a = map.get(en.target.id); if (a) a.classList.add('on'); } }), { rootMargin: '-15% 0px -75% 0px' });
+    map.forEach((_, id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+  }
+})();
+
+let rt = 0;
+const redrawAll = () => redraws.forEach(fn => fn());
+window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(redrawAll, 120); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll);
+})();
+</script>
+</body>
+</html>

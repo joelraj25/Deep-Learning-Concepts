@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSPE502 Deep Learning – Important Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f7f6; --card:#ffffff; --ink:#14201b; --muted:#5b6b64; --line:#dde5e1;
+    --accent:#0f8a5f; --accent-soft:#e3f4ec; --hero:#0b1612; --hero-ink:#d8efe4;
+    --star:#c98a06; --star-soft:#fdf3dc; --done:#9aa8a2;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0b1210; --card:#121c18; --ink:#e3ece8; --muted:#8fa29a; --line:#22312b;
+      --accent:#3ccf91; --accent-soft:#143126; --hero:#060c0a; --hero-ink:#cfe9dc;
+      --star:#f0b43c; --star-soft:#2f2612; --done:#5d6d66;
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:16px;line-height:1.55}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  header{background:var(--hero);color:var(--hero-ink);padding:36px 20px 28px;position:relative;overflow:hidden}
+  header::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(60,207,145,.18) 1px,transparent 1px);background-size:18px 18px;mask-image:linear-gradient(90deg,transparent,#000 60%);opacity:.7}
+  .wrap{max-width:960px;margin:0 auto;position:relative}
+  .tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;color:#3ccf91;border:1px solid rgba(60,207,145,.4);padding:3px 8px;border-radius:4px}
+  h1{font-size:clamp(26px,5vw,40px);line-height:1.15;margin:12px 0 8px;color:#fff;font-weight:700}
+  .sub{color:#9fbfb1;margin:0;max-width:640px}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+  .pill{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:6px 12px;border-radius:999px;font-size:13px;color:#cfe9dc}
+  .pill b{color:#fff}
+
+  .bar{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .bar .wrap{padding:12px 20px;display:flex;flex-direction:column;gap:10px}
+  .tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 13px;border-radius:8px;font:inherit;font-size:14px;cursor:pointer;white-space:nowrap}
+  .tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  @media (prefers-color-scheme: dark){.tab.on{color:#05110c}}
+  .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .search{flex:1 1 220px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:8px 12px;font:inherit;font-size:14px}
+  .search:focus{outline:2px solid var(--accent);outline-offset:-1px}
+  .chip{border:1px solid var(--line);background:var(--card);color:var(--muted);padding:7px 11px;border-radius:8px;font:inherit;font-size:13px;cursor:pointer}
+  .chip.on{border-color:var(--star);color:var(--star);background:var(--star-soft)}
+  .chip.on.g{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+  main .wrap{padding:24px 20px 60px}
+  .progress{display:flex;align-items:center;gap:12px;margin-bottom:22px;font-size:14px;color:var(--muted)}
+  .track{flex:1;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+  .fill{height:100%;background:var(--accent);width:0;transition:width .3s}
+  .reset{border:none;background:none;color:var(--muted);text-decoration:underline;cursor:pointer;font:inherit;font-size:13px}
+
+  .unit{margin-bottom:34px}
+  .uhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:6px}
+  .uhead h2{margin:0;font-size:22px}
+  .uhead h2 span{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-size:15px;margin-right:8px}
+  .hrs{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted)}
+  .note{font-size:14px;color:var(--muted);margin:6px 0 14px}
+  .note.hot{color:var(--star);font-weight:600}
+  h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px;font-weight:600}
+  ol.qs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+  .q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:start}
+  .q.star2{border-left:4px solid var(--star)}
+  .q.star1{border-left:4px solid color-mix(in srgb,var(--star) 45%,var(--line))}
+  .q input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent);cursor:pointer}
+  .q .t{font-weight:500}
+  .q .h{font-size:14px;color:var(--muted);margin-top:4px}
+  .q .h code,.q .t code{font-family:"IBM Plex Mono",monospace;font-size:13px;background:var(--accent-soft);padding:1px 5px;border-radius:4px;color:var(--ink)}
+  .q.done .t,.q.done .h{color:var(--done);text-decoration:line-through;text-decoration-thickness:1px}
+  .stars{color:var(--star);font-size:14px;white-space:nowrap;letter-spacing:1px}
+  .num{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:13px;margin-right:4px}
+  .empty{color:var(--muted);text-align:center;padding:40px 0}
+
+  .top10{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:34px}
+  .top10 h2{margin:0 0 4px;font-size:20px}
+  .top10 p{margin:0 0 12px;color:var(--muted);font-size:14px}
+  .top10 ol{margin:0;padding-left:22px;columns:2;column-gap:32px}
+  .top10 li{margin-bottom:6px;break-inside:avoid}
+  @media (max-width:640px){.top10 ol{columns:1}}
+  footer{color:var(--muted);font-size:13px;text-align:center;padding:0 20px 40px}
+  mark{background:var(--star-soft);color:inherit;border-radius:2px}
+  .badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+  .bd{font-family:"IBM Plex Mono",monospace;font-size:11px;padding:2px 7px;border-radius:4px;border:1px solid var(--line);color:var(--muted);background:var(--bg)}
+  .bd.yr{border-color:color-mix(in srgb,var(--accent) 50%,var(--line));color:var(--accent);background:var(--accent-soft)}
+  .bd.off{border-color:#c0504d;color:#c0504d;background:transparent}
+  .q.off .t{color:var(--muted)}
+  .q.top{border:2px solid #d9480f;border-left-width:6px;background:color-mix(in srgb,#d9480f 6%,var(--card))}
+  .bd.tp{background:#d9480f;border-color:#d9480f;color:#fff;font-weight:600}
+  .top3{border:2px solid #d9480f;border-radius:10px;padding:10px 14px;margin:0 0 6px;background:color-mix(in srgb,#d9480f 6%,var(--card))}
+  .top3 b.l{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#d9480f;margin-bottom:4px}
+  .top3 ol{margin:0;padding-left:20px;font-size:15px}
+  .top3 li{margin:2px 0}
+  .chip.on.t3{border-color:#d9480f;color:#d9480f;background:color-mix(in srgb,#d9480f 10%,var(--card))}
+  .pa{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent);margin-left:auto}
+  .tnotes{font-size:13px;color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:8px;padding:8px 12px;margin:0 0 6px}
+  .tnotes b{color:var(--ink);font-weight:600}
+  h3 .cnt{font-weight:400;text-transform:none;letter-spacing:0}
+  .pattern{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:14px 0 0;font-size:13px}
+  .pattern div{border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:var(--bg)}
+  .pattern b{display:block;color:var(--ink)}
+  @media (max-width:640px){.pattern{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="tag">PONDICHERRY UNIVERSITY · R2023 · B.TECH CSE · ELECTIVE</span>
+    <h1>CSPE502 Deep Learning<br>Important Questions</h1>
+    <p class="sub">Unit-wise question bank for the semester exam. There are no PU past papers for this course yet, so questions follow the syllabus wording, plus real questions from AKTU's Deep Learning exams (KCS078), whose Units I–IV match yours almost word for word.</p>
+    <div class="meta">
+      <span class="pill">Expected: Part A <b>10 × 2</b> · Part B <b>5 × 8</b></span>
+      <span class="pill"><b>AKTU</b> tag = asked in AKTU's exam</span>
+      <span class="pill">⭐⭐ very likely · ⭐ likely</span>
+    </div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="tabs" id="tabs"></div>
+    <div class="tools">
+      <input class="search" id="search" type="search" placeholder="Search questions… e.g. LSTM, ResNet, GAN, batch norm">
+      <button class="chip" id="fStar">⭐ Starred only</button>
+      <button class="chip g" data-type="all" id="tAll">All</button>
+      <button class="chip" data-type="short" id="tShort">Short</button>
+      <button class="chip" data-type="long" id="tLong">Essays</button>
+      <button class="chip" id="fAk">AKTU-asked</button>
+      <button class="chip" id="fTop">🔥 Top 3 per unit</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="wrap">
+    <div class="progress">
+      <span id="ptext" class="mono">0 / 0 done</span>
+      <div class="track"><div class="fill" id="pfill"></div></div>
+      <button class="reset" id="reset">Reset</button>
+    </div>
+    <section class="top10" id="top10">
+      <h2>Short on time? Study these 10 first</h2>
+      <p>Ranked by the syllabus and by what came up in AKTU's Deep Learning exams, which share Units I–IV with yours. Each unit's own top 3 is marked 🔥 below. Use the 🔥 filter to see just those 15 questions.</p>
+      <ol>
+        <li>Backpropagation (diagram and steps), plus GD vs SGD vs mini-batch</li>
+        <li>Universal approximation theorem, SVM and logistic regression</li>
+        <li>Batch normalization (equations and benefits)</li>
+        <li>Deep vs shallow networks, plus VC dimension</li>
+        <li>GANs: architecture, training and types</li>
+        <li>Autoencoders: architecture and types</li>
+        <li>AlexNet, VGG, Inception, ResNet, plus a comparison table</li>
+        <li>Training a ConvNet: weight initialization, batch norm, hyperparameter tuning</li>
+        <li>RNN, LSTM gates, vanishing gradients, plus Spatial Transformer Networks</li>
+        <li>Image captioning (CNN + LSTM), object detection, segmentation, attention</li>
+      </ol>
+      <p style="margin:14px 0 0"><b style="color:var(--ink)">Diagrams worth practising:</b> perceptron and MLP, the backpropagation flow, the SVM margin, the CNN pipeline, a ResNet residual block, an Inception module, an autoencoder, a GAN, an LSTM cell, a Spatial Transformer Network, and the image-captioning encoder–decoder.</p>
+      <p style="margin:14px 0 0"><b style="color:var(--ink)">Expected paper layout.</b> Your Biology papers (same 2023-24 regulation) used this pattern, so expect the same here: Part A goes in unit order (2 questions each), and in Part B you answer one of two questions per unit.</p>
+      <div class="pattern">
+        <div><b>Unit I</b>A: Q1–2<br>B: Q11 / Q12</div>
+        <div><b>Unit II</b>A: Q3–4<br>B: Q13 / Q14</div>
+        <div><b>Unit III</b>A: Q5–6<br>B: Q15 / Q16</div>
+        <div><b>Unit IV</b>A: Q7–8<br>B: Q17 / Q18</div>
+        <div><b>Unit V</b>A: Q9–10<br>B: Q19 / Q20</div>
+      </div>
+    </section>
+    <div id="units"></div>
+  </div>
+</main>
+<footer>AKTU questions are from the KCS078 Deep Learning papers for 2022-23 and 2023-24. AKTU's Unit V is different from yours, so the Unit V questions here follow your syllabus. Good luck!</footer>
+
+<script>
+const A23="AKTU 2023", A24="AKTU 2024";
+const UNITS = [
+ {id:"unit-1", n:"I", title:"Intro to ML & Neural Nets", hrs:9, pa:"Part A Q1–2 · Part B Q11 or Q12",
+  note:"Backpropagation came up in both AKTU papers. Learn it with a diagram and steps, along with GD vs SGD.",
+  short:[
+   {q:"Define an artificial neuron (perceptron). Why do we use a bias?", h:"y = f(Σ wᵢxᵢ + b). The bias shifts the activation so the decision boundary need not pass through the origin.", s:2, ak:[A24]},
+   {q:"Define loss function and gradient descent.", h:"Loss: MSE for regression, cross-entropy for classification. Update: w ← w − η·∂L/∂w.", s:2, ak:[A24]},
+   {q:"State the universal approximation theorem.", h:"A network with one hidden layer, enough neurons and a non-linear activation can approximate any continuous function on a bounded region to any accuracy.", s:2},
+   {q:"Why do we need non-linear activation functions?", h:"Without them, stacked layers collapse into a single linear map, so depth adds nothing.", s:1, ak:[A23]},
+   {q:"What are the limitations of a perceptron?", h:"It can only separate linearly separable data, so it cannot solve XOR.", s:1, ak:[A23]},
+   {q:"Why is logistic regression used for classification? Write the sigmoid function.", h:"σ(z) = 1 / (1 + e⁻ᶻ). Outputs a probability; threshold at 0.5.", s:1},
+   {q:"What are support vectors and the margin in an SVM?", h:"Support vectors are the training points closest to the separating hyperplane. The margin is the gap between them, and the SVM maximizes it.", s:1},
+   {q:"What is the kernel trick?", h:"Maps data into a higher dimension implicitly (polynomial, RBF kernels) so a linear boundary there is non-linear in the original space."},
+   {q:"Differentiate between batch GD, mini-batch GD and SGD.", s:1, ak:[A23]},
+   {q:"Differentiate between supervised, unsupervised and semi-supervised learning.", ak:[A24]},
+   {q:"What is a shallow network?", h:"A network with a single hidden layer."},
+   {q:"What is a linear model? Give two examples.", h:"Output is a weighted sum of inputs. Examples: linear regression, logistic regression, linear SVM.", ak:[A23]}
+  ],
+  long:[
+   {top:1, q:"Explain the backpropagation algorithm with a neat diagram and its steps. Give its advantages and disadvantages.", h:"Forward pass → compute loss → chain rule to get gradients layer by layer (output to input) → update weights. Show a small 2-layer example.", s:2, ak:[A23,A24]},
+   {top:2, q:"Explain the difference between gradient descent, stochastic gradient descent and mini-batch gradient descent.", h:"Data used per update, speed, noise, memory, convergence. Draw the loss-contour paths.", s:2, ak:[A23]},
+   {top:3, q:"Explain neural networks as universal function approximators.", h:"State the theorem, show intuitively how sigmoids/ReLUs combine into 'bumps' that build any curve, and why deeper networks still help (fewer neurons needed).", s:2},
+   {q:"Explain SVM: hyperplane, margin, support vectors, hard vs soft margin, and the kernel trick.", s:2},
+   {q:"Explain logistic regression: the sigmoid, log-loss (binary cross-entropy), training with gradient descent, and the decision boundary.", s:1},
+   {q:"Explain the common loss functions used to train neural networks.", h:"MSE, MAE, binary cross-entropy, categorical cross-entropy, hinge loss, and when to use each.", s:1},
+   {q:"Explain a shallow neural network: its architecture, forward computation and activation functions.", h:"Sigmoid, tanh, ReLU, softmax with graphs.", s:1},
+   {q:"Compare a single-layer perceptron with a multi-layer perceptron. Show why an MLP can solve XOR.", s:1, ak:[A24]}
+  ]},
+ {id:"unit-2", n:"II", title:"History of DL & Deep Networks", hrs:9, pa:"Part A Q3–4 · Part B Q13 or Q14",
+  note:"Batch normalization was asked twice in the same AKTU paper. Deep vs shallow networks and GANs are also repeat favourites.",
+  short:[
+   {q:"What is batch normalization?", h:"Normalizes each layer's inputs over a mini-batch, then scales and shifts them with learnable γ and β.", s:2, ak:[A24]},
+   {q:"Differentiate between deep and shallow networks.", s:2, ak:[A23,A24]},
+   {q:"Define VC dimension. Give an example.", h:"The largest number of points a model can shatter (classify in every possible labelling). A line in 2D has VC dimension 3.", s:2},
+   {q:"What is a GAN? Name its two parts.", h:"Generator (makes fake samples) and discriminator (tells real from fake), trained as a minimax game.", s:2},
+   {q:"What is regularization? Name 4 techniques.", h:"L1, L2 (weight decay), dropout, early stopping, data augmentation.", s:2},
+   {q:"Differentiate between L1 and L2 regularization.", h:"L1 adds Σ|w| and drives weights to exactly zero (sparse). L2 adds Σw² and shrinks all weights smoothly.", s:1},
+   {q:"What is dropout?", h:"Randomly switches off neurons with probability p during training, so the network can't rely on any single neuron.", s:1},
+   {q:"What is semi-supervised learning? Give an example.", h:"Learns from a little labelled data plus a lot of unlabelled data, e.g. pseudo-labelling.", s:1, ak:[A23]},
+   {q:"Give a short timeline of deep learning.", h:"McCulloch-Pitts 1943 · Perceptron 1958 · Backprop 1986 · LeNet 1998 · Deep belief nets 2006 · AlexNet 2012 · GANs 2014 · ResNet 2015 · Transformers 2017.", s:1},
+   {q:"What is the probabilistic view of deep learning?", h:"The network outputs p(y | x). Training is maximum likelihood, and cross-entropy loss is the negative log-likelihood."},
+   {q:"Why do CNNs use convolutions for images instead of fully connected layers?", h:"Parameter sharing, local connectivity and translation invariance mean far fewer weights.", ak:[A23]}
+  ],
+  long:[
+   {top:1, q:"Explain batch normalization in detail: the algorithm, the equations and its benefits.", h:"μ_B and σ²_B over the batch; x̂ = (x − μ_B)/√(σ²_B + ε); y = γx̂ + β. Benefits: reduces internal covariate shift, allows higher learning rates, faster training, mild regularization. At test time, use running averages.", s:2, ak:[A24]},
+   {top:2, q:"Differentiate between deep and shallow networks. Why are deep networks more powerful?", h:"Hierarchical features, exponentially more efficient representation, fewer neurons for the same function; but harder to train.", s:2, ak:[A23,A24]},
+   {top:3, q:"Explain GAN: its architecture, the training process (minimax loss) and the types of GAN.", h:"Types: DCGAN, conditional GAN, CycleGAN, StyleGAN. Mention mode collapse as a problem.", s:2, ak:[A23]},
+   {q:"Draw and explain the architecture of a convolutional network.", h:"Input → convolution + ReLU → pooling → (repeat) → flatten → fully connected → softmax.", s:2, ak:[A23]},
+   {q:"Explain backpropagation together with regularization techniques.", h:"L1, L2, dropout, early stopping, data augmentation, and how each changes the gradient or training.", s:2},
+   {q:"Explain VC dimension and how it relates to neural networks.", h:"VC dimension measures capacity. Higher VC dimension means the model can fit more but needs more data to generalize. For a network it grows with the number of weights (about W log W).", s:1},
+   {q:"Explain the probabilistic theory of deep learning.", h:"Maximum likelihood; softmax as a categorical distribution; MSE ↔ Gaussian noise; cross-entropy ↔ Bernoulli/categorical; regularization ↔ a prior (MAP).", s:1},
+   {q:"Explain semi-supervised learning and its techniques.", h:"Self-training / pseudo-labelling, consistency regularization, graph-based methods, GAN-based methods.", s:1, ak:[A23]},
+   {q:"Explain the history of deep learning, its uses and applications.", s:1, ak:[A23]}
+  ]},
+ {id:"unit-3", n:"III", title:"Autoencoders & CNN Architectures", hrs:9, pa:"Part A Q5–6 · Part B Q15 or Q16",
+  note:"Expect one of the four architectures (AlexNet, VGG, Inception, ResNet) as an essay. Learn a diagram for each, plus the comparison table.",
+  short:[
+   {q:"What is an autoencoder?", h:"A network trained to reproduce its input through a narrow bottleneck: encoder → code → decoder.", s:2},
+   {q:"What is the key idea of ResNet?", h:"Skip (residual) connections: y = F(x) + x. Gradients flow through the shortcut, so very deep nets (152 layers) train without degrading.", s:2},
+   {q:"Define stride, padding and pooling.", s:2},
+   {q:"Name the types of autoencoders.", h:"Undercomplete, sparse, denoising, contractive, variational (VAE).", s:1},
+   {q:"How is an autoencoder different from PCA for dimensionality reduction?", h:"PCA is linear. A linear autoencoder with MSE loss learns the same subspace as PCA, but a non-linear autoencoder can learn a curved manifold.", s:1},
+   {q:"What is a ConvNet? List its advantages.", s:1, ak:[A24]},
+   {q:"What is an Inception module?", h:"Parallel 1×1, 3×3 and 5×5 convolutions plus pooling, concatenated. 1×1 convolutions shrink depth first to save computation.", s:1},
+   {q:"Why does VGG use only 3×3 filters?", h:"Two stacked 3×3 layers see a 5×5 area with fewer parameters and an extra non-linearity."},
+   {q:"Why is weight initialization important? Name two methods.", h:"Bad initialization causes vanishing or exploding activations. Xavier/Glorot for tanh/sigmoid; He for ReLU.", s:1},
+   {q:"What are hyperparameters? Give examples.", h:"Set before training: learning rate, batch size, epochs, number of layers, dropout rate.", s:1},
+   {q:"Write the formula for the output size of a convolution layer.", h:"(W − F + 2P) / S + 1. Practise one, e.g. W=32, F=5, P=0, S=1 → 28."},
+   {q:"What is a manifold in deep learning?", h:"Manifold hypothesis: real high-dimensional data lies near a much lower-dimensional surface."}
+  ],
+  long:[
+   {top:1, q:"Explain CNN (ConvNet) in detail: convolution, filters, stride, padding, pooling and fully connected layers, with a diagram.", s:2, ak:[A24]},
+   {top:3, q:"Explain the autoencoder architecture and how it is used for dimensionality reduction. Explain its types.", h:"Encoder, bottleneck (code), decoder; reconstruction loss. Types: undercomplete, sparse, denoising, contractive, variational.", s:2, ak:[A23]},
+   {q:"Explain the AlexNet architecture.", h:"8 layers (5 conv + 3 FC), ReLU, dropout, overlapping max-pooling, data augmentation, trained on 2 GPUs. Won ImageNet 2012 (top-5 error ~15.3%).", s:2},
+   {q:"Explain the VGG (VGG-16) architecture.", h:"Only 3×3 convolutions (stride 1) and 2×2 max-pooling; 13 conv + 3 FC layers; ~138M parameters.", s:2, ak:[A23]},
+   {q:"Explain the Inception (GoogLeNet) architecture.", h:"Inception modules, 1×1 bottleneck convolutions, 22 layers, global average pooling, auxiliary classifiers.", s:2},
+   {q:"Explain the ResNet architecture: residual blocks and skip connections.", h:"Draw the residual block. Explain why it fixes vanishing gradients and the degradation problem.", s:2},
+   {top:2, q:"Compare AlexNet, VGG, Inception and ResNet.", h:"Make a table: year, depth, parameters, key idea, top-5 error.", s:2},
+   {q:"Explain how to train a ConvNet: weight initialization, batch normalization and hyperparameter optimization.", h:"Xavier/He init; batch norm; grid search, random search, Bayesian optimization; learning-rate schedules.", s:2},
+   {q:"Explain linear dimensionality reduction (PCA) and non-linear manifold learning.", h:"PCA steps: standardize → covariance matrix → eigenvectors → project onto the top k. Contrast with autoencoders.", s:1}
+  ]},
+ {id:"unit-4", n:"IV", title:"Optimization, RNN & LSTM", hrs:9, pa:"Part A Q7–8 · Part B Q17 or Q18",
+  note:"LSTM, Spatial Transformer Networks and 'the optimization process in deep learning' were all asked at AKTU.",
+  short:[
+   {q:"What is a recurrent neural network?", h:"A network with a loop that keeps a hidden state hₜ = f(W·xₜ + U·hₜ₋₁), so it can process sequences.", s:2, ak:[A24]},
+   {q:"Name the gates of an LSTM and what each does.", h:"Forget gate (what to erase), input gate (what to add), output gate (what to show), plus the cell state.", s:2},
+   {q:"What are vanishing and exploding gradients? How are they fixed?", h:"Gradients shrink or blow up as they pass back through many steps. Fixes: LSTM/GRU, gradient clipping, ReLU, good initialization.", s:2},
+   {q:"What is stochastic optimization? Name four optimizers.", h:"SGD, momentum, AdaGrad, RMSProp, Adam.", s:2, ak:[A24]},
+   {q:"What is generalization? Differentiate overfitting and underfitting.", s:2},
+   {q:"What is a Spatial Transformer Network?", h:"A module that learns to rotate, scale and crop the input (or a feature map) so the network becomes invariant to those changes.", s:1, ak:[A24]},
+   {q:"Why is training a deep network a non-convex optimization problem?", h:"The loss surface has many local minima, saddle points and flat plateaus.", s:1},
+   {q:"Differentiate between LSTM and GRU.", h:"GRU has 2 gates (update, reset) and no separate cell state, so it is simpler and faster.", s:1, ak:[A24]},
+   {q:"What is deep reinforcement learning?", h:"An agent learns actions that maximize reward, using a deep network to estimate values or policies (e.g. DQN).", s:1},
+   {q:"What is an RNN language model?", h:"Predicts the next word: P(wₜ | w₁ … wₜ₋₁). Measured by perplexity."},
+   {q:"Differentiate between word-level and character-level RNNs."},
+   {q:"What is a saddle point?"}
+  ],
+  long:[
+   {top:1, q:"Explain the LSTM architecture with its gates, equations and a diagram. How does it solve the vanishing gradient problem? Give applications.", s:2, ak:[A23]},
+   {top:2, q:"Explain the optimization process in deep learning: non-convex optimization, local minima, saddle points and plateaus, and how optimizers handle them.", s:2, ak:[A24]},
+   {q:"Explain stochastic optimization algorithms: SGD, momentum, Nesterov, AdaGrad, RMSProp and Adam, with their update rules.", s:2},
+   {top:3, q:"Describe the role of Spatial Transformer Networks in detail.", h:"Localization network → grid generator → sampler. Draw the block diagram.", s:2, ak:[A24]},
+   {q:"Explain the RNN architecture, unfolding in time, backpropagation through time (BPTT) and its problems.", s:2},
+   {q:"Explain deep reinforcement learning and the Deep Q-Network.", h:"MDP (state, action, reward), Q-learning, DQN with experience replay and a target network; applications such as Atari games and AlphaGo.", s:2, ak:[A23]},
+   {q:"Explain generalization in neural networks and the techniques used to improve it.", h:"Bias–variance trade-off, regularization, dropout, data augmentation, early stopping.", s:1},
+   {q:"Explain RNN language models and word-level RNNs.", h:"Word embedding → RNN/LSTM → softmax over the vocabulary; trained with cross-entropy; generate text by sampling one word at a time.", s:1},
+   {q:"Explain the working of a Gated Recurrent Unit (GRU).", s:1, ak:[A24]}
+  ]},
+ {id:"unit-5", n:"V", title:"Applications of Deep Learning", hrs:9, pa:"Part A Q9–10 · Part B Q19 or Q20",
+  note:"Image captioning, object detection, segmentation and attention are the core topics. Two of your lab experiments (segmentation, captioning) are here too.",
+  short:[
+   {q:"What is image segmentation? Differentiate semantic and instance segmentation.", s:2},
+   {q:"What is object detection? Name two models.", h:"Finds objects with a bounding box and class. Models: Faster R-CNN, YOLO, SSD.", s:2},
+   {q:"What is image captioning?", h:"Generating a sentence describing an image, using a CNN encoder and an LSTM decoder.", s:2, ak:[A23]},
+   {q:"What is the attention mechanism?", h:"Lets the model weight the most relevant parts of the input (image regions or words) at each output step.", s:2},
+   {q:"What is IoU (Intersection over Union)?", h:"Overlap area ÷ union area of the predicted and true boxes. Used to judge detections.", s:1},
+   {q:"What is named entity recognition? Give an example.", h:"Tagging names in text: 'Sundar Pichai [PERSON] leads Google [ORG] in California [LOCATION]'.", s:1},
+   {q:"What is opinion mining (sentiment analysis)?", s:1},
+   {q:"Differentiate between recursive and recurrent neural networks.", h:"Recursive works over a tree (such as a parse tree). Recurrent works over a sequence.", s:1},
+   {q:"How can a CNN be used to classify sentences?", h:"Stack word embeddings into a matrix, slide 1D filters over n-grams, max-pool over time, then softmax (Kim, 2014)."},
+   {q:"What is dialogue generation?", h:"Generating chatbot replies with a seq2seq (encoder–decoder) LSTM."}
+  ],
+  long:[
+   {top:1, q:"Explain automatic image captioning using a CNN and an LSTM (encoder–decoder), with a diagram.", s:2, ak:[A23]},
+   {top:2, q:"Explain object detection with deep learning: R-CNN, Fast R-CNN, Faster R-CNN, YOLO and SSD.", s:2},
+   {top:3, q:"Explain image segmentation with deep learning: FCN, U-Net and Mask R-CNN.", h:"U-Net: encoder–decoder with skip connections.", s:2},
+   {q:"Explain attention models for computer vision.", h:"Soft vs hard attention, 'Show, Attend and Tell' captioning, self-attention and Vision Transformers.", s:2},
+   {q:"Explain image generation with Generative Adversarial Networks.", h:"DCGAN architecture, training loop, applications (faces, art, super-resolution, data augmentation).", s:1},
+   {q:"Explain video-to-text with LSTM models.", h:"S2VT: CNN features per frame → encoder LSTM → decoder LSTM generates the sentence.", s:1},
+   {q:"Case study: named entity recognition using deep learning.", h:"Word embeddings → BiLSTM → CRF layer → tags (BIO scheme).", s:1},
+   {q:"Case study: opinion mining using recurrent neural networks.", s:1},
+   {q:"Explain parsing and sentiment analysis using recursive neural networks.", h:"Combine word vectors up the parse tree; each node predicts sentiment (Stanford Sentiment Treebank).", s:1},
+   {q:"Explain sentence classification using convolutional neural networks.", s:1},
+   {q:"Explain dialogue generation with LSTMs.", h:"Seq2seq encoder–decoder, teacher forcing, beam search.", s:1}
+  ]}
+];
+UNITS.forEach(u=>u.pyq=[]);
+
+// stable ids
+function hsh(t){let h=0;for(const c of t)h=(h*31+c.charCodeAt(0))|0;return (h>>>0).toString(36)}
+UNITS.forEach(u=>{["short","long","pyq"].forEach(k=>u[k].forEach(x=>x.id=u.id+"-"+k[0]+hsh(x.q)))});
+
+let done = {};
+try{ done = JSON.parse(localStorage.getItem("cspe502-done")||"{}") }catch(e){}
+function save(){ try{ localStorage.setItem("cspe502-done",JSON.stringify(done)) }catch(e){} }
+
+const state = {unit:"all", q:"", star:false, ak:false, top:false, type:"all"};
+const tabs = document.getElementById("tabs");
+const tabList = [{id:"all",label:"All units"},...UNITS.map(u=>({id:u.id,label:"Unit "+u.n}))];
+tabs.innerHTML = tabList.map(t=>`<button class="tab" data-id="${t.id}">${t.label}</button>`).join("");
+tabs.addEventListener("click",e=>{const b=e.target.closest(".tab"); if(!b)return; location.hash = b.dataset.id==="all" ? "all" : b.dataset.id;});
+
+function fromHash(){
+  const h = location.hash.slice(1);
+  state.unit = UNITS.some(u=>u.id===h) ? h : "all";
+  render();
+}
+window.addEventListener("hashchange",fromHash);
+
+document.getElementById("search").addEventListener("input",e=>{state.q=e.target.value.trim().toLowerCase();render()});
+const fStar=document.getElementById("fStar");
+fStar.addEventListener("click",()=>{state.star=!state.star;fStar.classList.toggle("on",state.star);render()});
+const fTop=document.getElementById("fTop");
+fTop.addEventListener("click",()=>{state.top=!state.top;fTop.classList.toggle("on",state.top);fTop.classList.toggle("t3",state.top);render()});
+const fAk=document.getElementById("fAk");
+fAk.addEventListener("click",()=>{state.ak=!state.ak;fAk.classList.toggle("on",state.ak);fAk.classList.toggle("g",state.ak);render()});
+const typeBtns=[...document.querySelectorAll("[data-type]")];
+typeBtns.forEach(b=>b.addEventListener("click",()=>{state.type=b.dataset.type;typeBtns.forEach(x=>x.classList.toggle("on",x===b));render()}));
+typeBtns.forEach(x=>x.classList.toggle("g",true));
+document.getElementById("tAll").classList.add("on");
+document.getElementById("reset").addEventListener("click",()=>{done={};save();render()});
+
+function hl(html){
+  if(!state.q) return html;
+  const re = new RegExp("("+state.q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi");
+  return html.split(/(<[^>]+>)/).map(p=>p.startsWith("<")?p:p.replace(re,"<mark>$1</mark>")).join("");
+}
+function match(x){
+  if(state.star && !x.s) return false;
+  if(state.ak && !x.ak) return false;
+  if(state.top && !x.top) return false;
+  if(!state.q) return true;
+  return (x.q+" "+(x.h||"")).toLowerCase().replace(/<[^>]+>/g,"").includes(state.q);
+}
+function item(x,i){
+  const stars = x.s===2?"⭐⭐":x.s===1?"⭐":"";
+  const cls = ["q", x.s?"star"+x.s:"", done[x.id]?"done":"", x.off?"off":"", x.top?"top":""].join(" ");
+  const tb = x.top?`<span class="bd tp">🔥 TOP ${x.top}</span>`:"";
+  const badges = (x.ak||x.top) ? `<div class="badges">${tb}${(x.ak||[]).map(y=>`<span class="bd yr">${y}</span>`).join("")}</div>` : x.ak ? `<div class="badges">${x.ak.map(y=>`<span class="bd yr">${y}</span>`).join("")}</div>` : x.y ? `<div class="badges"><span class="bd">Part ${x.p} · ${x.p==="A"?"2":"8"} marks</span>${x.y.map(y=>`<span class="bd yr">${y}</span>`).join("")}${x.off?`<span class="bd off">Not in your syllabus</span>`:""}</div>` : "";
+  return `<li class="${cls}"><input type="checkbox" data-id="${x.id}" ${done[x.id]?"checked":""} aria-label="Mark done">
+    <div><div class="t"><span class="num">${i+1}.</span>${hl(x.q)}</div>${x.h?`<div class="h">${hl(x.h)}</div>`:""}${badges}</div>
+    <span class="stars">${stars}</span></li>`;
+}
+function render(){
+  [...tabs.children].forEach(b=>b.classList.toggle("on",b.dataset.id===state.unit));
+  document.getElementById("top10").style.display = (state.unit==="all" && !state.q) ? "" : "none";
+  const list = state.unit==="all"?UNITS:UNITS.filter(u=>u.id===state.unit);
+  let html="", count=0;
+  list.forEach(u=>{
+    const t=state.type;
+    const sh = (t==="all"||t==="short") ? u.short.filter(match) : [];
+    const lo = (t==="all"||t==="long") ? u.long.filter(match) : [];
+    const py = (t==="all"||t==="pyq") ? u.pyq.filter(match) : [];
+    if(!sh.length && !lo.length && !py.length) return;
+    count += sh.length+lo.length+py.length;
+    html += `<section class="unit"><div class="uhead"><h2><span>UNIT ${u.n}</span>${u.title}</h2><span class="hrs">${u.pa}</span></div>
+      <p class="note hot">${u.note}</p>
+      ${!state.q&&!state.top?`<div class="top3"><b class="l">🔥 Top 3 for this unit</b><ol>${[...u.long].filter(x=>x.top).sort((a,b)=>a.top-b.top).map(x=>`<li>${x.q}</li>`).join("")}</ol></div>`:""}
+      ${sh.length?`<h3>Short answers <span class="cnt">(Part A, 2 marks)</span></h3><ol class="qs">${sh.map(item).join("")}</ol>`:""}
+      ${lo.length?`<h3>Essays <span class="cnt">(Part B, 8 marks)</span></h3><ol class="qs">${lo.map(item).join("")}</ol>`:""}
+
+    </section>`;
+  });
+  document.getElementById("units").innerHTML = count?html:`<p class="empty">No questions match. Try another search.</p>`;
+  const scope = list.flatMap(u=>[...u.short,...u.long,...u.pyq]);
+  const d = scope.filter(x=>done[x.id]).length;
+  document.getElementById("ptext").textContent = `${d} / ${scope.length} done`;
+  document.getElementById("pfill").style.width = (scope.length?d/scope.length*100:0)+"%";
+}
+document.getElementById("units").addEventListener("change",e=>{
+  const id=e.target.dataset.id; if(!id)return;
+  if(e.target.checked) done[id]=1; else delete done[id];
+  save(); render();
+});
+fromHash();
+</script>
+</body>
+</html>

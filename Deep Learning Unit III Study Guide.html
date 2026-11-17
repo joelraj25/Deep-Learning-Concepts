@@ -1,0 +1,2184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deep Learning Unit III Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:wght@600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: a contents rail on the left, one reading column on the right.
+     Every topic repeats the same ten numbered blocks. Light theme only, as requested. */
+  color-scheme: light;
+  --bg:#f3f5f9; --paper:#ffffff; --ink:#18223a; --muted:#57627a; --line:#d6dce8;
+  --accent:#2b54c9; --accent-soft:#e6ecfb;
+  --warm:#c2410c; --warm-soft:#fdeee4;
+  --good:#1b7f4b; --good-soft:#e3f4ea;
+  --mark:#fff1bf;
+  --font-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --font-body:"Atkinson Hyperlegible","Segoe UI",Arial,sans-serif;
+  --font-mono:"JetBrains Mono",Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--font-body)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:3px}
+.shell{display:grid;grid-template-columns:268px minmax(0,1fr)}
+
+/* contents rail */
+.rail{position:sticky;top:0;align-self:start;max-height:100vh;overflow:auto;padding:22px 16px 24px;background:var(--paper);border-right:1px solid var(--line)}
+.rail .brand{font:700 20px/1.2 var(--font-display);margin:0 0 2px}
+.rail .sub{font-size:13px;color:var(--muted);margin:0 0 14px}
+.rail ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.rail li{display:flex;align-items:center;gap:6px}
+.rail a{flex:1;display:block;padding:7px 9px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.3}
+.rail a:hover{background:var(--bg)}
+.rail a.on{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.rail a .n{font:600 12px var(--font-mono);color:var(--muted);margin-right:6px}
+.rail input[type=checkbox]{width:17px;height:17px;accent-color:var(--good);flex:none;margin:0}
+.rail .prog{margin:14px 0 0;font-size:13px;color:var(--muted)}
+.rail .hint{font-size:12px;color:var(--muted);margin:4px 0 0}
+
+main{padding:30px clamp(16px,4vw,52px) 90px;max-width:960px;min-width:0}
+h1{font:700 clamp(30px,5vw,46px)/1.08 var(--font-display);margin:6px 0 10px;text-wrap:balance}
+h2{font:700 clamp(25px,3.6vw,34px)/1.15 var(--font-display);margin:4px 0 0;text-wrap:balance}
+h3,h4{text-wrap:balance}
+p,li{max-width:72ch}
+.eyebrow{font:600 12px var(--font-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin:0}
+.syllabus{color:var(--muted);font-size:15.5px;margin:0 0 14px}
+.inside{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.inside li{font:600 13px var(--font-mono);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+.how{margin:18px 0 0;font-size:15.5px}
+.how ol{margin:8px 0 0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 16px;counter-reset:b}
+.how li{counter-increment:b;font-size:14.5px}
+.how li::before{content:counter(b);font:600 11px var(--font-mono);background:var(--ink);color:#fff;border-radius:4px;padding:1px 5px;margin-right:7px}
+
+.block{margin-top:44px;scroll-margin-top:70px}
+.topic{margin-top:64px;padding-top:18px;border-top:3px solid var(--ink);scroll-margin-top:60px}
+.sec{margin-top:30px}
+.sec>h3{display:flex;align-items:center;gap:10px;font:700 18px/1.3 var(--font-display);margin:0 0 10px}
+.sec>h3 b{font:600 12px var(--font-mono);color:#fff;background:var(--ink);border-radius:4px;padding:2px 0;width:28px;text-align:center;flex:none}
+.sec h4{font:700 15px var(--font-body);margin:0 0 6px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.sec ol,.sec ul{margin:0;padding-left:22px}
+.sec li{margin:4px 0}
+.sec p{margin:0 0 10px}
+
+.sec-def .def{margin:0;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--ink);border-radius:0 8px 8px 0;padding:14px 18px;font-size:18.5px;line-height:1.5}
+.sec-def mark{background:linear-gradient(transparent 58%,var(--mark) 58%);color:inherit}
+
+.diagram{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto}
+.diagram svg{display:block;width:100%;min-width:600px;height:auto}
+.diagram figcaption,.demo figcaption{font-size:14px;color:var(--muted);margin-top:8px}
+.dg text{font-family:var(--font-body);font-size:13px;fill:var(--ink)}
+.dg .m{fill:var(--muted);font-size:12px}
+.dg .s{font-size:11.5px;fill:var(--muted)}
+.dg .b{font-weight:700}
+.dg .ta{fill:var(--accent)} .dg .tw{fill:var(--warm)} .dg .tg{fill:var(--good)}
+.dg .k{stroke:var(--ink);fill:none;stroke-width:1.6}
+.dg .kl{stroke:#9aa5ba;fill:none;stroke-width:1.3}
+.dg .ka{stroke:var(--accent);fill:none;stroke-width:2.2}
+.dg .kw{stroke:var(--warm);fill:none;stroke-width:2.2}
+.dg .kg{stroke:var(--good);fill:none;stroke-width:2.2}
+.dg .dash{stroke-dasharray:6 5}
+.dg .node{fill:var(--paper);stroke:var(--ink);stroke-width:1.8}
+.dg .box{fill:var(--paper);stroke:var(--ink);stroke-width:1.6}
+.dg .pa{fill:var(--accent)} .dg .pw{fill:var(--warm)}
+.dg a{cursor:pointer}
+.dg a:hover .box{fill:var(--accent-soft)}
+
+.demo{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px}
+.demo canvas{display:block;width:100%;background:#fbfcfe;border:1px solid var(--line);border-radius:6px}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;margin-top:12px}
+.ctl{display:flex;align-items:center;gap:8px;font-size:15px}
+.ctl output,.ctl .val{font:600 14px var(--font-mono);font-variant-numeric:tabular-nums;min-width:44px}
+input[type=range]{accent-color:var(--accent);width:150px}
+select{font:15px var(--font-body);padding:6px 8px;border:1px solid var(--ink);border-radius:6px;background:var(--paper);color:var(--ink)}
+button{font:700 15px var(--font-body);padding:8px 14px;border-radius:6px;border:1.5px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}
+button.ghost{background:var(--paper);color:var(--ink)}
+button:disabled{opacity:.45;cursor:default}
+.readout{margin:12px 0 0;font:14px/1.7 var(--font-mono);font-variant-numeric:tabular-nums;background:var(--bg);border-radius:6px;padding:8px 12px;overflow-x:auto}
+.readout b{color:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;margin-top:10px}
+.legend i{display:inline-block;width:22px;height:4px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.observe{margin:12px 0 0;border-left:4px solid var(--good);background:var(--good-soft);padding:10px 14px;border-radius:0 6px 6px 0;font-size:15.5px;max-width:none}
+.stepbox{margin-top:12px;border:1px solid var(--line);border-radius:6px;padding:12px 14px;background:var(--bg);min-height:118px}
+.stepbox .phase{display:inline-block;font:600 12px var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:#fff;border-radius:4px;padding:2px 8px;margin-right:8px}
+.stepbox .ttl{font-weight:700}
+.stepbox .eq{font:14.5px/1.75 var(--font-mono);margin:8px 0 0;overflow-x:auto;white-space:nowrap}
+.stepbox .why{font-size:15px;margin:8px 0 0;color:var(--muted)}
+
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px}
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:18px}
+.three>div{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px;border-top:4px solid var(--good)}
+.three>div:nth-child(2){border-top-color:var(--warm)}
+.three>div:nth-child(3){border-top-color:var(--accent)}
+.three li{font-size:15.5px}
+
+.tablewrap{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th,td{border-bottom:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+tr:last-child td{border-bottom:0}
+thead th{background:#e9edf5;font-weight:700}
+tbody th{font-weight:700;background:#f6f8fb;width:24%}
+td.num,th.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.formulas{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:4px 16px;overflow-x:auto}
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.sym{margin-top:12px}
+.sym td:first-child{width:92px;white-space:nowrap}
+.worked{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 18px}
+.worked,.two>div,.three>div,.qa,.long,.sec-def .def,.sec-mem,.observe,.sheet .grid>div{overflow-x:auto}
+.worked .given{color:var(--muted);font-size:15.5px}
+.worked ol{padding-left:22px}
+.worked .ans{font-weight:700;border-top:1px dashed var(--line);padding-top:8px;margin:10px 0 0}
+.note{font-size:15px;color:var(--muted);margin-top:10px}
+
+.sec-exam{background:var(--accent-soft);border-radius:8px;padding:16px 18px 18px}
+.qa{margin:0 0 12px;background:var(--paper);border-radius:6px;padding:10px 14px}
+.qa .q{font-weight:700;margin:0 0 4px}
+.qa .q span,.long .q span{font:600 11.5px var(--font-mono);background:var(--accent);color:#fff;border-radius:4px;padding:2px 7px;margin-right:8px;white-space:nowrap}
+.qa .a{margin:0}
+.long{background:var(--paper);border-radius:6px;padding:12px 14px;border:2px solid var(--accent)}
+.long .q{font-weight:700;margin:0 0 8px}
+.long .q span{background:var(--ink)}
+.long ol{padding-left:22px}
+.long .draw{margin:10px 0 0;font-size:15.5px}
+
+.sec-mem{border:2px dashed var(--warm);background:var(--warm-soft);border-radius:8px;padding:14px 18px}
+.sec-mem>h3 b{background:var(--warm)}
+.sec-mem p{margin:0 0 6px}
+
+/* quiz */
+.quiz-top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin:10px 0 16px}
+.score{font:600 15px var(--font-mono)}
+.mcq{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:12px}
+.mcq .qt{font-weight:700;margin:0 0 10px}
+.mcq .qt span{font:600 12px var(--font-mono);color:var(--muted);margin-right:8px}
+.mcq .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+.mcq .opts button{background:var(--paper);color:var(--ink);border:1.5px solid var(--line);text-align:left;font-weight:400;line-height:1.35}
+.mcq .opts button:hover:not(:disabled){border-color:var(--ink)}
+.mcq .opts button:disabled{opacity:1}
+.mcq .opts button.right{background:var(--good-soft);border-color:var(--good);font-weight:700}
+.mcq .opts button.wrong{background:var(--warm-soft);border-color:var(--warm)}
+.mcq .fb{margin:10px 0 0;font-size:15.5px;padding:8px 12px;border-radius:6px}
+.mcq .fb.ok{background:var(--good-soft)} .mcq .fb.no{background:var(--warm-soft)}
+
+/* revision sheet */
+.sheet{background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:18px 20px}
+.sheet .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px 26px}
+.sheet h3{font:700 16px var(--font-display);margin:0 0 4px;color:var(--accent)}
+.sheet ul{margin:0;padding-left:18px}
+.sheet li{font-size:15px;margin:2px 0}
+.sheet .last{margin-top:16px;border-top:1px dashed var(--line);padding-top:12px}
+
+
+/* Unit II additions */
+.timeline{position:relative;min-width:800px;height:200px;margin:4px 0 0}
+.timeline .axis{position:absolute;left:0;right:0;top:98px;height:4px;background:var(--line);border-radius:2px}
+.timeline .winter{position:absolute;top:90px;height:20px;background:repeating-linear-gradient(135deg,#dfe6f3 0 6px,#eef2f9 6px 12px);border-radius:4px}
+.timeline .winter span{position:absolute;top:34px;left:50%;transform:translateX(-50%);font:600 11px var(--font-mono);color:var(--muted);white-space:nowrap}
+.tl-item{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;color:var(--ink);padding:0;font-weight:400;width:88px;cursor:pointer}
+.tl-item .yr{font:700 14px var(--font-mono);background:var(--paper);border:1.5px solid var(--ink);border-radius:999px;padding:2px 9px}
+.tl-item .nm{font-size:12.5px;line-height:1.25;text-align:center}
+.tl-item .dot{width:14px;height:14px;border-radius:50%;background:var(--paper);border:3px solid var(--ink)}
+.tl-item.up{top:6px}.tl-item.up .dot{order:3}
+.tl-item.down{top:93px}.tl-item.down .dot{order:-1}
+.tl-item.key .yr{background:var(--ink);color:#fff}
+.tl-item.key .dot{background:var(--accent);border-color:var(--accent)}
+.tl-item.sel .yr{background:var(--accent);border-color:var(--accent);color:#fff}
+.tl-item.sel .dot{background:var(--warm);border-color:var(--warm)}
+.tl-card{margin-top:12px;border:1px solid var(--line);border-left:5px solid var(--accent);background:var(--bg);border-radius:0 8px 8px 0;padding:12px 16px;min-height:120px}
+.tl-card h3{font:700 18px var(--font-display);margin:0 0 4px}
+.tl-card .who{font-size:14.5px;color:var(--muted);margin:0 0 6px}
+.tl-card p{margin:0 0 6px}
+.mini{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:8px;margin-top:12px}
+.mini canvas{background:#fbfcfe;border:2px solid var(--line);border-radius:6px;width:100%;cursor:pointer}
+.mini canvas.ok{border-color:var(--good)} .mini canvas.no{border-color:var(--warm)} .mini canvas.cur{outline:3px solid var(--accent);outline-offset:1px}
+.subdemo{margin-top:22px}
+.subdemo>h4{font:700 16px var(--font-display);margin:0 0 8px;color:var(--ink);text-transform:none;letter-spacing:0}
+.gridwrap{overflow-x:auto}
+.conv{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.conv table{width:auto;border-collapse:separate;border-spacing:3px;font:600 14px var(--font-mono)}
+.conv td{width:34px;height:34px;padding:0;text-align:center;vertical-align:middle;border:1px solid var(--line);border-radius:4px;background:var(--paper)}
+.conv td.on{outline:3px solid var(--accent);outline-offset:-1px}
+.conv td.pad{background:#eef1f6;color:#9aa5ba}
+.conv td.cur{outline:3px solid var(--warm);outline-offset:-1px}
+.conv .cap{font:700 13.5px var(--font-body);margin:0 0 4px}
+.conv .op{align-self:center;font:700 22px var(--font-body);color:var(--muted)}
+
+/* Unit V additions */
+.tokens{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin:4px 0 0}
+.tk{display:inline-flex;flex-direction:column;align-items:center;gap:3px;border:1px solid var(--line);border-radius:6px;padding:5px 9px;background:var(--paper);font-size:16.5px;min-width:44px}
+.tk small{font:600 11.5px var(--font-mono);color:var(--muted)}
+.tk.e-PER{background:#e6ecfb;border-color:#2b54c9}.tk.e-PER small{color:#2b54c9}
+.tk.e-ORG{background:#fdeee4;border-color:#c2410c}.tk.e-ORG small{color:#c2410c}
+.tk.e-LOC{background:#e3f4ea;border-color:#1b7f4b}.tk.e-LOC small{color:#1b7f4b}
+.tk.e-DATE{background:#efe9f8;border-color:#6b4fa3}.tk.e-DATE small{color:#6b4fa3}
+.span-view{font-size:18px;line-height:2.4;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+.span-view .ent{border-radius:5px;padding:3px 6px;border:1.5px solid}
+.span-view .ent b{font:700 11px var(--font-mono);margin-left:6px;vertical-align:2px}
+.ent.e-PER{background:#e6ecfb;border-color:#2b54c9}.ent.e-PER b{color:#2b54c9}
+.ent.e-ORG{background:#fdeee4;border-color:#c2410c}.ent.e-ORG b{color:#c2410c}
+.ent.e-LOC{background:#e3f4ea;border-color:#1b7f4b}.ent.e-LOC b{color:#1b7f4b}
+.ent.e-DATE{background:#efe9f8;border-color:#6b4fa3}.ent.e-DATE b{color:#6b4fa3}
+.seg{display:inline-flex;flex-wrap:wrap;max-width:100%;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden}
+select{max-width:100%}
+.ctl{flex-wrap:wrap;max-width:100%}
+.seg button{border:0;border-radius:0;background:var(--paper);color:var(--ink);font-weight:600;padding:7px 12px}
+.seg button+button{border-left:1.5px solid var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.emb table{border-collapse:separate;border-spacing:2px;width:auto;font:600 12.5px var(--font-mono)}
+.emb td,.emb th{padding:0;border:0;text-align:center;vertical-align:middle;height:28px}
+.emb td.c{width:44px;border-radius:3px}
+.emb th.w{font:600 14px var(--font-body);text-align:right;padding-right:8px;background:none}
+.emb tr.on td.c{outline:2.5px solid var(--warm);outline-offset:-1px}
+.emb td.fm{width:56px;border:1px solid var(--line);border-radius:4px;background:var(--paper)}
+.emb td.fm.cur{outline:2.5px solid var(--warm)} .emb td.fm.max{background:var(--good-soft);border-color:var(--good)}
+
+/* Unit III additions */
+.archcard{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:18px;margin-top:12px}
+@media (max-width:640px){.archcard{grid-template-columns:1fr}}
+.archcard dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:15.5px}
+.archcard dt{font-weight:700;color:var(--muted)}
+.archcard dd{margin:0}
+.archcard .big{font:700 30px var(--font-display);margin:0}
+.archcard ul{margin:6px 0 0;padding-left:20px}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 18px;margin-top:10px}
+.calc label{display:flex;flex-direction:column;gap:4px;font-size:14.5px;font-weight:700}
+.calc input[type=number]{font:600 16px var(--font-mono);padding:6px 8px;border:1.5px solid var(--ink);border-radius:6px;width:100%;background:var(--paper);color:var(--ink)}
+.bnt td{width:40px;height:34px;text-align:center;font:600 13.5px var(--font-mono);border:1px solid var(--line);border-radius:4px;background:var(--paper);padding:0}
+.bnt td.hl{background:var(--accent-soft);outline:2.5px solid var(--accent);outline-offset:-2px}
+.bnt table{border-collapse:separate;border-spacing:3px;width:auto}
+
+@media (max-width:900px){
+  .shell{display:block}
+  .rail{position:sticky;top:0;z-index:5;max-height:none;padding:8px 12px;border-right:0;border-bottom:1px solid var(--line)}
+  .rail .brand,.rail .sub,.rail .prog,.rail .hint{display:none}
+  .rail ol{flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:2px}
+  .rail li{flex:none}
+  .rail a{white-space:nowrap;font-size:14px;padding:6px 8px}
+}
+</style>
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'},options:{enableMenu:false}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--ink)"/></marker>
+<marker id="ahA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--accent)"/></marker>
+<marker id="ahW" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--warm)"/></marker>
+<marker id="ahG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--good)"/></marker>
+</defs></svg>
+
+<div class="shell">
+<nav class="rail" aria-label="Contents">
+  <p class="brand">Deep Learning</p>
+  <p class="sub">Unit III study guide</p>
+  <ol id="toc">
+    <li><a href="#glance">Unit at a glance</a></li>
+    <li><a href="#t-ae"><span class="n">1</span>Autoencoders, manifolds</a><input type="checkbox" id="rev-1" aria-label="Mark autoencoders as revised"></li>
+    <li><a href="#t-cnn"><span class="n">2</span>Introduction to ConvNet</a><input type="checkbox" id="rev-2" aria-label="Mark ConvNet introduction as revised"></li>
+    <li><a href="#cards">Architecture cards</a></li>
+    <li><a href="#t-alex"><span class="n">3</span>AlexNet and VGG</a><input type="checkbox" id="rev-3" aria-label="Mark AlexNet and VGG as revised"></li>
+    <li><a href="#t-inc"><span class="n">4</span>Inception (GoogLeNet)</a><input type="checkbox" id="rev-4" aria-label="Mark Inception as revised"></li>
+    <li><a href="#t-res"><span class="n">5</span>ResNet</a><input type="checkbox" id="rev-5" aria-label="Mark ResNet as revised"></li>
+    <li><a href="#t-init"><span class="n">6</span>Weight initialization</a><input type="checkbox" id="rev-6" aria-label="Mark weight initialization as revised"></li>
+    <li><a href="#t-bn"><span class="n">7</span>Batch norm in ConvNets</a><input type="checkbox" id="rev-7" aria-label="Mark batch normalization as revised"></li>
+    <li><a href="#t-hpo"><span class="n">8</span>Hyperparameter optimization</a><input type="checkbox" id="rev-8" aria-label="Mark hyperparameter optimization as revised"></li>
+    <li><a href="#quiz">Self-test quiz</a></li>
+    <li><a href="#revision">Last-minute revision</a></li>
+  </ol>
+  <p class="prog" id="prog">0 of 8 topics revised</p>
+  <p class="hint">Tick a topic when you have revised it. Ticks are remembered in this browser.</p>
+</nav>
+
+<main>
+<header>
+  <p class="eyebrow">Deep Learning · Unit III · 9 hours</p>
+  <h1>Linear and Manifolds: Autoencoders and ConvNets</h1>
+  <p class="syllabus">Autoencoders and CNN · Introduction to ConvNet · Architectures: AlexNet, VGG, Inception, ResNet · Training a ConvNet: weight initialization, batch normalization, hyperparameter optimization.</p>
+  <ul class="inside">
+    <li>8 topics</li><li>4 architecture cards</li><li>9 interactive demos</li><li>24 two-mark answers</li><li>8 long-answer outlines</li><li>10 MCQs</li>
+  </ul>
+  <div class="how">
+    Every topic has the same ten blocks, in the order you would build an answer:
+    <ol><li>Definition</li><li>Diagram</li><li>Demo</li><li>Explanation</li><li>Formulas</li><li>Worked example</li><li>Pros, cons, uses</li><li>Comparison</li><li>Exam corner</li><li>Memory trick</li></ol>
+  </div>
+</header>
+
+<!-- ================= UNIT AT A GLANCE ================= -->
+<section class="block" id="glance">
+  <p class="eyebrow">Concept map</p>
+  <h2>Unit at a glance</h2>
+  <p>The unit title comes from the first topic. A linear autoencoder learns a flat subspace (like PCA), while a non-linear autoencoder learns a curved surface, or <em>manifold</em>, on which real data lies. Convolutional networks then become the standard way to learn image features; four landmark architectures show how they grew deeper and more efficient, and three training tools make deep ConvNets trainable.</p>
+  <figure class="diagram">
+    <svg class="dg" viewBox="0 0 900 300" role="img" aria-label="Concept map of Unit III: autoencoders and manifolds; ConvNet basics leading to four architectures in time order AlexNet 2012, VGG 2014, Inception 2014, ResNet 2015; and three training tools: weight initialization, batch normalization and hyperparameter optimization.">
+      <rect x="8" y="10" width="250" height="280" rx="10" class="kl dash"/><text x="20" y="31" class="s b">REPRESENTATION LEARNING</text>
+      <a href="#t-ae"><rect class="box" x="20" y="46" width="226" height="58" rx="8"/><text x="133" y="70" text-anchor="middle" class="b">1 · Autoencoders</text><text x="133" y="90" text-anchor="middle" class="s">encode → bottleneck → decode</text></a>
+      <text x="133" y="140" text-anchor="middle" class="s">linear AE = PCA (a flat subspace)</text>
+      <text x="133" y="158" text-anchor="middle" class="s">non-linear AE = a curved manifold</text>
+      <text x="133" y="190" text-anchor="middle" class="s">convolutional AE = autoencoder</text><text x="133" y="206" text-anchor="middle" class="s">built from conv layers</text>
+      <line class="ka" x1="246" y1="198" x2="296" y2="198" marker-end="url(#ahA)"/>
+      <a href="#t-cnn"><rect class="box" x="298" y="170" width="170" height="58" rx="8"/><text x="383" y="194" text-anchor="middle" class="b">2 · ConvNet basics</text><text x="383" y="214" text-anchor="middle" class="s">conv, ReLU, pool, FC</text></a>
+      <rect x="290" y="10" width="602" height="140" rx="10" class="kl dash"/><text x="302" y="31" class="s b">ARCHITECTURES (deeper and smarter over time)</text>
+      <a href="#t-alex"><rect class="box" x="302" y="44" width="134" height="58" rx="8"/><text x="369" y="68" text-anchor="middle" class="b">AlexNet 2012</text><text x="369" y="88" text-anchor="middle" class="s">8 layers, ReLU, GPUs</text></a>
+      <a href="#t-alex"><rect class="box" x="450" y="44" width="134" height="58" rx="8"/><text x="517" y="68" text-anchor="middle" class="b">VGG 2014</text><text x="517" y="88" text-anchor="middle" class="s">16–19 layers, all 3×3</text></a>
+      <a href="#t-inc"><rect class="box" x="598" y="44" width="134" height="58" rx="8"/><text x="665" y="68" text-anchor="middle" class="b">Inception 2014</text><text x="665" y="88" text-anchor="middle" class="s">parallel filters, 1×1</text></a>
+      <a href="#t-res"><rect class="box" x="746" y="44" width="134" height="58" rx="8"/><text x="813" y="68" text-anchor="middle" class="b">ResNet 2015</text><text x="813" y="88" text-anchor="middle" class="s">skip connections, 152</text></a>
+      <g class="k"><line x1="436" y1="73" x2="448" y2="73" marker-end="url(#ah)"/><line x1="584" y1="73" x2="596" y2="73" marker-end="url(#ah)"/><line x1="732" y1="73" x2="744" y2="73" marker-end="url(#ah)"/></g>
+      <text x="591" y="132" text-anchor="middle" class="s">ImageNet top-5 error: 15.3% → 7.3% → 6.7% → 3.6%</text>
+      <line class="k" x1="383" y1="168" x2="383" y2="104" marker-end="url(#ah)"/>
+      <rect x="490" y="162" width="402" height="128" rx="10" class="kl dash"/><text x="502" y="183" class="s b">TRAINING A CONVNET</text>
+      <a href="#t-init"><rect class="box" x="502" y="196" width="122" height="58" rx="8"/><text x="563" y="220" text-anchor="middle" class="b">6 · Init</text><text x="563" y="240" text-anchor="middle" class="s">Xavier, He</text></a>
+      <a href="#t-bn"><rect class="box" x="636" y="196" width="122" height="58" rx="8"/><text x="697" y="220" text-anchor="middle" class="b">7 · BatchNorm</text><text x="697" y="240" text-anchor="middle" class="s">per channel</text></a>
+      <a href="#t-hpo"><rect class="box" x="770" y="196" width="112" height="58" rx="8"/><text x="826" y="220" text-anchor="middle" class="b">8 · HPO</text><text x="826" y="240" text-anchor="middle" class="s">grid vs random</text></a>
+      <line class="kg" x1="468" y1="210" x2="500" y2="222" marker-end="url(#ahG)"/>
+      <text x="692" y="278" text-anchor="middle" class="s">ResNet and Inception-v2 rely on good init and batch norm</text>
+    </svg>
+    <figcaption>Click a box to jump to that topic. The four architectures share topics 3 to 5, and the <a href="#cards">architecture cards</a> compare them side by side.</figcaption>
+  </figure>
+</section>
+
+<!-- ================= TOPIC 1: AUTOENCODERS ================= -->
+<section class="topic" id="t-ae">
+  <p class="eyebrow">Topic 1 of 8 · Linear and manifolds</p>
+  <h2>Autoencoders and Manifolds</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">An autoencoder is a neural network trained to <mark>reproduce its input at its output through a narrow hidden layer (the bottleneck)</mark>, so the encoder must learn a compact code that captures the data's structure; a linear autoencoder learns the same subspace as PCA, while a non-linear one learns a curved <mark>manifold</mark>.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 280" role="img" aria-label="Autoencoder: input x of 784 numbers passes through encoder layers that get narrower, to a bottleneck code z of 32 numbers, then through decoder layers that get wider, to the reconstruction x hat of 784 numbers. Loss compares x and x hat. Inset: points in 2D lying near a curve, with the code z as position along the curve.">
+        <rect class="box" x="14" y="40" width="70" height="170" rx="6" style="fill:#fff5df"/><text x="49" y="122" text-anchor="middle" class="b">x</text><text x="49" y="140" text-anchor="middle" class="s">784</text>
+        <path class="box" d="M104,40 L254,90 L254,160 L104,210 Z" style="fill:var(--accent-soft)"/><text x="179" y="122" text-anchor="middle" class="b">Encoder</text><text x="179" y="140" text-anchor="middle" class="s">784 → 128 → 32</text><text x="179" y="156" text-anchor="middle" class="s">z = f(x)</text>
+        <rect class="box" x="270" y="92" width="44" height="66" rx="6" style="fill:var(--warm-soft);stroke-width:2.4"/><text x="292" y="122" text-anchor="middle" class="b">z</text><text x="292" y="140" text-anchor="middle" class="s">32</text>
+        <path class="box" d="M330,90 L480,40 L480,210 L330,160 Z" style="fill:var(--good-soft)"/><text x="405" y="122" text-anchor="middle" class="b">Decoder</text><text x="405" y="140" text-anchor="middle" class="s">32 → 128 → 784</text><text x="405" y="156" text-anchor="middle" class="s">x̂ = g(z)</text>
+        <rect class="box" x="500" y="40" width="70" height="170" rx="6" style="fill:#fff5df"/><text x="535" y="122" text-anchor="middle" class="b">x̂</text><text x="535" y="140" text-anchor="middle" class="s">784</text>
+        <g class="k"><line x1="84" y1="125" x2="102" y2="125" marker-end="url(#ah)"/><line x1="254" y1="125" x2="268" y2="125" marker-end="url(#ah)"/><line x1="314" y1="125" x2="328" y2="125" marker-end="url(#ah)"/><line x1="480" y1="125" x2="498" y2="125" marker-end="url(#ah)"/></g>
+        <text x="292" y="80" text-anchor="middle" class="tw b">bottleneck</text>
+        <path class="kw dash" d="M49,212 C49,248 535,248 535,212"/><text x="292" y="268" text-anchor="middle" class="tw b">loss L = ‖x − x̂‖² (reconstruction error)</text>
+        <g transform="translate(610,24)">
+          <rect width="276" height="214" rx="8" class="box" style="fill:#f6f8fc"/>
+          <text x="138" y="22" text-anchor="middle" class="b">The manifold idea (2-D → 1-D)</text>
+          <path class="ka" d="M30,170 C60,60 150,40 200,90 S250,170 250,170" style="stroke-width:2.4"/>
+          <g style="fill:var(--ink)"><circle cx="34" cy="160" r="3"/><circle cx="44" cy="124" r="3"/><circle cx="62" cy="96" r="3"/><circle cx="86" cy="74" r="3"/><circle cx="114" cy="62" r="3"/><circle cx="146" cy="60" r="3"/><circle cx="176" cy="70" r="3"/><circle cx="204" cy="94" r="3"/><circle cx="226" cy="124" r="3"/><circle cx="244" cy="158" r="3"/><circle cx="54" cy="112" r="3"/><circle cx="196" cy="84" r="3"/></g>
+          <text x="40" y="190" class="s">z = 0</text><text x="240" y="190" class="s">z = 1</text>
+          <text x="138" y="206" text-anchor="middle" class="s">2 numbers per point, but 1 number (z) is enough</text>
+        </g>
+      </svg>
+      <figcaption>Draw the "bow tie": wide input, narrow code, wide output, with the loss arrow below. Add the curve inset when the question mentions manifolds.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: linear (PCA) vs non-linear autoencoder on a curved manifold</h3>
+    <figure class="demo">
+      <canvas id="aeC" data-ratio="0.44" data-ratio-sm="0.85" aria-label="Points near a curved arc, compressed to a 1-number code and reconstructed by a linear or a non-linear autoencoder."></canvas>
+      <div class="controls">
+        <div class="seg" role="group" aria-label="Autoencoder type" id="aeType"><button type="button" data-t="lin" aria-pressed="true">Linear AE (= PCA)</button><button type="button" data-t="non" aria-pressed="false">Non-linear AE</button></div>
+        <label class="ctl" for="aeNoise">Noise <input type="range" id="aeNoise" min="0" max="0.12" step="0.01" value="0.04"><span class="val" id="aeNoisev"></span></label>
+        <label class="ctl" for="aeLines"><input type="checkbox" id="aeLines" checked> Show reconstruction lines</label>
+        <button class="ghost" id="aeNew" type="button">New sample</button>
+      </div>
+      <p class="readout" id="aeOut"></p>
+      <p class="observe"><strong>What to observe.</strong> Every point has 2 numbers but lies near a 1-D curve, so a 1-number code should be enough. The linear autoencoder can only squash points onto a straight line (the first principal component), so points at the ends of the arc are reconstructed far away. The non-linear autoencoder maps each point to its position along the curve and back, so reconstructions land on the arc and the error is mostly just the noise. Here the non-linear decoder is the true curve, standing in for a trained network; the linear one is computed exactly by PCA.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>Ask a network to copy its input, but force the message through a very small middle layer.</li>
+          <li>To succeed it must keep only the important information and throw away noise: compression.</li>
+          <li>The encoder squeezes; the decoder rebuilds. No labels are needed, the input is its own target.</li>
+          <li>Real data such as face photos uses only a tiny part of all possible pixel patterns. That part is a smooth, curved surface: a manifold.</li>
+          <li>The code z is like coordinates on that surface (pose, lighting, smile).</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li><strong>Undercomplete AE:</strong> code dimension d &lt; input dimension; minimise \(L(x,g(f(x)))\).</li>
+          <li><strong>Linear AE ≡ PCA:</strong> with linear f and g and squared error, the optimal code spans the same subspace as the top d principal components.</li>
+          <li><strong>Manifold hypothesis:</strong> high-dimensional real data concentrates near a low-dimensional manifold; a non-linear AE learns a chart (coordinates) of it.</li>
+          <li><strong>Regularized AEs:</strong> sparse (L1 penalty on the code), denoising (reconstruct x from corrupted x̃), contractive (penalise \(\lVert\partial f/\partial x\rVert_F^2\)).</li>
+          <li><strong>Variational AE:</strong> encoder outputs a distribution; a KL term makes the code space smooth, so the decoder can generate new samples.</li>
+          <li><strong>Convolutional AE:</strong> encoder of conv + pooling, decoder of transposed convs / up-sampling; used for images (denoising, anomaly detection, pre-training CNN layers).</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[z=f(x)=\sigma(W_ex+b_e)\qquad\qquad \hat x=g(z)=\sigma(W_dz+b_d)\qquad\qquad L=\frac1N\sum_{i=1}^{N}\lVert x_i-\hat x_i\rVert^2\]
+      \[\textbf{Sparse:}\ \ L+\lambda\sum_j|z_j|\qquad\textbf{Denoising:}\ \ L=\lVert x-g(f(\tilde x))\rVert^2,\ \tilde x=x+\text{noise}\qquad\textbf{Contractive:}\ \ L+\lambda\Bigl\lVert\frac{\partial f(x)}{\partial x}\Bigr\rVert_F^2\]
+      \[\textbf{VAE:}\quad L=\mathbb E_{q(z\mid x)}\bigl[-\log p(x\mid z)\bigr]+\text{KL}\bigl(q(z\mid x)\,\Vert\,\mathcal N(0,I)\bigr)\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(x,\ \hat x\)</td><td>Input and reconstruction.</td></tr>
+        <tr><td>\(z\)</td><td>Code (latent representation) in the bottleneck.</td></tr>
+        <tr><td>\(f,\ g\)</td><td>Encoder and decoder functions.</td></tr>
+        <tr><td>\(W_e,W_d\)</td><td>Encoder and decoder weights (tied AEs use \(W_d=W_e^\top\)).</td></tr>
+        <tr><td>\(\tilde x\)</td><td>Corrupted input for the denoising AE.</td></tr>
+        <tr><td>\(\lambda\)</td><td>Strength of the regularization term.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">An MNIST autoencoder 784 → 128 → 32 → 128 → 784 (fully connected). Count its parameters and its compression ratio. Then compute the reconstruction MSE for \(x=(1,\ 0,\ 0.5)\) and \(\hat x=(0.8,\ 0.1,\ 0.6)\).</p>
+      <ol>
+        <li>784 → 128: 784 × 128 + 128 = 100,480.</li>
+        <li>128 → 32: 128 × 32 + 32 = 4,128. 32 → 128: 32 × 128 + 128 = 4,224.</li>
+        <li>128 → 784: 128 × 784 + 784 = 101,136. Total = 209,968 parameters.</li>
+        <li>Compression: 784/32 = 24.5 times fewer numbers in the code.</li>
+        <li>Errors: 0.2² = 0.04, (−0.1)² = 0.01, (−0.1)² = 0.01. MSE = 0.06/3 = 0.02.</li>
+      </ol>
+      <p class="ans">Answer: 209,968 parameters; 24.5× compression; reconstruction MSE = 0.02.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Unsupervised: no labels needed.</li>
+        <li>Learns non-linear features, unlike PCA.</li>
+        <li>The code is a compact feature for other tasks.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>An overcomplete AE with no regularization can just copy the input.</li>
+        <li>Reconstructions are often blurry.</li>
+        <li>The code is learned for reconstruction, not necessarily for classification.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Dimensionality reduction and visualisation.</li>
+        <li>Image denoising.</li>
+        <li>Anomaly detection (high reconstruction error = unusual).</li>
+        <li>Pre-training, image compression, generation (VAE).</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison tables</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>PCA (linear AE)</th><th>Non-linear autoencoder</th></tr></thead>
+      <tbody>
+        <tr><th>Mapping</th><td>Linear projection</td><td>Non-linear, any depth</td></tr>
+        <tr><th>Learns</th><td>A flat subspace</td><td>A curved manifold</td></tr>
+        <tr><th>Solution</th><td>Closed form (eigenvectors)</td><td>Gradient descent</td></tr>
+        <tr><th>Code dimensions</th><td>Orthogonal, ordered by variance</td><td>Not orthogonal or ordered</td></tr>
+        <tr><th>Best for</th><td>Roughly linear data</td><td>Images, speech, complex data</td></tr>
+      </tbody></table></div>
+    <div class="tablewrap" style="margin-top:12px"><table>
+      <thead><tr><th>Type</th><th>Idea</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><th>Undercomplete</th><td>Bottleneck smaller than input</td><td>Compression</td></tr>
+        <tr><th>Sparse</th><td>Few code units active (L1 penalty)</td><td>Interpretable features</td></tr>
+        <tr><th>Denoising</th><td>Rebuild clean x from noisy x̃</td><td>Robust features, denoising</td></tr>
+        <tr><th>Contractive</th><td>Code insensitive to small input changes</td><td>Learn the manifold's tangent directions</td></tr>
+        <tr><th>Variational</th><td>Probabilistic code with a KL prior</td><td>Generation</td></tr>
+        <tr><th>Convolutional</th><td>Conv encoder, transposed-conv decoder</td><td>Images</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>What is an autoencoder?</p><p class="a">A feed-forward network trained without labels to reconstruct its input. An encoder maps the input to a smaller code z = f(x), and a decoder maps it back, x̂ = g(z), minimising the reconstruction error ‖x − x̂‖².</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>State the manifold hypothesis.</p><p class="a">Real high-dimensional data, such as natural images, lies on or near a low-dimensional manifold embedded in the input space, so a few latent coordinates are enough to describe it.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>How is a linear autoencoder related to PCA?</p><p class="a">An autoencoder with linear encoder and decoder trained with squared error learns a code that spans the same subspace as the top principal components, so it performs PCA (up to a rotation of the code).</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain autoencoders and their types. Relate them to manifold learning.</p>
+      <ol>
+        <li><strong>Introduction:</strong> unsupervised representation learning.</li>
+        <li><strong>Diagram:</strong> encoder, bottleneck, decoder, loss.</li>
+        <li><strong>Equations:</strong> f, g, reconstruction loss; training by backprop.</li>
+        <li><strong>Undercomplete vs overcomplete</strong> autoencoders.</li>
+        <li><strong>Linear AE and PCA.</strong></li>
+        <li><strong>Manifold hypothesis:</strong> curve example; code as manifold coordinates.</li>
+        <li><strong>Types:</strong> sparse, denoising, contractive, variational, convolutional.</li>
+        <li><strong>Worked example:</strong> parameter count and MSE.</li>
+        <li><strong>Applications</strong> and conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> the bow tie from block 2 and the curve inset.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"Squeeze, then rebuild."</strong> A bow tie: wide, narrow, wide.</p>
+    <p>Types, <strong>"Sweet Dogs Can't Visit Cats"</strong>: Sparse, Denoising, Contractive, Variational, Convolutional.</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 2: CONVNET ================= -->
+<section class="topic" id="t-cnn">
+  <p class="eyebrow">Topic 2 of 8 · ConvNets</p>
+  <h2>Introduction to ConvNets</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">A ConvNet (convolutional neural network) is a deep network for images built from a repeating pattern of <mark>convolution → ReLU → pooling</mark> layers, which learn local, shared filters and progressively shrink the spatial size, followed by <mark>fully connected layers</mark> that classify.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw: the pipeline with sizes</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 290" role="img" aria-label="ConvNet pipeline with sizes: input 32 by 32 by 3, convolution 5 by 5 with 6 filters giving 28 by 28 by 6, ReLU, max pooling to 14 by 14 by 6, convolution 5 by 5 with 16 filters giving 10 by 10 by 16, ReLU, max pooling to 5 by 5 by 16, flatten to 400, fully connected 120, 84, and softmax 10.">
+        <rect class="box" x="20" y="80.0" width="60" height="60" rx="2" style="fill:#fff5df"/>
+<text x="56.0" y="162.0" text-anchor="middle" class="b">Input</text><text x="56.0" y="178.0" text-anchor="middle" class="s">32×32×3</text>
+<line class="k" x1="89" y1="110" x2="119" y2="110" marker-end="url(#ah)"/><text x="104.0" y="52" text-anchor="middle" class="s">6 filters</text>
+<rect class="box" x="133" y="73.0" width="54" height="54" rx="2" style="fill:var(--accent-soft)"/>
+<rect class="box" x="128" y="78.0" width="54" height="54" rx="2" style="fill:var(--accent-soft)"/>
+<rect class="box" x="123" y="83.0" width="54" height="54" rx="2" style="fill:var(--accent-soft)"/>
+<text x="156.0" y="159.0" text-anchor="middle" class="b">Conv 5×5</text><text x="156.0" y="175.0" text-anchor="middle" class="s">28×28×6</text>
+<line class="k" x1="196" y1="110" x2="226" y2="110" marker-end="url(#ah)"/><text x="211.0" y="52" text-anchor="middle" class="s">ReLU, 2×2 s2</text>
+<rect class="box" x="240" y="81.0" width="38" height="38" rx="2" style="fill:var(--good-soft)"/>
+<rect class="box" x="235" y="86.0" width="38" height="38" rx="2" style="fill:var(--good-soft)"/>
+<rect class="box" x="230" y="91.0" width="38" height="38" rx="2" style="fill:var(--good-soft)"/>
+<text x="255.0" y="151.0" text-anchor="middle" class="b">Max pool</text><text x="255.0" y="167.0" text-anchor="middle" class="s">14×14×6</text>
+<line class="k" x1="287" y1="110" x2="317" y2="110" marker-end="url(#ah)"/><text x="302.0" y="52" text-anchor="middle" class="s">16 filters</text>
+<rect class="box" x="336" y="80.0" width="30" height="30" rx="2" style="fill:var(--accent-soft)"/>
+<rect class="box" x="331" y="85.0" width="30" height="30" rx="2" style="fill:var(--accent-soft)"/>
+<rect class="box" x="326" y="90.0" width="30" height="30" rx="2" style="fill:var(--accent-soft)"/>
+<rect class="box" x="321" y="95.0" width="30" height="30" rx="2" style="fill:var(--accent-soft)"/>
+<text x="342.0" y="147.0" text-anchor="middle" class="b">Conv 5×5</text><text x="342.0" y="163.0" text-anchor="middle" class="s">10×10×16</text>
+<line class="k" x1="375" y1="110" x2="405" y2="110" marker-end="url(#ah)"/><text x="390.0" y="52" text-anchor="middle" class="s">ReLU, 2×2 s2</text>
+<rect class="box" x="424" y="84.0" width="22" height="22" rx="2" style="fill:var(--good-soft)"/>
+<rect class="box" x="419" y="89.0" width="22" height="22" rx="2" style="fill:var(--good-soft)"/>
+<rect class="box" x="414" y="94.0" width="22" height="22" rx="2" style="fill:var(--good-soft)"/>
+<rect class="box" x="409" y="99.0" width="22" height="22" rx="2" style="fill:var(--good-soft)"/>
+<text x="426.0" y="143.0" text-anchor="middle" class="b">Max pool</text><text x="426.0" y="159.0" text-anchor="middle" class="s">5×5×16</text>
+<line class="k" x1="455" y1="110" x2="491" y2="110" marker-end="url(#ah)"/>
+<rect class="box" x="495" y="40" width="16" height="140" rx="2"/><text x="503" y="202" text-anchor="middle" class="b">Flatten</text><text x="503" y="218" text-anchor="middle" class="s">400</text>
+<line class="k" x1="513" y1="110" x2="561" y2="110" marker-end="url(#ah)"/>
+<rect class="box" x="565" y="55.0" width="16" height="110" rx="2" style="fill:var(--warm-soft)"/><text x="573" y="202" text-anchor="middle" class="b">FC</text><text x="573" y="218" text-anchor="middle" class="s">120</text>
+<line class="k" x1="589" y1="110" x2="641" y2="110" marker-end="url(#ah)"/>
+<rect class="box" x="645" y="65.0" width="16" height="90" rx="2" style="fill:var(--warm-soft)"/><text x="653" y="202" text-anchor="middle" class="b">FC</text><text x="653" y="218" text-anchor="middle" class="s">84</text>
+<line class="k" x1="669" y1="110" x2="721" y2="110" marker-end="url(#ah)"/>
+<rect class="box" x="725" y="80.0" width="16" height="60" rx="2" style="fill:#efe9f8"/><text x="733" y="202" text-anchor="middle" class="b">Softmax</text><text x="733" y="218" text-anchor="middle" class="s">10</text>
+<text x="645" y="28" text-anchor="middle" class="s b">CLASSIFIER</text><text x="250" y="28" text-anchor="middle" class="s b">FEATURE EXTRACTOR</text>
+        <rect x="140" y="226" width="620" height="54" rx="8" class="box" style="fill:#f6f8fc"/>
+        <text x="450" y="248" text-anchor="middle" class="b">Output size O = (W − F + 2P) / S + 1</text>
+        <text x="450" y="268" text-anchor="middle" class="s">conv 1: (32 − 5 + 0)/1 + 1 = 28 · pool: (28 − 2)/2 + 1 = 14 · conv 2: (14 − 5)/1 + 1 = 10 · pool: 5</text>
+      </svg>
+      <figcaption>A LeNet-5 style network. Write the size under every block; examiners give marks for the numbers.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: output-size and parameter calculator</h3>
+    <figure class="demo">
+      <div class="calc">
+        <label for="ccW">Input size W <input type="number" id="ccW" min="1" max="512" value="32"></label>
+        <label for="ccC">Input channels C<sub>in</sub> <input type="number" id="ccC" min="1" max="1024" value="3"></label>
+        <label for="ccF">Filter size F <input type="number" id="ccF" min="1" max="15" value="5"></label>
+        <label for="ccP">Padding P <input type="number" id="ccP" min="0" max="10" value="0"></label>
+        <label for="ccS">Stride S <input type="number" id="ccS" min="1" max="8" value="1"></label>
+        <label for="ccK">Number of filters K <input type="number" id="ccK" min="1" max="2048" value="6"></label>
+      </div>
+      <div class="controls">
+        <span class="ctl">Presets:</span>
+        <button class="ghost" type="button" data-p="32,3,5,0,1,6">LeNet conv 1</button>
+        <button class="ghost" type="button" data-p="227,3,11,0,4,96">AlexNet conv 1</button>
+        <button class="ghost" type="button" data-p="224,3,3,1,1,64">VGG conv 1</button>
+        <button class="ghost" type="button" data-p="224,3,7,3,2,64">ResNet conv 1</button>
+        <button class="ghost" type="button" data-p="32,3,5,1,2,8">Not a whole number</button>
+      </div>
+      <canvas id="ccC2" data-ratio="0.32" data-ratio-sm="0.7" aria-label="Input square with padding and filter, and the output square."></canvas>
+      <p class="readout" id="ccOut"></p>
+      <p class="observe"><strong>What to observe.</strong> Padding P = (F − 1)/2 with stride 1 keeps the size the same ("same" convolution, as in VGG). Stride 2 roughly halves it. The number of parameters depends only on F, C<sub>in</sub> and K, never on the image size, because of weight sharing. If (W − F + 2P) is not divisible by S, the filter does not fit evenly: libraries round down and drop the last pixels.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li><strong>Convolution:</strong> small filters slide over the image and light up where they find a pattern (edge, colour blob).</li>
+          <li><strong>ReLU:</strong> keeps positive responses, sets negatives to 0.</li>
+          <li><strong>Pooling:</strong> shrinks each map, keeping the strongest response in each 2×2 patch.</li>
+          <li>Repeat: later layers find bigger patterns made from earlier ones.</li>
+          <li><strong>Flatten + fully connected:</strong> combine all features and output class scores; softmax turns them into probabilities.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li><strong>Input volume</strong> W × H × C; a conv layer has K filters of size F × F × C, stride S, zero padding P.</li>
+          <li><strong>Local connectivity</strong> (each output sees an F × F patch) and <strong>parameter sharing</strong> (same filter everywhere) give far fewer weights than a fully connected layer and translation equivariance.</li>
+          <li><strong>Receptive field</strong> grows with depth: two stacked 3×3 convs see 5×5, three see 7×7.</li>
+          <li><strong>Pooling</strong> (max or average) has no parameters; it adds small translation invariance. Modern nets often use stride-2 convs or global average pooling instead.</li>
+          <li><strong>Training:</strong> softmax cross-entropy, backprop through conv (the gradient of a convolution is another convolution), SGD with momentum.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[O=\frac{W-F+2P}{S}+1\qquad\qquad \text{Output volume}=O\times O\times K\]
+      \[\textbf{Parameters}=(F\cdot F\cdot C_{\text{in}}+1)\cdot K\qquad\qquad \textbf{Multiply-adds}=O\cdot O\cdot K\cdot F\cdot F\cdot C_{\text{in}}\]
+      \[\textbf{Same padding (S = 1):}\ \ P=\frac{F-1}{2}\qquad\qquad \textbf{Receptive field of n stacked 3×3 convs}=2n+1\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(W\)</td><td>Input width (and height, for square inputs).</td></tr>
+        <tr><td>\(F\)</td><td>Filter (kernel) size.</td></tr>
+        <tr><td>\(P\)</td><td>Zero padding on each side.</td></tr>
+        <tr><td>\(S\)</td><td>Stride.</td></tr>
+        <tr><td>\(K\)</td><td>Number of filters = output channels.</td></tr>
+        <tr><td>\(C_{\text{in}}\)</td><td>Input channels (depth of each filter).</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">Trace a 32×32×3 image through: conv 5×5, 6 filters, P = 0, S = 1 → ReLU → max pool 2×2, S = 2 → conv 5×5, 16 filters → ReLU → max pool 2×2 → FC 120. Then check AlexNet's first layer: 227×227×3 input, 96 filters of 11×11, S = 4, P = 0.</p>
+      <ol>
+        <li>Conv 1: (32 − 5 + 0)/1 + 1 = 28 → 28×28×6. Parameters (5·5·3 + 1)·6 = 456.</li>
+        <li>Pool 1: (28 − 2)/2 + 1 = 14 → 14×14×6 (no parameters).</li>
+        <li>Conv 2: (14 − 5)/1 + 1 = 10 → 10×10×16. Parameters (5·5·6 + 1)·16 = 2,416.</li>
+        <li>Pool 2: (10 − 2)/2 + 1 = 5 → 5×5×16 = 400 values after flattening.</li>
+        <li>FC 120: 400 × 120 + 120 = 48,120 parameters, far more than both conv layers together.</li>
+        <li>AlexNet conv 1: (227 − 11)/4 + 1 = 55 → 55×55×96; parameters (11·11·3 + 1)·96 = 34,944.</li>
+      </ol>
+      <p class="ans">Answer: 28×28×6 → 14×14×6 → 10×10×16 → 5×5×16 → 400 → 120; AlexNet conv 1 gives 55×55×96 with 34,944 parameters.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Few parameters thanks to weight sharing.</li>
+        <li>Learns a hierarchy of features automatically.</li>
+        <li>Translation equivariant; pooling adds invariance.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>Needs lots of labelled data and GPU time.</li>
+        <li>Not rotation or scale invariant by design.</li>
+        <li>Many design choices (depth, filters, stride).</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Image classification, face recognition.</li>
+        <li>Backbone for detection and segmentation.</li>
+        <li>Medical imaging, OCR, video analysis.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison: layer types</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Layer</th><th>Purpose</th><th>Parameters</th><th>Changes size?</th></tr></thead>
+      <tbody>
+        <tr><th>Convolution</th><td>Detect local patterns</td><td>(F·F·C<sub>in</sub> + 1)·K</td><td>Depends on F, P, S; depth becomes K</td></tr>
+        <tr><th>ReLU</th><td>Non-linearity</td><td>0</td><td>No</td></tr>
+        <tr><th>Pooling</th><td>Down-sample, invariance</td><td>0</td><td>Yes, usually halves width and height</td></tr>
+        <tr><th>Batch norm</th><td>Stabilise training</td><td>2 per channel (γ, β)</td><td>No</td></tr>
+        <tr><th>Fully connected</th><td>Combine features, classify</td><td>n<sub>in</sub>·n<sub>out</sub> + n<sub>out</sub></td><td>Outputs a vector</td></tr>
+        <tr><th>Softmax</th><td>Class probabilities</td><td>0</td><td>No</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>Write the formula for the output size of a convolution layer.</p><p class="a">O = (W − F + 2P)/S + 1, where W is the input size, F the filter size, P the padding and S the stride. The output depth equals the number of filters K.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>What is parameter sharing?</p><p class="a">The same filter weights are used at every spatial position of the input. A feature detector useful in one place is useful everywhere, and the number of weights becomes independent of image size.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>What is the receptive field of a neuron?</p><p class="a">The region of the input image that can affect that neuron. It grows with depth; for example, two stacked 3×3 conv layers give each output a 5×5 receptive field.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain the architecture of a ConvNet with the size calculation at each layer.</p>
+      <ol>
+        <li><strong>Introduction:</strong> why fully connected nets fail on images.</li>
+        <li><strong>Pipeline diagram</strong> with sizes (block 2).</li>
+        <li><strong>Convolution layer:</strong> filters, local connectivity, parameter sharing.</li>
+        <li><strong>Hyperparameters</strong> F, P, S, K; output-size formula.</li>
+        <li><strong>ReLU</strong> and why it is used.</li>
+        <li><strong>Pooling layer:</strong> max and average.</li>
+        <li><strong>Fully connected and softmax layers.</strong></li>
+        <li><strong>Worked size and parameter calculation</strong> (all layers).</li>
+        <li><strong>Receptive field,</strong> training, applications, conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> the pipeline from block 2 with sizes.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"W minus F plus 2P, over S, plus 1."</strong> Say it three times before the exam.</p>
+    <p><strong>"Can Robots Play Football?"</strong>: Conv, ReLU, Pool, Fully connected.</p>
+  </div>
+</section>
+
+<!-- ================= ARCHITECTURE CARDS ================= -->
+<section class="block" id="cards">
+  <p class="eyebrow">Architectures at a glance</p>
+  <h2>Architecture cards: AlexNet, VGG, Inception, ResNet</h2>
+  <p>Pick a network to see its card and layer diagram. Topics 3 to 5 explain each one in full.</p>
+  <figure class="demo">
+    <div class="seg" role="group" aria-label="Architecture" id="archPick"><button type="button" data-a="alex" aria-pressed="true">AlexNet</button><button type="button" data-a="vgg" aria-pressed="false">VGG-16</button><button type="button" data-a="inc" aria-pressed="false">GoogLeNet (Inception v1)</button><button type="button" data-a="res" aria-pressed="false">ResNet</button></div>
+    <div class="archcard" id="archCard"></div>
+    <canvas id="archC" data-ratio="0.3" data-ratio-sm="0.62" style="margin-top:14px" aria-label="Layer diagram of the selected architecture."></canvas>
+    <div class="legend" id="archLegend">
+      <span><i style="background:#2b54c9"></i>convolution</span><span><i style="background:#1b7f4b"></i>pooling</span><span><i style="background:#6b4fa3"></i>inception module / residual block</span><span><i style="background:#c2410c"></i>fully connected</span><span><i style="background:#18223a"></i>softmax</span>
+    </div>
+  </figure>
+  <div class="tablewrap" style="margin-top:16px"><table>
+    <thead><tr><th>Point</th><th>AlexNet</th><th>VGG-16</th><th>GoogLeNet</th><th>ResNet-50 / 152</th></tr></thead>
+    <tbody>
+      <tr><th>Year (ILSVRC)</th><td>2012, winner</td><td>2014, 2nd in classification</td><td>2014, winner</td><td>2015, winner</td></tr>
+      <tr><th>Authors</th><td>Krizhevsky, Sutskever, Hinton</td><td>Simonyan, Zisserman (Oxford)</td><td>Szegedy et al. (Google)</td><td>He, Zhang, Ren, Sun (Microsoft)</td></tr>
+      <tr><th>Depth (weight layers)</th><td>8</td><td>16</td><td>22</td><td>50 / 152</td></tr>
+      <tr><th>Parameters</th><td class="num">≈ 60 M</td><td class="num">≈ 138 M</td><td class="num">≈ 6.8 M</td><td class="num">≈ 25.6 M / 60 M</td></tr>
+      <tr><th>Top-5 error</th><td class="num">15.3%</td><td class="num">7.3%</td><td class="num">6.7%</td><td class="num">3.57% (ensemble)</td></tr>
+      <tr><th>Key idea</th><td>Deep CNN on GPUs; ReLU, dropout, augmentation</td><td>Only 3×3 convs, stacked deep</td><td>Inception module; 1×1 bottlenecks; global average pooling</td><td>Residual (skip) connections</td></tr>
+      <tr><th>Filter sizes</th><td>11×11, 5×5, 3×3</td><td>3×3 only</td><td>1×1, 3×3, 5×5 in parallel</td><td>7×7 stem; then 1×1, 3×3</td></tr>
+      <tr><th>Classifier</th><td>3 FC layers</td><td>3 FC layers</td><td>Global avg pool + 1 FC</td><td>Global avg pool + 1 FC</td></tr>
+      <tr><th>Weakness</th><td>Large filters, many FC weights</td><td>Huge, slow, memory hungry</td><td>Complex design</td><td>Very deep; many layers to compute</td></tr>
+    </tbody></table></div>
+</section>
+
+<!-- ================= TOPIC 3: ALEXNET + VGG ================= -->
+<section class="topic" id="t-alex">
+  <p class="eyebrow">Topic 3 of 8 · Architectures</p>
+  <h2>AlexNet and VGG</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def"><mark>AlexNet</mark> (2012) is an 8-layer CNN (5 conv + 3 fully connected) trained on GPUs with ReLU and dropout that won ImageNet 2012; <mark>VGG</mark> (2014) showed that depth matters by stacking 16–19 layers using <mark>only 3×3 convolutions</mark> and 2×2 max pooling.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 290" role="img" aria-label="Top: AlexNet layers: input 227, conv 11 by 11 stride 4 with 96 filters, max pool, conv 5 by 5 256, max pool, three 3 by 3 convs with 384, 384 and 256 filters, max pool, fully connected 4096, 4096, 1000. Bottom: VGG-16: five blocks of 3 by 3 convolutions with 64, 128, 256, 512, 512 channels, each followed by max pooling, then fully connected 4096, 4096, 1000.">
+        <text x="10" y="22" class="b">AlexNet (2012): 5 conv + 3 FC, ≈ 60 M parameters</text>
+<rect class="box" x="10.0" y="30.0" width="63.9" height="60" rx="3" style="fill:#fff5df"/>
+<text x="42.0" y="112" text-anchor="middle" class="s">input</text>
+<text x="42.0" y="126" text-anchor="middle" class="s">227²×3</text>
+<rect class="box" x="85.2" y="32.0" width="75.2" height="56" rx="3" style="fill:var(--accent-soft)"/>
+<text x="122.8" y="112" text-anchor="middle" class="s">11×11</text>
+<text x="122.8" y="126" text-anchor="middle" class="s">96, s4</text>
+<rect class="box" x="171.7" y="40.0" width="41.4" height="40" rx="3" style="fill:var(--good-soft)"/>
+<text x="192.4" y="112" text-anchor="middle" class="s">pool</text>
+<rect class="box" x="224.4" y="37.0" width="75.2" height="46" rx="3" style="fill:var(--accent-soft)"/>
+<text x="262.0" y="112" text-anchor="middle" class="s">5×5</text>
+<text x="262.0" y="126" text-anchor="middle" class="s">256</text>
+<rect class="box" x="310.9" y="43.0" width="41.4" height="34" rx="3" style="fill:var(--good-soft)"/>
+<text x="331.5" y="112" text-anchor="middle" class="s">pool</text>
+<rect class="box" x="363.5" y="42.0" width="75.2" height="36" rx="3" style="fill:var(--accent-soft)"/>
+<text x="401.1" y="112" text-anchor="middle" class="s">3×3</text>
+<text x="401.1" y="126" text-anchor="middle" class="s">384</text>
+<rect class="box" x="450.0" y="42.0" width="75.2" height="36" rx="3" style="fill:var(--accent-soft)"/>
+<text x="487.6" y="112" text-anchor="middle" class="s">3×3</text>
+<text x="487.6" y="126" text-anchor="middle" class="s">384</text>
+<rect class="box" x="536.5" y="42.0" width="75.2" height="36" rx="3" style="fill:var(--accent-soft)"/>
+<text x="574.1" y="112" text-anchor="middle" class="s">3×3</text>
+<text x="574.1" y="126" text-anchor="middle" class="s">256</text>
+<rect class="box" x="623.0" y="46.0" width="41.4" height="28" rx="3" style="fill:var(--good-soft)"/>
+<text x="643.7" y="112" text-anchor="middle" class="s">pool</text>
+<rect class="box" x="675.6" y="30.0" width="63.9" height="60" rx="3" style="fill:var(--warm-soft)"/>
+<text x="707.6" y="112" text-anchor="middle" class="s">FC</text>
+<text x="707.6" y="126" text-anchor="middle" class="s">4096</text>
+<rect class="box" x="750.9" y="30.0" width="63.9" height="60" rx="3" style="fill:var(--warm-soft)"/>
+<text x="782.8" y="112" text-anchor="middle" class="s">FC</text>
+<text x="782.8" y="126" text-anchor="middle" class="s">4096</text>
+<rect class="box" x="826.1" y="40.0" width="63.9" height="40" rx="3" style="fill:var(--warm-soft)"/>
+<text x="858.0" y="112" text-anchor="middle" class="s">FC</text>
+<text x="858.0" y="126" text-anchor="middle" class="s">1000</text>
+<text x="10" y="162" class="b">VGG-16 (2014): 13 conv (all 3×3) + 3 FC, ≈ 138 M parameters</text>
+<rect class="box" x="10.0" y="170.0" width="59.4" height="60" rx="3" style="fill:#fff5df"/>
+<text x="39.7" y="252" text-anchor="middle" class="s">input</text>
+<text x="39.7" y="266" text-anchor="middle" class="s">224²×3</text>
+<rect class="box" x="79.8" y="172.0" width="69.8" height="56" rx="3" style="fill:var(--accent-soft)"/>
+<text x="114.8" y="252" text-anchor="middle" class="s">3×3 ×2</text>
+<text x="114.8" y="266" text-anchor="middle" class="s">64</text>
+<rect class="box" x="160.2" y="176.0" width="31.4" height="48" rx="3" style="fill:var(--good-soft)"/>
+<text x="175.9" y="252" text-anchor="middle" class="s">pool</text>
+<rect class="box" x="202.1" y="175.0" width="69.8" height="50" rx="3" style="fill:var(--accent-soft)"/>
+<text x="237.0" y="252" text-anchor="middle" class="s">3×3 ×2</text>
+<text x="237.0" y="266" text-anchor="middle" class="s">128</text>
+<rect class="box" x="282.4" y="179.0" width="31.4" height="42" rx="3" style="fill:var(--good-soft)"/>
+<text x="298.1" y="252" text-anchor="middle" class="s">pool</text>
+<rect class="box" x="324.3" y="178.0" width="76.8" height="44" rx="3" style="fill:var(--accent-soft)"/>
+<text x="362.7" y="252" text-anchor="middle" class="s">3×3 ×3</text>
+<text x="362.7" y="266" text-anchor="middle" class="s">256</text>
+<rect class="box" x="411.6" y="182.0" width="31.4" height="36" rx="3" style="fill:var(--good-soft)"/>
+<text x="427.3" y="252" text-anchor="middle" class="s">pool</text>
+<rect class="box" x="453.5" y="181.0" width="76.8" height="38" rx="3" style="fill:var(--accent-soft)"/>
+<text x="491.9" y="252" text-anchor="middle" class="s">3×3 ×3</text>
+<text x="491.9" y="266" text-anchor="middle" class="s">512</text>
+<rect class="box" x="540.8" y="185.0" width="31.4" height="30" rx="3" style="fill:var(--good-soft)"/>
+<text x="556.5" y="252" text-anchor="middle" class="s">pool</text>
+<rect class="box" x="582.7" y="185.0" width="76.8" height="30" rx="3" style="fill:var(--accent-soft)"/>
+<text x="621.1" y="252" text-anchor="middle" class="s">3×3 ×3</text>
+<text x="621.1" y="266" text-anchor="middle" class="s">512</text>
+<rect class="box" x="670.0" y="188.0" width="31.4" height="24" rx="3" style="fill:var(--good-soft)"/>
+<text x="685.7" y="252" text-anchor="middle" class="s">pool</text>
+<rect class="box" x="711.9" y="170.0" width="52.4" height="60" rx="3" style="fill:var(--warm-soft)"/>
+<text x="738.1" y="252" text-anchor="middle" class="s">FC</text>
+<text x="738.1" y="266" text-anchor="middle" class="s">4096</text>
+<rect class="box" x="774.8" y="170.0" width="52.4" height="60" rx="3" style="fill:var(--warm-soft)"/>
+<text x="801.0" y="252" text-anchor="middle" class="s">FC</text>
+<text x="801.0" y="266" text-anchor="middle" class="s">4096</text>
+<rect class="box" x="837.6" y="180.0" width="52.4" height="40" rx="3" style="fill:var(--warm-soft)"/>
+<text x="863.8" y="252" text-anchor="middle" class="s">FC</text>
+<text x="863.8" y="266" text-anchor="middle" class="s">1000</text>
+      </svg>
+      <figcaption>Draw AlexNet as 5 conv + 3 FC with the big 11×11 first filter. Draw VGG-16 as five blocks of 3×3 convs (2, 2, 3, 3, 3 layers) with pooling after each block, then 3 FC.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: why VGG stacks 3×3 filters</h3>
+    <figure class="demo">
+      <canvas id="rfC" data-ratio="0.45" data-ratio-sm="0.9" aria-label="Receptive field of stacked 3 by 3 convolutions on a grid, and a parameter comparison with a single large filter."></canvas>
+      <div class="controls">
+        <label class="ctl" for="rfN">Stacked 3×3 layers <input type="range" id="rfN" min="1" max="4" step="1" value="3"><span class="val" id="rfNv"></span></label>
+        <label class="ctl" for="rfC2">Channels C <select id="rfC2"><option>64</option><option>128</option><option selected>256</option><option>512</option></select></label>
+      </div>
+      <p class="readout" id="rfOut"></p>
+      <p class="observe"><strong>What to observe.</strong> One output pixel (orange) of the top layer sees a 3×3 patch of the layer below, which sees a 5×5 patch below that, and so on: n stacked 3×3 layers cover (2n + 1)×(2n + 1) pixels. Three 3×3 layers see the same 7×7 area as one 7×7 filter, but use 27C² weights instead of 49C² (45% fewer) and add three ReLUs instead of one, making the function more non-linear.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>AlexNet (Krizhevsky, Sutskever, Hinton, 2012)</h4>
+        <ol>
+          <li>Input 227×227×3; conv 1 has 96 filters of 11×11, stride 4 → 55×55×96.</li>
+          <li>Then conv 5×5 (256), three conv 3×3 (384, 384, 256), with overlapping 3×3 stride-2 max pooling.</li>
+          <li>Three FC layers: 4096, 4096, 1000 (softmax). About 60 M parameters, mostly in the FC layers.</li>
+          <li><strong>ReLU</strong> instead of tanh: trained about 6× faster.</li>
+          <li><strong>Dropout 0.5</strong> in the FC layers; <strong>data augmentation</strong> (random crops, flips, colour changes).</li>
+          <li>Trained on <strong>two GTX 580 GPUs</strong> (model split across them); also used local response normalization (LRN), later abandoned.</li>
+        </ol>
+      </div>
+      <div><h4>VGG (Simonyan and Zisserman, 2014)</h4>
+        <ol>
+          <li>Question asked: what if we just go deeper with a simple, uniform design?</li>
+          <li>All convs are <strong>3×3, stride 1, padding 1</strong> (size preserved); all pools are 2×2 stride 2 (size halved).</li>
+          <li>Channels double after each pool: 64 → 128 → 256 → 512 → 512.</li>
+          <li>VGG-16: 13 conv + 3 FC; VGG-19: 16 conv + 3 FC. About 138 M and 144 M parameters.</li>
+          <li>Stacked 3×3 filters give large receptive fields with fewer weights and more non-linearity.</li>
+          <li>Simple and very popular as a feature extractor (transfer learning, style transfer), but heavy: about 15.5 billion multiply-adds per 224×224 image.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\textbf{AlexNet conv 1:}\quad \frac{227-11+0}{4}+1=55\ \Rightarrow\ 55\times55\times96\]
+      \[\textbf{Receptive field of n stacked 3×3 convs:}\quad 2n+1\qquad\qquad \textbf{Weights:}\ \ n\cdot(3^2C^2)\ \text{vs}\ (2n+1)^2C^2\]
+      \[\textbf{ReLU:}\ f(x)=\max(0,x)\qquad\qquad \textbf{Dropout:}\ \tilde h=r\odot h,\ r\sim\text{Bernoulli}(0.5)\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(n\)</td><td>Number of stacked 3×3 conv layers.</td></tr>
+        <tr><td>\(C\)</td><td>Number of channels in and out of each layer (biases ignored).</td></tr>
+        <tr><td>\(r\)</td><td>Random dropout mask.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">(a) Compare weights of three 3×3 conv layers and one 7×7 layer with C = 256 channels. (b) Count VGG-16's first FC layer, which takes the 7×7×512 output of the last pool. (c) AlexNet conv 1 output and parameters.</p>
+      <ol>
+        <li>(a) Three 3×3: 3 × 9 × 256² = 27 × 65,536 = 1,769,472. One 7×7: 49 × 65,536 = 3,211,264.</li>
+        <li>Ratio 27/49 = 0.55, so the stack uses 45% fewer weights for the same 7×7 receptive field.</li>
+        <li>(b) 7 × 7 × 512 × 4096 + 4096 = 102,764,544: about 103 M of VGG-16's 138 M parameters sit in this one layer.</li>
+        <li>(c) (227 − 11)/4 + 1 = 55 → 55×55×96; parameters (11·11·3 + 1) × 96 = 34,944.</li>
+      </ol>
+      <p class="ans">Answer: 1.77 M vs 3.21 M weights; first FC layer of VGG-16 ≈ 102.8 M parameters; AlexNet conv 1 = 55×55×96 with 34,944 parameters.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li><strong>AlexNet:</strong> proved deep CNNs + GPUs work; introduced practical ReLU and dropout.</li>
+        <li><strong>VGG:</strong> very simple, uniform design; excellent transferable features.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li><strong>AlexNet:</strong> large early filters, LRN, many FC parameters.</li>
+        <li><strong>VGG:</strong> 138 M parameters (over 500 MB), slow, memory hungry.</li>
+        <li>Both: plain stacking stops helping beyond about 20 layers.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Image classification baselines.</li>
+        <li>Feature extractor for detection (Fast R-CNN used VGG-16).</li>
+        <li>Neural style transfer and perceptual losses (VGG).</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison: AlexNet vs VGG-16</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>AlexNet</th><th>VGG-16</th></tr></thead>
+      <tbody>
+        <tr><th>Year</th><td>2012</td><td>2014</td></tr>
+        <tr><th>Weight layers</th><td>8 (5 conv + 3 FC)</td><td>16 (13 conv + 3 FC)</td></tr>
+        <tr><th>Filter sizes</th><td>11×11, 5×5, 3×3</td><td>3×3 only</td></tr>
+        <tr><th>Parameters</th><td>≈ 60 M</td><td>≈ 138 M</td></tr>
+        <tr><th>Top-5 error (ILSVRC)</th><td>15.3%</td><td>7.3%</td></tr>
+        <tr><th>Normalization</th><td>LRN</td><td>None (LRN found unhelpful)</td></tr>
+        <tr><th>Main lesson</th><td>Deep CNNs on GPUs beat hand-made features</td><td>Depth with small filters improves accuracy</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>List the key innovations of AlexNet.</p><p class="a">ReLU activations, dropout in the fully connected layers, data augmentation, overlapping max pooling, and training on two GPUs; it won ILSVRC 2012 with 15.3% top-5 error.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why does VGG use 3×3 filters?</p><p class="a">Stacked 3×3 layers achieve the same receptive field as larger filters (two give 5×5, three give 7×7) with fewer parameters and more ReLU non-linearities between them.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Where are most of VGG-16's parameters?</p><p class="a">In the fully connected layers; the first FC layer alone (7×7×512 → 4096) has about 103 million of the roughly 138 million parameters.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Describe the AlexNet and VGG architectures and compare them.</p>
+      <ol>
+        <li><strong>Introduction:</strong> ImageNet / ILSVRC; the 2012 turning point.</li>
+        <li><strong>AlexNet diagram</strong> with layer sizes.</li>
+        <li><strong>AlexNet innovations:</strong> ReLU, dropout, augmentation, GPUs, LRN, overlapping pooling.</li>
+        <li><strong>VGG diagram:</strong> five 3×3 blocks + 3 FC.</li>
+        <li><strong>Why 3×3:</strong> receptive field and parameter calculation.</li>
+        <li><strong>VGG-16 vs VGG-19;</strong> parameter count.</li>
+        <li><strong>Comparison table.</strong></li>
+        <li><strong>Limitations</strong> leading to Inception and ResNet; conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagrams to draw:</strong> both rows from block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>AlexNet "5 + 3 = 8"</strong>: 5 conv, 3 FC. Its first filter is "11 by 11, stride 4, 96 filters".</p>
+    <p><strong>VGG "2-2-3-3-3"</strong> conv layers per block, channels "64-128-256-512-512", and "only 3×3".</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 4: INCEPTION ================= -->
+<section class="topic" id="t-inc">
+  <p class="eyebrow">Topic 4 of 8 · Architectures</p>
+  <h2>Inception (GoogLeNet)</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">GoogLeNet (Szegedy et al., 2014) is a 22-layer CNN built from <mark>Inception modules</mark>, each running 1×1, 3×3 and 5×5 convolutions and 3×3 max pooling <mark>in parallel</mark> and concatenating the results, with <mark>1×1 convolutions as bottlenecks</mark> to cut computation; it won ImageNet 2014 with only about 6.8 M parameters.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw: the Inception module</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 300" role="img" aria-label="Inception module with dimension reduction: the previous layer feeds four parallel branches: a 1 by 1 convolution; a 1 by 1 convolution followed by a 3 by 3 convolution; a 1 by 1 convolution followed by a 5 by 5 convolution; and a 3 by 3 max pool followed by a 1 by 1 convolution. The four outputs are concatenated along the channel dimension.">
+        <rect class="box" x="300" y="250" width="300" height="38" rx="6"/><text x="450" y="274" text-anchor="middle" class="b">Previous layer (e.g. 28×28×192)</text>
+        <g>
+          <rect class="box" x="40" y="104" width="150" height="40" rx="6" style="fill:#fff5df"/><text x="115" y="129" text-anchor="middle" class="b">1×1 conv (64)</text>
+          <rect class="box" x="250" y="170" width="150" height="38" rx="6" style="fill:#fff5df"/><text x="325" y="194" text-anchor="middle">1×1 conv (96)</text>
+          <rect class="box" x="250" y="104" width="150" height="40" rx="6" style="fill:var(--accent-soft)"/><text x="325" y="129" text-anchor="middle" class="b">3×3 conv (128)</text>
+          <rect class="box" x="460" y="170" width="150" height="38" rx="6" style="fill:#fff5df"/><text x="535" y="194" text-anchor="middle">1×1 conv (16)</text>
+          <rect class="box" x="460" y="104" width="150" height="40" rx="6" style="fill:var(--accent-soft)"/><text x="535" y="129" text-anchor="middle" class="b">5×5 conv (32)</text>
+          <rect class="box" x="670" y="170" width="170" height="38" rx="6" style="fill:var(--good-soft)"/><text x="755" y="194" text-anchor="middle">3×3 max pool (s 1)</text>
+          <rect class="box" x="670" y="104" width="170" height="40" rx="6" style="fill:#fff5df"/><text x="755" y="129" text-anchor="middle" class="b">1×1 conv (32)</text>
+        </g>
+        <g class="k"><path d="M450,250 L115,146" marker-end="url(#ah)"/><path d="M450,250 L325,210" marker-end="url(#ah)"/><path d="M450,250 L535,210" marker-end="url(#ah)"/><path d="M450,250 L755,210" marker-end="url(#ah)"/>
+          <line x1="325" y1="170" x2="325" y2="146" marker-end="url(#ah)"/><line x1="535" y1="170" x2="535" y2="146" marker-end="url(#ah)"/><line x1="755" y1="170" x2="755" y2="146" marker-end="url(#ah)"/>
+          <path d="M115,104 L410,52" marker-end="url(#ah)"/><path d="M325,104 L430,52" marker-end="url(#ah)"/><path d="M535,104 L470,52" marker-end="url(#ah)"/><path d="M755,104 L490,52" marker-end="url(#ah)"/></g>
+        <rect class="box" x="330" y="12" width="240" height="38" rx="6" style="fill:#efe9f8;stroke-width:2.2"/><text x="450" y="36" text-anchor="middle" class="b">Filter concatenation (28×28×256)</text>
+        <text x="755" y="224" text-anchor="middle" class="s">(pool has no weights)</text>
+        <text x="30" y="230" class="s tw b">cream boxes = 1×1 "bottleneck" convs that</text><text x="30" y="246" class="s tw b">shrink channels before costly 3×3 and 5×5</text>
+        <text x="610" y="72" class="s">64 + 128 + 32 + 32 = 256 channels</text>
+      </svg>
+      <figcaption>Inception 3a from GoogLeNet. End-to-end GoogLeNet: stem convs → 9 stacked Inception modules (with max pools between groups) → global average pooling → dropout → one FC → softmax; plus two auxiliary classifiers during training.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: how much the 1×1 bottleneck saves</h3>
+    <figure class="demo">
+      <canvas id="incC" data-ratio="0.22" data-ratio-sm="0.5" aria-label="Bar chart of multiply-add operations for a 5 by 5 convolution with and without a 1 by 1 bottleneck."></canvas>
+      <div class="controls">
+        <label class="ctl" for="incCin">Input channels <input type="range" id="incCin" min="64" max="512" step="32" value="192"><span class="val" id="incCinv"></span></label>
+        <label class="ctl" for="incOut">5×5 output filters <input type="range" id="incOut" min="16" max="128" step="16" value="32"><span class="val" id="incOutv"></span></label>
+        <label class="ctl" for="incRed">1×1 reduce to <input type="range" id="incRed" min="8" max="64" step="8" value="16"><span class="val" id="incRedv"></span></label>
+      </div>
+      <p class="readout" id="incOut2"></p>
+      <p class="observe"><strong>What to observe.</strong> On a 28×28 map, a 5×5 convolution that reads all 192 input channels costs about 120 million multiply-adds. Shrinking the channels to 16 with a cheap 1×1 conv first, then applying the 5×5, costs about 12 million: roughly 10 times less, with the same output size. This is what made a 22-layer network affordable.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>Which filter size is best: 1×1, 3×3 or 5×5? Objects appear at different sizes, so Inception uses all of them at once.</li>
+          <li>Each branch looks at the same input with a different "zoom", and their outputs are stacked together.</li>
+          <li>Big filters on many channels are very expensive, so a 1×1 conv first squeezes the channels down.</li>
+          <li>The network stacks 9 such modules, ending with an average over each whole feature map instead of huge fully connected layers.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li><strong>Naive module:</strong> parallel 1×1, 3×3, 5×5 convs and 3×3 max pool, concatenated; output channels pile up and computation explodes.</li>
+          <li><strong>Dimension reduction:</strong> 1×1 convs (with ReLU) before the 3×3 and 5×5 convs and after the pool. A 1×1 conv is a per-pixel fully connected layer across channels (the "network in network" idea, Lin et al., 2013).</li>
+          <li><strong>GoogLeNet:</strong> 22 weight layers, 9 Inception modules, about 6.8 M parameters (about 12× fewer than AlexNet).</li>
+          <li><strong>Global average pooling</strong> (7×7×1024 → 1024) replaces the large FC layers; then dropout 0.4 and one FC to 1000 classes.</li>
+          <li><strong>Auxiliary classifiers</strong> on intermediate layers add extra gradient signal during training (loss weight 0.3) and are removed at test time.</li>
+          <li><strong>Later versions:</strong> Inception-v2/v3 add batch norm and factorise 5×5 into two 3×3 (and n×n into 1×n + n×1); Inception-v4 and Inception-ResNet add residual connections.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\textbf{Cost of a conv layer (multiply-adds)}=H\cdot W\cdot K\cdot F^2\cdot C_{\text{in}}\]
+      \[\textbf{Naive 5×5:}\ \ H W\cdot K\cdot25\cdot C_{\text{in}}\qquad\qquad \textbf{With 1×1 reduce to }r:\ \ HW\cdot r\cdot C_{\text{in}}+HW\cdot K\cdot25\cdot r\]
+      \[\textbf{Concatenated output channels}=K_{1\times1}+K_{3\times3}+K_{5\times5}+K_{\text{pool proj}}\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(H,W\)</td><td>Height and width of the feature map (kept the same inside a module).</td></tr>
+        <tr><td>\(C_{\text{in}}\)</td><td>Input channels.</td></tr>
+        <tr><td>\(K\)</td><td>Number of filters in a branch.</td></tr>
+        <tr><td>\(F\)</td><td>Filter size.</td></tr>
+        <tr><td>\(r\)</td><td>Channels after the 1×1 reduction.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">Input 28×28×192. A 5×5 conv produces 32 channels ("same" padding). Compare its cost without and with a 1×1 conv that first reduces to 16 channels. Then find the output depth of Inception 3a (branches 64, 128, 32, 32).</p>
+      <ol>
+        <li>Naive: 28 × 28 × 32 × 5 × 5 × 192 = 120,422,400 ≈ 120.4 M multiply-adds.</li>
+        <li>1×1 reduce: 28 × 28 × 16 × 1 × 1 × 192 = 2,408,448 ≈ 2.4 M.</li>
+        <li>Then 5×5: 28 × 28 × 32 × 5 × 5 × 16 = 10,035,200 ≈ 10.0 M.</li>
+        <li>Total with bottleneck ≈ 12.4 M: about 9.7× cheaper.</li>
+        <li>Inception 3a output depth: 64 + 128 + 32 + 32 = 256 channels, so 28×28×256.</li>
+      </ol>
+      <p class="ans">Answer: 120.4 M vs 12.4 M multiply-adds (≈ 10× saving); module output 28×28×256.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Multi-scale features in every module.</li>
+        <li>Very few parameters (≈ 6.8 M) for its accuracy.</li>
+        <li>Efficient: 1×1 bottlenecks and global average pooling.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>Complex, hand-designed modules; many hyperparameters.</li>
+        <li>Harder to modify than VGG or ResNet.</li>
+        <li>Auxiliary classifiers complicate training.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Image classification on limited compute.</li>
+        <li>Backbone for detection.</li>
+        <li>Medical imaging (Inception-v3 is widely used for transfer learning).</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison: naive vs bottleneck Inception module</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>Naive module</th><th>Module with 1×1 reduction</th></tr></thead>
+      <tbody>
+        <tr><th>Branches</th><td>1×1, 3×3, 5×5, max pool</td><td>Same, plus 1×1 convs before 3×3 / 5×5 and after the pool</td></tr>
+        <tr><th>Computation</th><td>Very high</td><td>About 10× lower for the 5×5 branch</td></tr>
+        <tr><th>Output channels</th><td>Grow quickly (pool keeps all input channels)</td><td>Controlled by the pool projection</td></tr>
+        <tr><th>Extra non-linearity</th><td>No</td><td>Yes, ReLU after each 1×1</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>What is the role of 1×1 convolution in Inception?</p><p class="a">It reduces the number of channels (dimension reduction) before expensive 3×3 and 5×5 convolutions, cutting computation and parameters, and adds an extra ReLU non-linearity.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>What is global average pooling?</p><p class="a">Each feature map is averaged over all its positions to a single number (e.g. 7×7×1024 → 1024). It replaces large fully connected layers, has no parameters, and reduces overfitting.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why does GoogLeNet use auxiliary classifiers?</p><p class="a">Small classifiers attached to middle layers add extra loss terms during training, injecting gradient into the lower layers to fight vanishing gradients and to regularize. They are discarded at test time.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain the Inception module and the GoogLeNet architecture.</p>
+      <ol>
+        <li><strong>Motivation:</strong> choosing a filter size; going deeper and wider is costly.</li>
+        <li><strong>Naive Inception module</strong> (diagram) and its problem.</li>
+        <li><strong>Module with 1×1 reductions</strong> (diagram, block 2).</li>
+        <li><strong>1×1 convolution explained</strong>; cost calculation (120 M vs 12 M).</li>
+        <li><strong>GoogLeNet layout:</strong> stem, 9 modules, pooling, global average pooling, FC.</li>
+        <li><strong>Auxiliary classifiers.</strong></li>
+        <li><strong>Results:</strong> ILSVRC 2014 winner, 6.67% top-5, ≈ 6.8 M parameters.</li>
+        <li><strong>Later versions</strong> (v2, v3, v4); comparison with VGG; conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> the module from block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"Try every lens at once, but squeeze first."</strong> Four parallel paths: 1, 3, 5, pool, each 3 and 5 after a 1×1 squeeze.</p>
+    <p>The name comes from the film <em>Inception</em>'s line "we need to go deeper".</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 5: RESNET ================= -->
+<section class="topic" id="t-res">
+  <p class="eyebrow">Topic 5 of 8 · Architectures</p>
+  <h2>ResNet (Residual Networks)</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">ResNet (He et al., 2015) is a very deep CNN made of residual blocks in which <mark>a shortcut (skip) connection adds the block's input to its output, y = F(x) + x</mark>, so each block only learns a residual F(x); this made 152-layer networks trainable and won ImageNet 2015.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw: residual blocks</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 320" role="img" aria-label="Left: basic residual block: input x goes through a 3 by 3 conv, batch norm, ReLU, another 3 by 3 conv and batch norm to give F of x; an identity shortcut carries x around the block; they are added and passed through ReLU. Right: bottleneck block for 256 channels: 1 by 1 conv to 64, 3 by 3 conv 64, 1 by 1 conv back to 256, with the identity shortcut added.">
+        <text x="200" y="22" text-anchor="middle" class="b">Basic block (ResNet-18 / 34)</text>
+        <circle cx="200" cy="44" r="5" style="fill:var(--ink)"/><text x="188" y="48" text-anchor="end" class="b">x</text>
+        <rect class="box" x="120" y="64" width="160" height="38" rx="6" style="fill:var(--accent-soft)"/><text x="200" y="88" text-anchor="middle">3×3 conv, BN</text>
+        <rect class="box" x="150" y="114" width="100" height="30" rx="6"/><text x="200" y="134" text-anchor="middle">ReLU</text>
+        <rect class="box" x="120" y="156" width="160" height="38" rx="6" style="fill:var(--accent-soft)"/><text x="200" y="180" text-anchor="middle">3×3 conv, BN</text>
+        <text x="96" y="132" text-anchor="end" class="ta b">F(x)</text>
+        <circle cx="200" cy="230" r="17" class="box" style="fill:#efe9f8;stroke-width:2.2"/><text x="200" y="236" text-anchor="middle" class="b" style="font-size:20px">+</text>
+        <rect class="box" x="150" y="262" width="100" height="30" rx="6"/><text x="200" y="282" text-anchor="middle">ReLU</text>
+        <text x="200" y="312" text-anchor="middle" class="b">y = F(x) + x</text>
+        <g class="k"><line x1="200" y1="49" x2="200" y2="62" marker-end="url(#ah)"/><line x1="200" y1="102" x2="200" y2="112" marker-end="url(#ah)"/><line x1="200" y1="144" x2="200" y2="154" marker-end="url(#ah)"/><line x1="200" y1="194" x2="200" y2="211" marker-end="url(#ah)"/><line x1="200" y1="247" x2="200" y2="260" marker-end="url(#ah)"/></g>
+        <path class="kw" style="stroke-width:3" d="M200,44 H330 V230 H219" marker-end="url(#ahW)"/>
+        <text x="340" y="132" class="tw b">identity</text><text x="340" y="148" class="tw b">shortcut x</text><text x="340" y="166" class="s">(no weights)</text>
+        <line class="kl dash" x1="450" y1="20" x2="450" y2="310"/>
+        <text x="680" y="22" text-anchor="middle" class="b">Bottleneck block (ResNet-50 / 101 / 152)</text>
+        <circle cx="680" cy="44" r="5" style="fill:var(--ink)"/><text x="668" y="48" text-anchor="end" class="b">x (256-d)</text>
+        <rect class="box" x="590" y="64" width="180" height="38" rx="6" style="fill:#fff5df"/><text x="680" y="88" text-anchor="middle">1×1, 64 (reduce)</text>
+        <rect class="box" x="590" y="116" width="180" height="38" rx="6" style="fill:var(--accent-soft)"/><text x="680" y="140" text-anchor="middle">3×3, 64</text>
+        <rect class="box" x="590" y="168" width="180" height="38" rx="6" style="fill:#fff5df"/><text x="680" y="192" text-anchor="middle">1×1, 256 (restore)</text>
+        <circle cx="680" cy="240" r="17" class="box" style="fill:#efe9f8;stroke-width:2.2"/><text x="680" y="246" text-anchor="middle" class="b" style="font-size:20px">+</text>
+        <rect class="box" x="630" y="270" width="100" height="30" rx="6"/><text x="680" y="290" text-anchor="middle">ReLU</text>
+        <g class="k"><line x1="680" y1="49" x2="680" y2="62" marker-end="url(#ah)"/><line x1="680" y1="102" x2="680" y2="114" marker-end="url(#ah)"/><line x1="680" y1="154" x2="680" y2="166" marker-end="url(#ah)"/><line x1="680" y1="206" x2="680" y2="221" marker-end="url(#ah)"/><line x1="680" y1="257" x2="680" y2="268" marker-end="url(#ah)"/></g>
+        <path class="kw" style="stroke-width:3" d="M680,44 H820 V240 H699" marker-end="url(#ahW)"/>
+        <text x="572" y="112" text-anchor="end" class="s">BN + ReLU after</text><text x="572" y="128" text-anchor="end" class="s">each conv (last ReLU</text><text x="572" y="144" text-anchor="end" class="s">comes after the +)</text>
+      </svg>
+      <figcaption>The shortcut is the key line: draw it boldly around the block, ending in a "+". When the shape changes (stride 2 or more channels), the shortcut uses a 1×1 conv with stride 2 (projection shortcut).</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: gradient flow in plain vs residual networks</h3>
+    <figure class="demo">
+      <canvas id="resC" data-ratio="0.5" data-ratio-sm="0.9" aria-label="Gradient magnitude reaching each layer, on a log scale, for a plain network and a residual network."></canvas>
+      <div class="controls">
+        <label class="ctl" for="resL">Depth (blocks) <input type="range" id="resL" min="5" max="60" step="5" value="30"><span class="val" id="resLv"></span></label>
+        <label class="ctl" for="resD">Typical layer derivative |F′| <input type="range" id="resD" min="0.2" max="1.0" step="0.05" value="0.5"><span class="val" id="resDv"></span></label>
+      </div>
+      <p class="readout" id="resOut"></p>
+      <p class="observe"><strong>What to observe.</strong> Going backwards, a plain network multiplies the gradient by each layer's derivative F′, so with |F′| below 1 it shrinks exponentially and the early layers barely learn. A residual block's derivative is 1 + F′, so the gradient always has a direct "1" path back through the shortcuts. Here each layer's F′ is drawn at random around the chosen size (with random sign for the residual case, as in a real network), so the plain curve plunges by many orders of magnitude while the residual one changes far less. Real ResNets also keep F′ small with batch norm and careful initialization.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>Surprise found by He et al.: a plain 56-layer CNN had <em>higher training error</em> than a 20-layer one. Not overfitting, just harder to optimise (the degradation problem).</li>
+          <li>A deeper net should be at least as good: extra layers could just copy their input. But learning "copy" with conv layers is hard.</li>
+          <li>Fix: give every block a free copy path (the shortcut) and let the layers learn only the change F(x) to add.</li>
+          <li>If no change is needed, the layers can learn F(x) ≈ 0, which is easy.</li>
+          <li>Gradients also travel backwards along the shortcuts, so even layer 1 of 152 keeps learning.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li><strong>Residual learning:</strong> to represent H(x), learn F(x) = H(x) − x and output y = F(x, {W_i}) + x.</li>
+          <li><strong>Shortcuts:</strong> identity (no parameters) when shapes match; projection \(W_sx\) (1×1 conv) when they change.</li>
+          <li><strong>Backprop:</strong> \(\partial L/\partial x=\partial L/\partial y\,(1+\partial F/\partial x)\); the 1 term passes gradient straight through.</li>
+          <li><strong>Architecture:</strong> 7×7 conv stride 2, 3×3 max pool, then 4 stages of blocks (64, 128, 256, 512 channels for basic blocks; ×4 output for bottlenecks), global average pooling, FC 1000. Batch norm after every conv; He initialization.</li>
+          <li><strong>Depths:</strong> ResNet-18, 34 (basic blocks); 50, 101, 152 (bottleneck blocks). ResNet-152: 3.57% top-5 (ensemble), ILSVRC 2015 winner. A 1202-layer version was also trained on CIFAR-10.</li>
+          <li><strong>Influence:</strong> skip connections appear in DenseNet, ResNeXt, U-Net and every Transformer layer.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[y=F(x,\{W_i\})+x\qquad\qquad y=F(x,\{W_i\})+W_sx\ \ \text{(projection shortcut)}\]
+      \[\frac{\partial L}{\partial x}=\frac{\partial L}{\partial y}\Bigl(1+\frac{\partial F}{\partial x}\Bigr)\qquad\qquad x_L=x_l+\sum_{i=l}^{L-1}F(x_i,W_i)\]
+      \[\textbf{Bottleneck weights (256 → 64 → 64 → 256):}\quad 256\cdot64+9\cdot64\cdot64+64\cdot256\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(x,\ y\)</td><td>Input and output of a residual block.</td></tr>
+        <tr><td>\(F(x)\)</td><td>Residual mapping learned by the block's conv layers.</td></tr>
+        <tr><td>\(H(x)\)</td><td>The desired underlying mapping, H(x) = F(x) + x.</td></tr>
+        <tr><td>\(W_s\)</td><td>Projection (1×1 conv) used when dimensions differ.</td></tr>
+        <tr><td>\(x_l,\ x_L\)</td><td>Features at a shallow block l and a deep block L.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">(a) Weights of a bottleneck block on 256 channels vs two plain 3×3 convs on 256 channels (biases ignored). (b) Gradient through 5 layers whose derivatives are each 0.1, plain vs residual. (c) A block with x = (1, 2) and F(x) = (0.2, −0.5): find y.</p>
+      <ol>
+        <li>(a) Bottleneck: 256·64 + 9·64·64 + 64·256 = 16,384 + 36,864 + 16,384 = 69,632.</li>
+        <li>Two 3×3 convs on 256 channels: 2 × 9 × 256 × 256 = 1,179,648, about 17× more.</li>
+        <li>(b) Plain: 0.1⁵ = 0.00001, so the gradient almost vanishes. Residual: (1 + 0.1)⁵ = 1.611, so it survives.</li>
+        <li>(c) y = F(x) + x = (0.2 + 1, −0.5 + 2) = (1.2, 1.5); then ReLU leaves it unchanged.</li>
+      </ol>
+      <p class="ans">Answer: 69,632 vs 1,179,648 weights; gradient factor 0.00001 (plain) vs 1.61 (residual); y = (1.2, 1.5).</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Trains networks with 100+ layers.</li>
+        <li>Solves the degradation problem; eases vanishing gradients.</li>
+        <li>Identity shortcuts add no parameters.</li>
+        <li>Simple, modular, easy to scale.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>Very deep versions are slow at inference.</li>
+        <li>Many blocks contribute little (redundancy).</li>
+        <li>Projection shortcuts add parameters.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Default backbone for classification, detection (Faster R-CNN, Mask R-CNN) and segmentation.</li>
+        <li>Transfer learning (ResNet-50 is the standard pretrained model).</li>
+        <li>Residual idea used in Transformers.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison: plain vs residual network</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>Plain deep network</th><th>Residual network</th></tr></thead>
+      <tbody>
+        <tr><th>Block output</th><td>y = H(x)</td><td>y = F(x) + x</td></tr>
+        <tr><th>To be an identity</th><td>Layers must learn H(x) = x (hard)</td><td>Layers learn F(x) = 0 (easy)</td></tr>
+        <tr><th>Gradient path</th><td>Product of layer derivatives</td><td>Includes a direct path (1 + F′)</td></tr>
+        <tr><th>Deeper = better?</th><td>No: 56 layers worse than 20 (degradation)</td><td>Yes, up to 152 layers on ImageNet</td></tr>
+        <tr><th>Extra parameters</th><td>-</td><td>None for identity shortcuts</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>What is the degradation problem?</p><p class="a">As plain networks get deeper, accuracy saturates and then drops, and even the training error increases. It is an optimisation difficulty, not overfitting. Residual connections solve it.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>What is a skip (shortcut) connection?</p><p class="a">A connection that bypasses one or more layers and adds the block's input to its output, y = F(x) + x. Identity shortcuts have no parameters and give gradients a direct path backwards.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why are bottleneck blocks used in ResNet-50 and deeper?</p><p class="a">A 1×1 conv reduces channels (256 → 64) before the 3×3 conv and another restores them, cutting computation and parameters so very deep networks remain affordable.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain the ResNet architecture and how residual learning solves the problems of very deep networks.</p>
+      <ol>
+        <li><strong>Introduction:</strong> deeper is better, until it is not.</li>
+        <li><strong>Degradation problem</strong> (20 vs 56 layers).</li>
+        <li><strong>Residual learning:</strong> H(x) = F(x) + x; why F = 0 is easy.</li>
+        <li><strong>Residual block diagram</strong> (basic and bottleneck).</li>
+        <li><strong>Identity vs projection shortcuts.</strong></li>
+        <li><strong>Gradient flow:</strong> derivative 1 + F′, worked example.</li>
+        <li><strong>Overall architecture:</strong> stem, 4 stages, GAP, FC; ResNet-18 to 152.</li>
+        <li><strong>Results and influence;</strong> comparison table; conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> block 2, the basic block at least.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"Learn the change, keep the original."</strong> y = F(x) + x.</p>
+    <p><strong>Express highway:</strong> the shortcut lets information and gradients skip the traffic of every block.</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 6: WEIGHT INIT ================= -->
+<section class="topic" id="t-init">
+  <p class="eyebrow">Topic 6 of 8 · Training a ConvNet</p>
+  <h2>Weight Initialization</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">Weight initialization is the choice of starting values for a network's weights; good schemes such as <mark>Xavier (Glorot)</mark> and <mark>He</mark> draw random weights with a variance scaled by the number of inputs so that <mark>activations and gradients keep roughly the same spread from layer to layer</mark>.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 270" role="img" aria-label="Standard deviation of activations across 10 layers for three cases: weights too small, the spread shrinks towards zero; weights too large, it saturates or explodes; Xavier or He initialization, it stays roughly constant.">
+        <line class="k" x1="60" y1="220" x2="520" y2="220" marker-end="url(#ah)"/><line class="k" x1="60" y1="220" x2="60" y2="22" marker-end="url(#ah)"/>
+        <text x="520" y="240" text-anchor="end" class="m">layer 1 → 10</text><text x="68" y="20" class="m">spread (std) of activations</text>
+        <path class="kw" d="M70,60 C150,64 260,66 510,70"/><text x="512" y="64" class="tw b">too large: saturate / explode</text>
+        <path class="kg" style="stroke-width:3" d="M70,120 C200,118 350,124 510,121"/><text x="512" y="125" class="tg b">Xavier / He: stable</text>
+        <path class="ka" d="M70,124 C120,180 200,210 510,216"/><text x="512" y="212" class="ta b">too small: vanish to 0</text>
+        <g transform="translate(700,20)">
+          <rect width="190" height="226" rx="8" class="box" style="fill:#f6f8fc"/>
+          <text x="95" y="24" text-anchor="middle" class="b">Which scheme?</text>
+          <text x="12" y="52" class="b">Zero / constant</text><text x="12" y="70" class="s tw">all neurons identical: never</text>
+          <text x="12" y="100" class="b">Xavier (Glorot)</text><text x="12" y="118" class="s">Var(w) = 2/(n_in + n_out)</text><text x="12" y="134" class="s">for tanh, sigmoid</text>
+          <text x="12" y="164" class="b">He (Kaiming)</text><text x="12" y="182" class="s">Var(w) = 2/n_in</text><text x="12" y="198" class="s">for ReLU</text>
+        </g>
+      </svg>
+      <figcaption>Draw three curves of activation spread against depth, and the small box of rules. The middle, flat curve is the goal of every initialization scheme.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: activation spread through 10 layers</h3>
+    <figure class="demo">
+      <div class="controls" style="margin-top:0">
+        <div class="seg" role="group" aria-label="Initialization" id="initPick"><button type="button" data-i="zero" aria-pressed="false">Zero</button><button type="button" data-i="small" aria-pressed="false">Random small (σ = 0.01)</button><button type="button" data-i="large" aria-pressed="false">Random large (σ = 1)</button><button type="button" data-i="xavier" aria-pressed="true">Xavier</button><button type="button" data-i="he" aria-pressed="false">He</button></div>
+        <label class="ctl" for="initAct">Activation <select id="initAct"><option value="tanh">tanh</option><option value="relu">ReLU</option></select></label>
+      </div>
+      <canvas id="initC" data-ratio="0.46" data-ratio-sm="1.1" style="margin-top:10px" aria-label="Histograms of activations at each of 10 layers."></canvas>
+      <p class="readout" id="initOut"></p>
+      <p class="observe"><strong>What to observe.</strong> A real 10-layer network with 128 units per layer runs on 200 random inputs in your browser. With σ = 0.01 the activations collapse towards 0 by layer 3 or 4, so gradients vanish. With σ = 1 and tanh, almost every unit is stuck at −1 or +1 (saturated), so gradients vanish again; with ReLU they explode. Zero init makes every unit identical. Xavier keeps tanh healthy; switch to ReLU and Xavier slowly shrinks, while He stays stable, because ReLU zeroes half the inputs.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>Training starts from the initial weights, so a bad start can stop training before it begins.</li>
+          <li><strong>All zeros:</strong> every neuron computes the same thing and gets the same update, so they stay twins forever (no symmetry breaking).</li>
+          <li><strong>Random but too small:</strong> each layer shrinks the signal, so deep layers see almost nothing.</li>
+          <li><strong>Random but too big:</strong> the signal grows or saturates the activation.</li>
+          <li><strong>Just right:</strong> scale the random weights by the number of inputs so the signal size stays constant.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li>For \(y=\sum_{i=1}^{n_{\text{in}}}w_ix_i\) with independent zero-mean terms, \(\text{Var}(y)=n_{\text{in}}\,\text{Var}(w)\,\text{Var}(x)\).</li>
+          <li>Keeping \(\text{Var}(y)=\text{Var}(x)\) forward needs \(\text{Var}(w)=1/n_{\text{in}}\) (LeCun); backward needs \(1/n_{\text{out}}\).</li>
+          <li><strong>Xavier / Glorot</strong> (2010) compromises: \(\text{Var}(w)=2/(n_{\text{in}}+n_{\text{out}})\); derived for symmetric activations like tanh.</li>
+          <li><strong>He / Kaiming</strong> (2015): ReLU outputs zero for half the inputs, halving the variance, so use \(\text{Var}(w)=2/n_{\text{in}}\).</li>
+          <li>For conv layers, \(n_{\text{in}}=F\cdot F\cdot C_{\text{in}}\). Biases are usually set to 0.</li>
+          <li>Batch norm (Topic 7) and residual connections make networks less sensitive to initialization, but He init is still the default for ReLU ConvNets.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\text{Var}(y)=n_{\text{in}}\,\text{Var}(w)\,\text{Var}(x)\]
+      \[\textbf{Xavier normal:}\ \ w\sim\mathcal N\Bigl(0,\ \frac{2}{n_{\text{in}}+n_{\text{out}}}\Bigr)\qquad \textbf{Xavier uniform:}\ \ w\sim U\Bigl[-\sqrt{\tfrac{6}{n_{\text{in}}+n_{\text{out}}}},\ \sqrt{\tfrac{6}{n_{\text{in}}+n_{\text{out}}}}\Bigr]\]
+      \[\textbf{He normal:}\ \ w\sim\mathcal N\Bigl(0,\ \frac{2}{n_{\text{in}}}\Bigr)\qquad\qquad \textbf{LeCun:}\ \ w\sim\mathcal N\Bigl(0,\ \frac{1}{n_{\text{in}}}\Bigr)\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(n_{\text{in}}\)</td><td>Fan-in: number of inputs to a unit (F·F·C<sub>in</sub> for a conv layer).</td></tr>
+        <tr><td>\(n_{\text{out}}\)</td><td>Fan-out: number of outputs (F·F·K for a conv layer).</td></tr>
+        <tr><td>\(\mathcal N(0,v)\)</td><td>Normal distribution with mean 0 and variance v.</td></tr>
+        <tr><td>\(U[-a,a]\)</td><td>Uniform distribution; its variance is a²/3.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">A fully connected layer with 256 inputs and 256 outputs. Find the standard deviation for Xavier normal, He normal and the Xavier uniform limit. Then find He's σ for a 3×3 conv layer with 64 input channels.</p>
+      <ol>
+        <li>Xavier normal: Var = 2/(256 + 256) = 1/256, so σ = 1/16 = 0.0625.</li>
+        <li>He normal: Var = 2/256 = 1/128, so σ = 0.0884.</li>
+        <li>Xavier uniform: limit = √(6/512) = 0.1083; check variance = 0.1083²/3 = 0.0039 = 1/256.</li>
+        <li>Conv layer: n_in = 3 × 3 × 64 = 576; He σ = √(2/576) = 0.0589.</li>
+        <li>Check with σ = 0.0625 and Var(x) = 1: Var(y) = 256 × 0.0039 × 1 = 1.0, so the spread is preserved.</li>
+      </ol>
+      <p class="ans">Answer: Xavier σ = 0.0625; He σ = 0.0884; Xavier uniform limit ±0.108; He σ for the conv layer = 0.0589.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Good initialization gives</h4><ul>
+        <li>Faster, more reliable convergence.</li>
+        <li>No vanishing or exploding signals at the start.</li>
+        <li>Symmetry broken so units learn different features.</li></ul></div>
+      <div><h4>Limitations</h4><ul>
+        <li>Derivations assume independent inputs and specific activations.</li>
+        <li>Only fixes the start; training can still drift.</li>
+        <li>Very deep nets also need BN or residual connections.</li></ul></div>
+      <div><h4>Where used</h4><ul>
+        <li>He: ReLU ConvNets (ResNet, VGG retrained).</li>
+        <li>Xavier: tanh / sigmoid networks, many RNN layers.</li>
+        <li>Pretrained weights: transfer learning as initialization.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison: Zero vs Random vs Xavier vs He</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Scheme</th><th>Variance of w</th><th>Problem or benefit</th><th>Use with</th></tr></thead>
+      <tbody>
+        <tr><th>Zero / constant</th><td>0</td><td>All units identical; symmetry never broken</td><td>Never for weights (fine for biases)</td></tr>
+        <tr><th>Random small (σ = 0.01)</th><td>10⁻⁴</td><td>Activations and gradients vanish in deep nets</td><td>Shallow nets only</td></tr>
+        <tr><th>Random large (σ = 1)</th><td>1</td><td>Saturation (tanh) or explosion (ReLU)</td><td>Never</td></tr>
+        <tr><th>Xavier / Glorot</th><td>2/(n<sub>in</sub> + n<sub>out</sub>)</td><td>Keeps variance for symmetric activations</td><td>tanh, sigmoid, linear</td></tr>
+        <tr><th>He / Kaiming</th><td>2/n<sub>in</sub></td><td>Compensates for ReLU halving the variance</td><td>ReLU and variants</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>Why should weights not be initialized to zero?</p><p class="a">All neurons in a layer would compute the same output and receive the same gradient, so they would stay identical forever (the symmetry problem); the layer would behave like a single neuron.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>State Xavier initialization.</p><p class="a">Draw weights with zero mean and variance 2/(n_in + n_out), e.g. normal or uniform on ±√(6/(n_in + n_out)). It keeps activation and gradient variance roughly constant across layers for tanh or sigmoid.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why is He initialization preferred for ReLU?</p><p class="a">ReLU sets about half its inputs to zero, halving the output variance. He initialization doubles the weight variance to 2/n_in to compensate, keeping the signal stable through many layers.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Discuss weight initialization techniques for deep networks.</p>
+      <ol>
+        <li><strong>Introduction:</strong> why the starting point matters.</li>
+        <li><strong>Zero initialization</strong> and the symmetry problem.</li>
+        <li><strong>Small and large random initialization:</strong> vanishing, saturation, explosion (diagram).</li>
+        <li><strong>Variance analysis:</strong> Var(y) = n_in Var(w) Var(x).</li>
+        <li><strong>Xavier initialization:</strong> formula, normal and uniform forms.</li>
+        <li><strong>He initialization</strong> for ReLU.</li>
+        <li><strong>Worked example</strong> (σ values).</li>
+        <li><strong>Comparison table;</strong> role of BN, residual nets and pretrained weights; conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> the three spread curves from block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"Xavier averages, He doubles."</strong> Xavier: 2 over (in + out), an average of fan-in and fan-out. He: 2 over in, double LeCun's 1 over in, because ReLU throws half away.</p>
+    <p><strong>Goldilocks:</strong> zero is broken, small vanishes, big explodes, scaled is just right.</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 7: BATCH NORM IN CONVNETS ================= -->
+<section class="topic" id="t-bn">
+  <p class="eyebrow">Topic 7 of 8 · Training a ConvNet</p>
+  <h2>Batch Normalization in ConvNets</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">Batch normalization (Ioffe and Szegedy, 2015) normalizes each layer's activations using the mini-batch mean and variance and then applies a learned scale γ and shift β; in a ConvNet the statistics are computed <mark>per channel, over all images in the batch and all spatial positions</mark>.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 260" role="img" aria-label="A feature tensor of N images by C channels by H by W. Batch norm takes one channel across all images and positions; layer norm takes one image across all channels and positions. A conv block is drawn as conv, batch norm, ReLU.">
+        <text x="130" y="22" text-anchor="middle" class="b">Batch norm: channel 1, all images</text>
+<rect x="48" y="72" width="72" height="72" rx="3" class="box" style="fill:var(--paper)"/>
+<rect x="34" y="86" width="72" height="72" rx="3" class="box" style="fill:var(--paper)"/>
+<rect x="20" y="100" width="72" height="72" rx="3" class="box" style="fill:var(--accent-soft);stroke-width:2.2"/>
+<text x="70" y="196" text-anchor="middle" class="s">image 1</text>
+<rect x="178" y="72" width="72" height="72" rx="3" class="box" style="fill:var(--paper)"/>
+<rect x="164" y="86" width="72" height="72" rx="3" class="box" style="fill:var(--paper)"/>
+<rect x="150" y="100" width="72" height="72" rx="3" class="box" style="fill:var(--accent-soft);stroke-width:2.2"/>
+<text x="200" y="196" text-anchor="middle" class="s">image 2</text>
+<text x="130" y="216" text-anchor="middle" class="s">3 channels × H × W each</text>
+<text x="400" y="22" text-anchor="middle" class="b">Layer norm: image 1, all channels</text>
+<rect x="318" y="72" width="72" height="72" rx="3" class="box" style="fill:var(--warm-soft);stroke-width:2.2"/>
+<rect x="304" y="86" width="72" height="72" rx="3" class="box" style="fill:var(--warm-soft);stroke-width:2.2"/>
+<rect x="290" y="100" width="72" height="72" rx="3" class="box" style="fill:var(--warm-soft);stroke-width:2.2"/>
+<text x="340" y="196" text-anchor="middle" class="s">image 1</text>
+<rect x="448" y="72" width="72" height="72" rx="3" class="box" style="fill:var(--paper)"/>
+<rect x="434" y="86" width="72" height="72" rx="3" class="box" style="fill:var(--paper)"/>
+<rect x="420" y="100" width="72" height="72" rx="3" class="box" style="fill:var(--paper)"/>
+<text x="470" y="196" text-anchor="middle" class="s">image 2</text>
+<text x="400" y="216" text-anchor="middle" class="s">3 channels × H × W each</text>
+<text x="130" y="244" text-anchor="middle" class="s ta b">μ, σ² over N × H × W</text><text x="400" y="244" text-anchor="middle" class="s tw b">μ, σ² over C × H × W</text>
+        <g transform="translate(560,30)">
+          <rect class="box" x="0" y="80" width="78" height="40" rx="6" style="fill:var(--accent-soft)"/><text x="39" y="105" text-anchor="middle" class="b">Conv</text>
+          <rect class="box" x="104" y="80" width="78" height="40" rx="6" style="fill:#efe9f8;stroke-width:2.2"/><text x="143" y="105" text-anchor="middle" class="b">BN</text>
+          <rect class="box" x="208" y="80" width="78" height="40" rx="6"/><text x="247" y="105" text-anchor="middle" class="b">ReLU</text>
+          <g class="k"><line x1="78" y1="100" x2="102" y2="100" marker-end="url(#ah)"/><line x1="182" y1="100" x2="206" y2="100" marker-end="url(#ah)"/></g>
+          <text x="143" y="64" text-anchor="middle" class="s">the standard ConvNet unit</text>
+          <text x="143" y="148" text-anchor="middle" class="s">x̂ = (x − μ_c)/√(σ²_c + ε)</text>
+          <text x="143" y="168" text-anchor="middle" class="s">y = γ_c x̂ + β_c</text>
+          <text x="143" y="194" text-anchor="middle" class="s">conv bias is dropped (β replaces it)</text>
+        </g>
+      </svg>
+      <figcaption>Draw the N × C × H × W tensor and shade one channel through every image: that slab is what batch norm averages over. Unit II covered BN for fully connected layers; here the focus is the ConvNet version.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: which numbers are averaged?</h3>
+    <figure class="demo">
+      <div class="controls" style="margin-top:0">
+        <div class="seg" role="group" aria-label="Normalization type" id="bnType"><button type="button" data-t="bn" aria-pressed="true">Batch norm</button><button type="button" data-t="ln" aria-pressed="false">Layer norm</button><button type="button" data-t="in" aria-pressed="false">Instance norm</button></div>
+        <label class="ctl" for="bnPick">Which group <select id="bnPick"></select></label>
+      </div>
+      <div class="bnt gridwrap" id="bnBox" style="margin-top:12px"></div>
+      <p class="readout" id="bnOut"></p>
+      <p class="observe"><strong>What to observe.</strong> The mini-batch holds 2 images, each with 2 channels of 2×2 pixels. Batch norm pools one channel from <em>both</em> images (8 numbers), so its statistics depend on the batch. Layer norm pools everything in <em>one</em> image (8 numbers across channels). Instance norm pools one channel of one image (4 numbers), as used in style transfer.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>Each channel of a conv layer is one feature detector (say, "vertical edge").</li>
+          <li>BN looks at that channel's values across every image in the batch and every pixel position, and rescales them to mean 0, spread 1.</li>
+          <li>Then γ and β (one pair per channel) let the network pick its own scale and centre.</li>
+          <li>At test time, saved running averages replace the batch statistics.</li>
+          <li>Result: higher learning rates, faster training, less sensitivity to initialization.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li>For a tensor N × C × H × W: \(\mu_c=\frac{1}{NHW}\sum_{n,h,w}x_{n,c,h,w}\) and likewise \(\sigma_c^2\); one γ_c and β_c per channel.</li>
+          <li>Per-channel (not per-pixel) statistics keep the convolution property: the same normalization applies at every location.</li>
+          <li>Placed after conv and before ReLU; the conv bias is redundant.</li>
+          <li><strong>Inference:</strong> \(\mu_{\text{run}}\leftarrow m\mu_{\text{run}}+(1-m)\mu_c\); BN can then be folded into the conv weights for speed.</li>
+          <li>First used at scale in Inception-v2 (BN-Inception), which reached the original GoogLeNet's accuracy in 14× fewer training steps; every ResNet conv is followed by BN.</li>
+          <li><strong>Small batches</strong> give noisy statistics; alternatives are group norm, layer norm and instance norm.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\mu_c=\frac{1}{NHW}\sum_{n=1}^{N}\sum_{h=1}^{H}\sum_{w=1}^{W}x_{n,c,h,w}\qquad\qquad \sigma_c^2=\frac{1}{NHW}\sum_{n,h,w}\bigl(x_{n,c,h,w}-\mu_c\bigr)^2\]
+      \[\hat x_{n,c,h,w}=\frac{x_{n,c,h,w}-\mu_c}{\sqrt{\sigma_c^2+\varepsilon}}\qquad\qquad y_{n,c,h,w}=\gamma_c\,\hat x_{n,c,h,w}+\beta_c\]
+      \[\textbf{Learnable BN parameters per layer}=2C\qquad\qquad \textbf{Stored running statistics}=2C\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(N,C,H,W\)</td><td>Batch size, channels, height, width.</td></tr>
+        <tr><td>\(\mu_c,\ \sigma_c^2\)</td><td>Mean and variance of channel c over the batch and positions.</td></tr>
+        <tr><td>\(\gamma_c,\ \beta_c\)</td><td>Learned scale and shift for channel c.</td></tr>
+        <tr><td>\(\varepsilon\)</td><td>Small constant for numerical safety.</td></tr>
+        <tr><td>\(m\)</td><td>Momentum of the running average (e.g. 0.9).</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">Channel 1 of a batch of two images: image 1 has pixels (1, 3, 5, 7), image 2 has (2, 4, 6, 8). Compute μ, σ², and the normalized values of 1 and 8. Then count BN parameters for a layer with 64 channels.</p>
+      <ol>
+        <li>All 8 values pooled: μ = (1 + 3 + 5 + 7 + 2 + 4 + 6 + 8)/8 = 36/8 = 4.5.</li>
+        <li>Squared deviations: 12.25, 2.25, 0.25, 6.25, 6.25, 0.25, 2.25, 12.25; sum = 42; σ² = 42/8 = 5.25; σ = 2.291.</li>
+        <li>x̂ for 1: (1 − 4.5)/2.291 = −1.528. x̂ for 8: (8 − 4.5)/2.291 = +1.528.</li>
+        <li>With γ = 1, β = 0 these are the outputs; the network can learn other γ, β.</li>
+        <li>64 channels: 2 × 64 = 128 learnable parameters, plus 128 running statistics.</li>
+      </ol>
+      <p class="ans">Answer: μ = 4.5, σ² = 5.25; x̂ = −1.528 and +1.528; 128 learnable BN parameters.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Much higher learning rates; faster convergence.</li>
+        <li>Less sensitive to weight initialization.</li>
+        <li>Mild regularization; can reduce dropout use.</li>
+        <li>Makes 100+ layer ConvNets practical.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>Depends on batch size; poor with tiny batches.</li>
+        <li>Train and test behave differently.</li>
+        <li>Extra memory and computation in training.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Inception-v2/v3, ResNet, DenseNet.</li>
+        <li>GAN generators and discriminators (DCGAN).</li>
+        <li>Almost every modern image classifier.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison: normalization layers</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Method</th><th>Statistics over</th><th>Depends on batch?</th><th>Typical use</th></tr></thead>
+      <tbody>
+        <tr><th>Batch norm</th><td>N, H, W (per channel)</td><td>Yes</td><td>ConvNets with large batches</td></tr>
+        <tr><th>Layer norm</th><td>C, H, W (per image)</td><td>No</td><td>RNNs, Transformers</td></tr>
+        <tr><th>Instance norm</th><td>H, W (per image, per channel)</td><td>No</td><td>Style transfer, GANs</td></tr>
+        <tr><th>Group norm</th><td>Groups of channels, H, W (per image)</td><td>No</td><td>Detection and segmentation with small batches</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>How is batch normalization applied in a convolutional layer?</p><p class="a">Mean and variance are computed for each channel over all images in the mini-batch and all spatial positions; each channel has one learned γ and β, so the same normalization is applied at every location.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why is the conv bias unnecessary before batch norm?</p><p class="a">BN subtracts the channel mean, which removes any constant bias added by the conv layer; the learned shift β then plays the role of the bias.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Name two benefits of batch normalization when training ConvNets.</p><p class="a">It allows higher learning rates for faster training, and it reduces sensitivity to weight initialization; it also has a mild regularizing effect.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain batch normalization and its role in training deep convolutional networks.</p>
+      <ol>
+        <li><strong>Motivation:</strong> internal covariate shift; difficulty of deep training.</li>
+        <li><strong>Algorithm:</strong> mean, variance, normalize, scale and shift.</li>
+        <li><strong>Per-channel BN in ConvNets</strong> (tensor diagram).</li>
+        <li><strong>Placement:</strong> conv → BN → ReLU; bias removal.</li>
+        <li><strong>Training vs inference:</strong> running statistics.</li>
+        <li><strong>Worked example</strong> (μ, σ², x̂, parameter count).</li>
+        <li><strong>Benefits</strong> and use in Inception-v2 and ResNet.</li>
+        <li><strong>Limitations</strong> and alternatives (layer, instance, group norm); conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> the tensor with the BN slab shaded, and the conv–BN–ReLU unit.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"Batch norm = same Channel, all Batch and all Pixels."</strong> Layer norm = same image, everything in it.</p>
+    <p>Order of the unit: <strong>"Conv, then Calm down (BN), then ReLU"</strong>.</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 8: HYPERPARAMETER OPTIMIZATION ================= -->
+<section class="topic" id="t-hpo">
+  <p class="eyebrow">Topic 8 of 8 · Training a ConvNet</p>
+  <h2>Hyperparameter Optimization</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">Hyperparameter optimization is the search for the settings that are <mark>chosen before training, not learned by it</mark> (learning rate, batch size, depth, dropout, weight decay), by training models with different settings and keeping the one with the <mark>best validation performance</mark>, using strategies such as grid search, random search or Bayesian optimization.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 900 270" role="img" aria-label="Hyperparameter search loop: propose hyperparameters with grid, random or Bayesian search; train on the training set; evaluate on the validation set; record the score; repeat; finally evaluate the best model once on the test set. Inset: grid search places 9 trials on a 3 by 3 grid; random search scatters 9 trials.">
+        <rect class="box" x="20" y="40" width="190" height="56" rx="8" style="fill:var(--accent-soft)"/><text x="115" y="64" text-anchor="middle" class="b">Propose settings</text><text x="115" y="82" text-anchor="middle" class="s">grid / random / Bayesian</text>
+        <rect class="box" x="250" y="40" width="160" height="56" rx="8"/><text x="330" y="64" text-anchor="middle" class="b">Train</text><text x="330" y="82" text-anchor="middle" class="s">on training set</text>
+        <rect class="box" x="450" y="40" width="160" height="56" rx="8" style="fill:var(--warm-soft)"/><text x="530" y="64" text-anchor="middle" class="b">Evaluate</text><text x="530" y="82" text-anchor="middle" class="s">on validation set</text>
+        <rect class="box" x="250" y="150" width="160" height="50" rx="8"/><text x="330" y="180" text-anchor="middle" class="b">Record score</text>
+        <g class="k"><line x1="210" y1="68" x2="248" y2="68" marker-end="url(#ah)"/><line x1="410" y1="68" x2="448" y2="68" marker-end="url(#ah)"/><path d="M530,96 V175 H412" marker-end="url(#ah)"/><path d="M250,175 H115 V98" marker-end="url(#ah)"/></g>
+        <text x="182" y="194" text-anchor="middle" class="s">repeat until budget used</text>
+        <rect class="box" x="450" y="210" width="160" height="44" rx="8" style="fill:var(--good-soft)"/><text x="530" y="237" text-anchor="middle" class="b">Test set, once</text>
+        <line class="kg" x1="530" y1="200" x2="530" y2="208" marker-end="url(#ahG)"/><text x="436" y="232" text-anchor="end" class="s tg">best settings</text>
+        <g transform="translate(650,20)">
+          <rect width="110" height="110" class="box"/><text x="55" y="128" text-anchor="middle" class="s b">Grid (9 trials)</text>
+          <g style="fill:var(--accent)"><circle cx="20" cy="20" r="5"/><circle cx="55" cy="20" r="5"/><circle cx="90" cy="20" r="5"/><circle cx="20" cy="55" r="5"/><circle cx="55" cy="55" r="5"/><circle cx="90" cy="55" r="5"/><circle cx="20" cy="90" r="5"/><circle cx="55" cy="90" r="5"/><circle cx="90" cy="90" r="5"/></g>
+          <text x="55" y="146" text-anchor="middle" class="s">3 values per axis</text>
+        </g>
+        <g transform="translate(776,20)">
+          <rect width="110" height="110" class="box"/><text x="55" y="128" text-anchor="middle" class="s b">Random (9 trials)</text>
+          <g style="fill:var(--warm)"><circle cx="14" cy="64" r="5"/><circle cx="31" cy="22" r="5"/><circle cx="44" cy="96" r="5"/><circle cx="58" cy="40" r="5"/><circle cx="66" cy="76" r="5"/><circle cx="79" cy="14" r="5"/><circle cx="87" cy="58" r="5"/><circle cx="96" cy="88" r="5"/><circle cx="23" cy="44" r="5"/></g>
+          <text x="55" y="146" text-anchor="middle" class="s">9 values per axis</text>
+        </g>
+        <text x="768" y="190" text-anchor="middle" class="s">Bergstra and Bengio (2012): random search</text><text x="768" y="206" text-anchor="middle" class="s">tries more values of the parameter that matters</text>
+      </svg>
+      <figcaption>Draw the loop on the left and the two small squares on the right. Never tune on the test set: it must be used only once, at the end.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: grid search vs random search</h3>
+    <figure class="demo">
+      <canvas id="hpoC" data-ratio="0.48" data-ratio-sm="1.15" aria-label="Validation accuracy over learning rate and dropout, with grid-search and random-search trials and their projections onto each axis."></canvas>
+      <div class="controls">
+        <label class="ctl" for="hpoN">Budget (trials) <select id="hpoN"><option selected>9</option><option>16</option><option>25</option></select></label>
+        <button class="ghost" id="hpoNew" type="button">New random trials</button>
+      </div>
+      <p class="readout" id="hpoOut"></p>
+      <p class="observe"><strong>What to observe.</strong> Brighter colour means higher validation accuracy. Accuracy depends strongly on the learning rate (horizontal, log scale) and only weakly on dropout (vertical). Grid search spends its budget re-testing the same few learning rates (look at the ticks along the bottom: only √budget distinct values), so with 9 or 25 trials it misses the narrow good region; with 16 it happens to land near it, which is luck, not design. Random search tries a different learning rate every time, so its chance of finding the good region grows steadily with the budget. Press "New random trials" a few times to see how often it succeeds. The accuracy surface is a made-up function for illustration.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>Weights are learned by training; hyperparameters are knobs you set before training starts.</li>
+          <li>Split data into training, validation and test sets.</li>
+          <li>Try some settings, train, check validation accuracy, and keep the best.</li>
+          <li><strong>Grid search</strong> tries every combination of a few values. <strong>Random search</strong> picks random combinations. <strong>Bayesian optimization</strong> uses past results to guess where to try next.</li>
+          <li>Finally report the best model's accuracy on the untouched test set.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li><strong>Objective:</strong> \(\lambda^*=\arg\max_\lambda\ \text{Acc}_{\text{val}}(\text{train}(\lambda))\); each evaluation is a full (or partial) training run, so it is very expensive.</li>
+          <li><strong>Grid search:</strong> cost grows as \(v^d\) (v values for each of d hyperparameters).</li>
+          <li><strong>Random search</strong> (Bergstra and Bengio, 2012): usually only a few hyperparameters matter; random sampling explores more distinct values of each.</li>
+          <li><strong>Search scales:</strong> sample learning rate and weight decay on a log scale, e.g. \(\eta=10^{u},\ u\sim U(-5,-1)\).</li>
+          <li><strong>Coarse-to-fine:</strong> a short wide search, then a narrow search around the best region.</li>
+          <li><strong>Smarter methods:</strong> Bayesian optimization (Gaussian-process surrogate + acquisition function), Hyperband / successive halving (stop bad runs early), population-based training, and k-fold cross-validation for small datasets.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\lambda^*=\arg\max_{\lambda\in\Lambda}\ \text{Acc}_{\text{val}}\bigl(w^*(\lambda)\bigr)\qquad\text{where}\qquad w^*(\lambda)=\arg\min_w\ L_{\text{train}}(w;\lambda)\]
+      \[\textbf{Grid cost}=\prod_{j=1}^{d}v_j\qquad\qquad \textbf{Log-uniform sampling:}\ \ \eta=10^{u},\ u\sim U(a,b)\]
+      \[\textbf{Chance random search hits the top 5\% in n trials}=1-0.95^{\,n}\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(\lambda,\ \Lambda\)</td><td>A setting of hyperparameters and the search space.</td></tr>
+        <tr><td>\(w^*(\lambda)\)</td><td>Weights learned by training with setting λ.</td></tr>
+        <tr><td>\(d,\ v_j\)</td><td>Number of hyperparameters; values tried for hyperparameter j.</td></tr>
+        <tr><td>\(u\)</td><td>Uniform random exponent for log-scale sampling.</td></tr>
+        <tr><td>\(n\)</td><td>Number of random trials.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">(a) A grid over 4 hyperparameters with 5 values each, 2 GPU-hours per run: total cost? (b) With 9 trials on 2 hyperparameters, how many distinct learning rates do grid and random search test? (c) How many random trials give a 95% chance of landing in the top 5% of the space? (d) Sample a learning rate with u = −2.6.</p>
+      <ol>
+        <li>(a) 5⁴ = 625 runs × 2 h = 1,250 GPU-hours (about 52 days on one GPU).</li>
+        <li>(b) Grid 3 × 3: only 3 distinct learning rates. Random: 9 distinct learning rates.</li>
+        <li>(c) Need 1 − 0.95ⁿ ≥ 0.95, so 0.95ⁿ ≤ 0.05, n ≥ ln 0.05 / ln 0.95 = 58.4, so n = 59 trials.</li>
+        <li>(d) η = 10^(−2.6) = 0.00251.</li>
+      </ol>
+      <p class="ans">Answer: 625 runs (1,250 GPU-hours); 3 vs 9 distinct learning rates; 59 random trials; η ≈ 0.0025.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Grid search</h4><ul>
+        <li>+ Simple, systematic, reproducible.</li>
+        <li>+ Easy to run in parallel.</li>
+        <li>− Exponential cost in the number of hyperparameters.</li>
+        <li>− Wastes trials on unimportant parameters.</li></ul></div>
+      <div><h4>Random search</h4><ul>
+        <li>+ More distinct values of important parameters.</li>
+        <li>+ Budget can be any size; easy to stop and extend.</li>
+        <li>− No guarantee of covering a region.</li>
+        <li>− Does not learn from earlier trials.</li></ul></div>
+      <div><h4>Bayesian optimization</h4><ul>
+        <li>+ Uses past results; fewer trials needed.</li>
+        <li>− Sequential and more complex.</li>
+        <li>Used in AutoML tools (Optuna, Hyperopt, Google Vizier).</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison tables</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>Grid search</th><th>Random search</th><th>Bayesian optimization</th></tr></thead>
+      <tbody>
+        <tr><th>How points are chosen</th><td>All combinations of fixed values</td><td>Randomly from distributions</td><td>Model of past results picks the next point</td></tr>
+        <tr><th>Cost</th><td>Exponential in d</td><td>Fixed budget n</td><td>Fixed budget, fewer needed</td></tr>
+        <tr><th>Important parameter coverage</th><td>Few distinct values</td><td>Many distinct values</td><td>Concentrates near the best</td></tr>
+        <tr><th>Parallel?</th><td>Fully</td><td>Fully</td><td>Mostly sequential</td></tr>
+        <tr><th>Best for</th><td>1–2 hyperparameters</td><td>Most deep learning searches</td><td>Expensive training runs</td></tr>
+      </tbody></table></div>
+    <div class="tablewrap" style="margin-top:12px"><table>
+      <thead><tr><th>Hyperparameter</th><th>Typical range</th><th>Scale</th></tr></thead>
+      <tbody>
+        <tr><th>Learning rate</th><td>10⁻⁵ to 10⁻¹</td><td>Log</td></tr>
+        <tr><th>Weight decay (L2)</th><td>10⁻⁶ to 10⁻²</td><td>Log</td></tr>
+        <tr><th>Batch size</th><td>16 to 512</td><td>Powers of 2</td></tr>
+        <tr><th>Dropout rate</th><td>0 to 0.5</td><td>Linear</td></tr>
+        <tr><th>Momentum</th><td>0.8 to 0.99</td><td>Linear (or log of 1 − m)</td></tr>
+        <tr><th>Number of layers / filters</th><td>Architecture-dependent</td><td>Integer</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>Differentiate parameters and hyperparameters.</p><p class="a">Parameters (weights, biases) are learned from data during training. Hyperparameters (learning rate, batch size, number of layers, dropout) are set before training and chosen using validation performance.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why is random search often better than grid search?</p><p class="a">Usually only a few hyperparameters matter. With the same number of trials, random search tests many more distinct values of each important hyperparameter, while grid search repeats the same few values.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why is the learning rate searched on a log scale?</p><p class="a">Its effect depends on its order of magnitude (0.001 vs 0.01 matters more than 0.010 vs 0.011), so sampling the exponent uniformly spreads trials evenly across magnitudes.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain hyperparameter optimization for deep networks. Compare grid search and random search.</p>
+      <ol>
+        <li><strong>Introduction:</strong> parameters vs hyperparameters; list of common hyperparameters.</li>
+        <li><strong>Data splits:</strong> training, validation, test; cross-validation.</li>
+        <li><strong>Search loop diagram</strong> (block 2).</li>
+        <li><strong>Manual tuning</strong> and coarse-to-fine search.</li>
+        <li><strong>Grid search:</strong> procedure, exponential cost (5⁴ example).</li>
+        <li><strong>Random search:</strong> procedure, why it is better (grid vs random sketch).</li>
+        <li><strong>Log-scale sampling.</strong></li>
+        <li><strong>Bayesian optimization</strong> and early-stopping methods (Hyperband).</li>
+        <li><strong>Comparison table;</strong> practical tips; conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> the loop and the two 3×3 squares from block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>"Grid repeats, random explores."</strong> 9 grid trials test 3 learning rates; 9 random trials test 9.</p>
+    <p><strong>Train → Validate → Test once.</strong> Peeking at the test set is cheating.</p>
+  </div>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section class="topic" id="quiz">
+  <p class="eyebrow">Self-test</p>
+  <h2>Ten-question quiz</h2>
+  <div class="quiz-top">
+    <p class="score" id="quizScore" aria-live="polite">Score 0 / 10 · 0 answered</p>
+    <button class="ghost" id="quizReset" type="button">Reset quiz</button>
+  </div>
+  <div id="quizBody"></div>
+</section>
+
+<!-- ================= REVISION ================= -->
+<section class="topic" id="revision">
+  <p class="eyebrow">Read this last</p>
+  <h2>Last-minute revision</h2>
+  <div class="sheet" style="margin-top:16px">
+    <div class="grid">
+      <div><h3>1 · Autoencoders</h3><ul>
+        <li>z = f(x), x̂ = g(z), minimise ‖x − x̂‖².</li>
+        <li>Linear AE = PCA; non-linear AE learns a manifold.</li>
+        <li>Sparse, denoising, contractive, variational, convolutional.</li>
+        <li>Uses: compression, denoising, anomaly detection.</li></ul></div>
+      <div><h3>2 · ConvNet basics</h3><ul>
+        <li>Conv → ReLU → Pool → … → FC → softmax.</li>
+        <li>O = (W − F + 2P)/S + 1.</li>
+        <li>Params = (F·F·C<sub>in</sub> + 1)·K.</li>
+        <li>32 → 28 → 14 → 10 → 5 (LeNet-style).</li></ul></div>
+      <div><h3>3 · AlexNet, VGG</h3><ul>
+        <li>AlexNet 2012: 5 conv + 3 FC, 60 M, 15.3%; ReLU, dropout, GPUs.</li>
+        <li>VGG 2014: only 3×3, 16/19 layers, 138 M, 7.3%.</li>
+        <li>3 × 3×3 = 7×7 field, 27C² vs 49C².</li></ul></div>
+      <div><h3>4 · Inception</h3><ul>
+        <li>Parallel 1×1, 3×3, 5×5, pool; concatenate.</li>
+        <li>1×1 bottleneck: 120 M → 12 M multiply-adds.</li>
+        <li>22 layers, ≈ 6.8 M params, 6.7%; GAP; auxiliary classifiers.</li></ul></div>
+      <div><h3>5 · ResNet</h3><ul>
+        <li>y = F(x) + x; learn the residual.</li>
+        <li>Fixes degradation; gradient (1 + F′).</li>
+        <li>Basic block (18/34), bottleneck (50/101/152).</li>
+        <li>3.57% top-5, 2015 winner.</li></ul></div>
+      <div><h3>6 · Initialization</h3><ul>
+        <li>Zero: symmetry problem.</li>
+        <li>Xavier: Var = 2/(n<sub>in</sub> + n<sub>out</sub>), tanh.</li>
+        <li>He: Var = 2/n<sub>in</sub>, ReLU.</li>
+        <li>Var(y) = n<sub>in</sub> Var(w) Var(x).</li></ul></div>
+      <div><h3>7 · Batch norm (CNN)</h3><ul>
+        <li>Per channel over N, H, W.</li>
+        <li>x̂ = (x − μ<sub>c</sub>)/√(σ²<sub>c</sub> + ε); y = γ<sub>c</sub>x̂ + β<sub>c</sub>.</li>
+        <li>Conv → BN → ReLU; no conv bias.</li>
+        <li>2C learnable params; running stats at test.</li></ul></div>
+      <div><h3>8 · Hyperparameter search</h3><ul>
+        <li>Tune on validation, test once.</li>
+        <li>Grid: v<sup>d</sup> runs; repeats values.</li>
+        <li>Random: more distinct values of what matters.</li>
+        <li>Log scale for learning rate; Bayesian optimization.</li></ul></div>
+      <div><h3>Architecture timeline</h3><ul>
+        <li>2012 AlexNet 8 layers, 15.3%.</li>
+        <li>2014 VGG 16–19 layers, 7.3%.</li>
+        <li>2014 GoogLeNet 22 layers, 6.7%.</li>
+        <li>2015 ResNet 152 layers, 3.57%.</li></ul></div>
+    </div>
+    <p class="last"><strong>Mnemonics:</strong> squeeze, then rebuild · W minus F plus 2P over S plus 1 · AlexNet 5 + 3 = 8 · VGG 2-2-3-3-3, only 3×3 · Inception: try every lens, squeeze first · ResNet: learn the change, keep the original · Xavier averages, He doubles · BN: same channel, all batch, all pixels · grid repeats, random explores.</p>
+  </div>
+</section>
+
+</main>
+</div>
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const COL = { ink: cssv('--ink'), muted: cssv('--muted'), line: cssv('--line'), accent: cssv('--accent'), warm: cssv('--warm'), good: cssv('--good'), paper: cssv('--paper'), aSoft: cssv('--accent-soft'), wSoft: cssv('--warm-soft'), gSoft: cssv('--good-soft') };
+const FONT = '"Atkinson Hyperlegible","Segoe UI",Arial,sans-serif';
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const sig = z => 1 / (1 + Math.exp(-z));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const fx = (v, d = 3) => (Math.abs(v) < 0.5 * Math.pow(10, -d) ? 0 : v).toFixed(d).replace('-', '−');
+const sh = v => String(+v.toFixed(4)).replace('-', '−');
+const redraws = [];
+
+function fit(cv) {
+  const dpr = window.devicePixelRatio || 1;
+  const W = cv.clientWidth || 600;
+  let r = +cv.dataset.ratio || 0.6;
+  if (W < 480 && cv.dataset.ratioSm) r = +cv.dataset.ratioSm;
+  const H = Math.round(W * r);
+  cv.style.height = H + 'px';
+  const pw = Math.round(W * dpr), ph = Math.round(H * dpr);
+  if (cv.width !== pw || cv.height !== ph) { cv.width = pw; cv.height = ph; }
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  ctx.setLineDash([]); ctx.globalAlpha = 1;
+  return { ctx, W, H };
+}
+function T(ctx, s, x, y, o = {}) {
+  ctx.font = `${o.bold ? '700 ' : ''}${o.size || 13}px ${FONT}`;
+  ctx.fillStyle = o.c || COL.ink; ctx.textAlign = o.align || 'left'; ctx.textBaseline = o.base || 'alphabetic';
+  ctx.fillText(s, x, y);
+}
+function pill(ctx, s, x, y, o = {}) {
+  const size = o.size || 12;
+  ctx.font = `${o.bold ? '700 ' : ''}${size}px ${FONT}`;
+  const w = ctx.measureText(s).width + 8, h = size + 6;
+  ctx.fillStyle = o.bg || 'rgba(251,252,254,0.94)'; ctx.fillRect(x - w / 2, y - h / 2, w, h);
+  ctx.fillStyle = o.c || COL.ink; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(s, x, y + 0.5);
+}
+function head(ctx, x, y, ang, size = 9) {
+  ctx.beginPath(); ctx.moveTo(x, y);
+  ctx.lineTo(x - size * Math.cos(ang - 0.42), y - size * Math.sin(ang - 0.42));
+  ctx.lineTo(x - size * Math.cos(ang + 0.42), y - size * Math.sin(ang + 0.42));
+  ctx.closePath(); ctx.fillStyle = ctx.strokeStyle; ctx.fill();
+}
+function seg(ctx, x1, y1, x2, y2) { ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); }
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+function segGroup(el, attr, onPick) {
+  const bs = $$('button', el);
+  bs.forEach(b => b.addEventListener('click', () => { bs.forEach(x => x.setAttribute('aria-pressed', x === b)); onPick(b.dataset[attr]); }));
+}
+function gaussRng(rnd) { return () => { let u = 0; while (u === 0) u = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd()); }; }
+const fmtM = v => v >= 1e9 ? (v / 1e9).toFixed(2) + ' B' : v >= 1e6 ? (v / 1e6).toFixed(2) + ' M' : v >= 1e3 ? (v / 1e3).toFixed(1) + ' K' : String(v);
+
+/* ================= 1. Autoencoder manifold ================= */
+(function () {
+  const cv = $('#aeC'), out = $('#aeOut'), nS = $('#aeNoise');
+  let type = 'lin', seed = 4, P = [];
+  const curve = t => [Math.cos(Math.PI * (0.06 + 0.88 * t)), Math.sin(Math.PI * (0.06 + 0.88 * t))];
+  function sample() { const r = mulberry32(seed), g = gaussRng(r), s = +nS.value; P = []; for (let i = 0; i < 60; i++) { const t = r(), c = curve(t); P.push({ t, x: [c[0] + s * g(), c[1] + s * g()] }); } }
+  function encode() {
+    const m = [0, 0]; P.forEach(p => { m[0] += p.x[0] / P.length; m[1] += p.x[1] / P.length; });
+    let a = 0, b = 0, c = 0; P.forEach(p => { const dx = p.x[0] - m[0], dy = p.x[1] - m[1]; a += dx * dx; b += dx * dy; c += dy * dy; });
+    const th = 0.5 * Math.atan2(2 * b, a - c), u = [Math.cos(th), Math.sin(th)];
+    let eL = 0, eN = 0;
+    P.forEach(p => {
+      const z = (p.x[0] - m[0]) * u[0] + (p.x[1] - m[1]) * u[1]; p.zl = z; p.rl = [m[0] + z * u[0], m[1] + z * u[1]];
+      let bt = 0, bd = 1e9; for (let k = 0; k <= 400; k++) { const t = k / 400, q = curve(t), d = (q[0] - p.x[0]) ** 2 + (q[1] - p.x[1]) ** 2; if (d < bd) { bd = d; bt = t; } }
+      p.zn = bt; p.rn = curve(bt);
+      eL += (p.x[0] - p.rl[0]) ** 2 + (p.x[1] - p.rl[1]) ** 2; eN += bd;
+    });
+    return { m, u, eL: eL / P.length / 2, eN: eN / P.length / 2 };
+  }
+  function draw() {
+    $('#aeNoisev').textContent = fx(+nS.value, 2);
+    const r = encode(), { ctx, W, H } = fit(cv), strip = 46, ph = H - strip - 10;
+    const sc = Math.min(W / 2.6, ph / 1.45), X = v => W / 2 + v * sc, Y = v => 12 + (1.18 - v) * sc;
+    ctx.strokeStyle = '#e8ebf1'; ctx.lineWidth = 1; for (let g = -1; g <= 1; g += 0.5) { seg(ctx, X(g), Y(-0.25), X(g), Y(1.15)); }
+    if (type === 'lin') { ctx.strokeStyle = COL.accent; ctx.lineWidth = 2.6; seg(ctx, X(r.m[0] - 1.4 * r.u[0]), Y(r.m[1] - 1.4 * r.u[1]), X(r.m[0] + 1.4 * r.u[0]), Y(r.m[1] + 1.4 * r.u[1])); }
+    else { ctx.strokeStyle = COL.good; ctx.lineWidth = 2.6; ctx.beginPath(); for (let k = 0; k <= 100; k++) { const q = curve(k / 100); k ? ctx.lineTo(X(q[0]), Y(q[1])) : ctx.moveTo(X(q[0]), Y(q[1])); } ctx.stroke(); }
+    const col = type === 'lin' ? COL.accent : COL.good;
+    P.forEach(p => { const rr = type === 'lin' ? p.rl : p.rn; if ($('#aeLines').checked) { ctx.strokeStyle = COL.warm; ctx.lineWidth = 1; seg(ctx, X(p.x[0]), Y(p.x[1]), X(rr[0]), Y(rr[1])); } });
+    P.forEach(p => { const rr = type === 'lin' ? p.rl : p.rn; ctx.fillStyle = col; ctx.beginPath(); ctx.arc(X(rr[0]), Y(rr[1]), 3.2, 0, 7); ctx.fill(); ctx.fillStyle = COL.ink; ctx.beginPath(); ctx.arc(X(p.x[0]), Y(p.x[1]), 3.6, 0, 7); ctx.fill(); });
+    T(ctx, type === 'lin' ? 'Linear AE: reconstructions lie on the principal line' : 'Non-linear AE: reconstructions lie on the curved manifold', 8, 16, { size: 13, bold: true, c: col });
+    T(ctx, '● input x   ● reconstruction x̂   — error', W - 8, 16, { size: 12, c: COL.muted, align: 'right' });
+    // code strip
+    const sy = H - strip + 4; T(ctx, 'code z (1 number per point), coloured by true position along the arc:', 8, sy, { size: 12, c: COL.muted });
+    const zs = P.map(p => type === 'lin' ? p.zl : p.zn), zmin = Math.min(...zs), zmax = Math.max(...zs);
+    ctx.strokeStyle = COL.ink; ctx.lineWidth = 1; seg(ctx, 20, sy + 24, W - 20, sy + 24);
+    P.forEach((p, i) => { const x = 20 + (zs[i] - zmin) / (zmax - zmin || 1) * (W - 40); ctx.fillStyle = `hsl(${220 - 200 * p.t},70%,45%)`; ctx.fillRect(x - 2, sy + 14, 4, 20); });
+    out.innerHTML = `Reconstruction MSE (per coordinate): linear AE = <b>${fx(r.eL, 4)}</b> &nbsp;·&nbsp; non-linear AE = <b>${fx(r.eN, 4)}</b> &nbsp;·&nbsp; noise variance alone = ${fx((+nS.value) ** 2, 4)} &nbsp;·&nbsp; 2 numbers → 1 number per point`;
+  }
+  segGroup($('#aeType'), 't', v => { type = v; draw(); });
+  nS.addEventListener('input', () => { sample(); draw(); }); $('#aeLines').addEventListener('input', draw);
+  $('#aeNew').addEventListener('click', () => { seed++; sample(); draw(); });
+  sample(); redraws.push(draw); draw();
+})();
+
+/* ================= 2. Output size calculator ================= */
+(function () {
+  const ids = ['ccW', 'ccC', 'ccF', 'ccP', 'ccS', 'ccK'], cv = $('#ccC2'), out = $('#ccOut');
+  const get = () => ids.map(i => Math.max(i === 'ccP' ? 0 : 1, Math.round(+$('#' + i).value || 0)));
+  function draw() {
+    const [W, C, F, P, S, K] = get(), num = W - F + 2 * P, O = Math.floor(num / S) + 1, exact = num % S === 0 && num >= 0;
+    const { ctx, W: cw, H } = fit(cv), side = Math.min(H - 52, cw * 0.36), tot = W + 2 * P, u = side / tot, x0 = 20, y0 = 26;
+    ctx.fillStyle = '#eef1f6'; ctx.fillRect(x0, y0, side, side);
+    ctx.fillStyle = COL.aSoft; ctx.fillRect(x0 + P * u, y0 + P * u, W * u, W * u);
+    ctx.strokeStyle = COL.ink; ctx.lineWidth = 1.2; ctx.strokeRect(x0, y0, side, side); ctx.strokeRect(x0 + P * u, y0 + P * u, W * u, W * u);
+    ctx.strokeStyle = COL.warm; ctx.lineWidth = 2.6; ctx.strokeRect(x0, y0, F * u, F * u);
+    if (S * u > 2 && O > 1) { ctx.setLineDash([4, 3]); ctx.strokeRect(x0 + S * u, y0, F * u, F * u); ctx.setLineDash([]); }
+    T(ctx, `input ${W}×${W}×${C}` + (P ? ` + padding ${P}` : ''), x0, 16, { size: 12.5, bold: true });
+    T(ctx, `filter ${F}×${F}, stride ${S}`, x0, y0 + side + 16, { size: 12, c: COL.warm, bold: true });
+    const ox = x0 + side + 90, os = O > 0 ? Math.min(side, side * O / tot) : 0;
+    ctx.strokeStyle = COL.ink; ctx.lineWidth = 1.6; seg(ctx, x0 + side + 16, y0 + side / 2, ox - 14, y0 + side / 2); head(ctx, ox - 12, y0 + side / 2, 0);
+    if (O > 0) { for (let k = Math.min(K, 5) - 1; k >= 0; k--) { ctx.fillStyle = k ? COL.paper : COL.gSoft; ctx.fillRect(ox + k * 6, y0 + (side - os) / 2 - k * 6, os, os); ctx.strokeStyle = COL.ink; ctx.lineWidth = 1.2; ctx.strokeRect(ox + k * 6, y0 + (side - os) / 2 - k * 6, os, os); } }
+    T(ctx, `output ${O}×${O}×${K}`, ox, 16, { size: 12.5, bold: true, c: COL.good });
+    const params = (F * F * C + 1) * K, macs = O * O * K * F * F * C;
+    out.innerHTML = `O = (W − F + 2P)/S + 1 = (${W} − ${F} + 2×${P})/${S} + 1 = ${num}/${S} + 1 = <b>${exact ? O : (num / S + 1).toFixed(2) + ' → rounds down to ' + O}</b>${exact ? '' : ' &nbsp;<b style="color:var(--warm)">(not a whole number: the filter does not fit evenly)</b>'}<br>output volume <b>${O}×${O}×${K}</b> = ${fmtM(O * O * K)} values &nbsp;·&nbsp; parameters (${F}·${F}·${C} + 1)·${K} = <b>${params.toLocaleString('en-US')}</b> &nbsp;·&nbsp; multiply-adds ≈ <b>${fmtM(macs)}</b>`;
+  }
+  ids.forEach(i => $('#' + i).addEventListener('input', draw));
+  $$('[data-p]').forEach(b => b.addEventListener('click', () => { b.dataset.p.split(',').forEach((v, k) => { $('#' + ids[k]).value = v; }); draw(); }));
+  redraws.push(draw); draw();
+})();
+
+/* ================= Architecture cards ================= */
+(function () {
+  const A = {
+    alex: { name: 'AlexNet', year: '2012 · ILSVRC winner', who: 'Krizhevsky, Sutskever, Hinton (Toronto)', depth: '8 weight layers (5 conv + 3 FC)', params: '≈ 60 million', err: '15.3% top-5', ideas: ['ReLU activations (≈ 6× faster training than tanh)', 'Dropout 0.5 in FC layers', 'Data augmentation: crops, flips, colour jitter', 'Trained on two GTX 580 GPUs', 'Overlapping max pooling; LRN'], lay: 'c p c p c c c p f f f', sizes: 'big filters first: 11×11 stride 4' },
+    vgg: { name: 'VGG-16', year: '2014 · ILSVRC 2nd (classification)', who: 'Simonyan, Zisserman (Oxford VGG)', depth: '16 weight layers (13 conv + 3 FC)', params: '≈ 138 million', err: '7.3% top-5', ideas: ['Only 3×3 convolutions, stride 1, padding 1', '2×2 max pooling halves the size', 'Channels 64 → 128 → 256 → 512 → 512', 'Depth matters: stacked 3×3 = large receptive field', 'Very popular feature extractor'], lay: 'c c p c c p c c c p c c c p c c c p f f f', sizes: 'uniform 3×3 blocks' },
+    inc: { name: 'GoogLeNet (Inception v1)', year: '2014 · ILSVRC winner', who: 'Szegedy et al. (Google)', depth: '22 weight layers, 9 Inception modules', params: '≈ 6.8 million (≈ 12× fewer than AlexNet)', err: '6.67% top-5', ideas: ['Inception module: 1×1, 3×3, 5×5, pool in parallel', '1×1 convolutions as bottlenecks', 'Global average pooling instead of big FC layers', 'Two auxiliary classifiers during training', 'Efficient: about 1.5 billion multiply-adds'], lay: 'c p c c p m m p m m m m m p m m g f', sizes: 'wide modules, tiny classifier' },
+    res: { name: 'ResNet-50 / 152', year: '2015 · ILSVRC winner', who: 'He, Zhang, Ren, Sun (Microsoft Research)', depth: '50 / 152 weight layers (bottleneck blocks)', params: '≈ 25.6 M (ResNet-50) · ≈ 60 M (ResNet-152)', err: '3.57% top-5 (ensemble)', ideas: ['Residual block: y = F(x) + x', 'Identity shortcuts: no extra parameters', 'Bottleneck 1×1 → 3×3 → 1×1 blocks', 'Batch norm after every conv; He init', 'Solved the degradation problem'], lay: 'c p r r r r r r r r r r r r r r r r g f', sizes: 'ResNet-50: 3 + 4 + 6 + 3 = 16 bottleneck blocks' }
+  };
+  const COLS = { c: '#2b54c9', p: '#1b7f4b', m: '#6b4fa3', r: '#6b4fa3', f: '#c2410c', g: '#1b7f4b', s: '#18223a' };
+  let cur = 'alex';
+  function draw() {
+    const a = A[cur];
+    $('#archCard').innerHTML = `<div><p class="big">${a.name}</p><dl><dt>Year</dt><dd>${a.year}</dd><dt>Authors</dt><dd>${a.who}</dd><dt>Depth</dt><dd>${a.depth}</dd><dt>Parameters</dt><dd><b>${a.params}</b></dd><dt>Top-5 error</dt><dd><b>${a.err}</b></dd></dl></div><div><h4 style="margin:0;font:700 15px var(--font-body);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)">Key ideas</h4><ul>${a.ideas.map(i => `<li>${i}</li>`).join('')}</ul></div>`;
+    const L = (a.lay + ' s').split(' '), { ctx, W, H } = fit($('#archC')), n = L.length, gap = 3, bw = (W - 20 - gap * (n - 1)) / n;
+    let hcur = H - 40;
+    L.forEach((t, i) => {
+      if (t === 'p' || t === 'g') hcur *= t === 'g' ? 0.35 : 0.82;
+      const h = t === 'f' ? (H - 40) * 0.55 : t === 's' ? (H - 40) * 0.35 : Math.max(16, hcur);
+      const x = 10 + i * (bw + gap), y = (H - 26 - h) / 2 + 4;
+      ctx.fillStyle = COLS[t]; ctx.globalAlpha = t === 'p' || t === 'g' ? 0.75 : 0.9; ctx.fillRect(x, y, bw, h); ctx.globalAlpha = 1;
+      if (t === 'r') { ctx.strokeStyle = COL.warm; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(x - gap / 2, y - 4); ctx.quadraticCurveTo(x + bw / 2, y - 14, x + bw + gap / 2, y - 4); ctx.stroke(); }
+    });
+    T(ctx, `${a.name}: ${a.sizes}` + (cur === 'res' ? ' · orange arcs = skip connections' : ''), 10, H - 6, { size: 12.5, c: COL.muted });
+  }
+  segGroup($('#archPick'), 'a', v => { cur = v; draw(); });
+  redraws.push(draw); draw();
+})();
+
+/* ================= 3. Receptive field ================= */
+(function () {
+  const cv = $('#rfC'), nS = $('#rfN'), cS = $('#rfC2'), out = $('#rfOut');
+  function draw() {
+    const n = +nS.value, C = +cS.value, rf = 2 * n + 1; $('#rfNv').textContent = n;
+    const { ctx, W, H } = fit(cv), stack = W < 520, gw = stack ? W : W * 0.5, G = 11, cell = Math.min(gw - 20, stack ? H * 0.55 : H - 30) / G, ox = (gw - cell * G) / 2, oy = 22, c0 = Math.floor(G / 2);
+    const cols = ['#e6ecfb', '#c9d6f5', '#a9bdee', '#86a2e6', '#5f80d9'];
+    for (let k = n; k >= 1; k--) { const r = k; ctx.fillStyle = cols[Math.min(k, 4)]; ctx.fillRect(ox + (c0 - r) * cell, oy + (c0 - r) * cell, (2 * r + 1) * cell, (2 * r + 1) * cell); }
+    ctx.strokeStyle = '#c3cad8'; ctx.lineWidth = 1; for (let i = 0; i <= G; i++) { seg(ctx, ox + i * cell, oy, ox + i * cell, oy + G * cell); seg(ctx, ox, oy + i * cell, ox + G * cell, oy + i * cell); }
+    ctx.fillStyle = COL.warm; ctx.fillRect(ox + c0 * cell + 2, oy + c0 * cell + 2, cell - 4, cell - 4);
+    for (let k = 1; k <= n; k++) { ctx.strokeStyle = COL.ink; ctx.lineWidth = 1.4; ctx.strokeRect(ox + (c0 - k) * cell, oy + (c0 - k) * cell, (2 * k + 1) * cell, (2 * k + 1) * cell); }
+    T(ctx, `input pixels seen by one output after ${n} layer${n > 1 ? 's' : ''}: ${rf}×${rf}`, ox, 14, { size: 12.5, bold: true });
+    const bx = stack ? 20 : gw + 20, by = stack ? oy + G * cell + 34 : 40, bwid = stack ? W - 40 : W - gw - 40;
+    const a = n * 9 * C * C, b = rf * rf * C * C, mx = Math.max(a, b);
+    T(ctx, 'Weights (C = ' + C + ')', bx, by - 12, { size: 12.5, bold: true });
+    [[`${n} × (3×3)`, a, COL.accent], [`one ${rf}×${rf}`, b, COL.warm]].forEach(([lab, v, col], i) => {
+      const y = by + i * 46, w = v / mx * (bwid - 120);
+      T(ctx, lab, bx, y + 18, { size: 12.5 }); ctx.fillStyle = col; ctx.fillRect(bx + 80, y + 4, w, 22); T(ctx, fmtM(v), bx + 86 + w, y + 20, { size: 12, bold: true });
+    });
+    out.innerHTML = `${n} stacked 3×3 conv layer${n > 1 ? 's' : ''}: receptive field <b>${rf}×${rf}</b>, weights ${n}·9·C² = <b>${a.toLocaleString('en-US')}</b>; a single ${rf}×${rf} layer: ${rf * rf}·C² = <b>${b.toLocaleString('en-US')}</b> → stack uses <b>${Math.round(100 * (1 - a / b))}%</b> fewer weights and has ${n} ReLUs instead of 1`;
+  }
+  [nS, cS].forEach(e => e.addEventListener('input', draw)); redraws.push(draw); draw();
+})();
+
+/* ================= 4. Inception cost ================= */
+(function () {
+  const cv = $('#incC'), out = $('#incOut2'), S = { c: $('#incCin'), k: $('#incOut'), r: $('#incRed') };
+  function draw() {
+    const C = +S.c.value, K = +S.k.value, r = +S.r.value, HW = 28 * 28;
+    $('#incCinv').textContent = C; $('#incOutv').textContent = K; $('#incRedv').textContent = r;
+    const naive = HW * K * 25 * C, red = HW * r * C, conv = HW * K * 25 * r, tot = red + conv, mx = Math.max(naive, tot);
+    const { ctx, W, H } = fit(cv), L = 150, bw = W - L - 110, bh = Math.min(36, (H - 50) / 2 - 10);
+    T(ctx, `28×28 map, ${C} input channels → ${K} output channels with a 5×5 conv`, 10, 16, { size: 13, bold: true });
+    const y1 = 34, y2 = y1 + bh + 22;
+    T(ctx, 'Naive 5×5', L - 10, y1 + bh / 2 + 5, { align: 'right', size: 13 });
+    ctx.fillStyle = COL.warm; ctx.fillRect(L, y1, naive / mx * bw, bh); T(ctx, fmtM(naive), L + naive / mx * bw + 6, y1 + bh / 2 + 5, { size: 13, bold: true });
+    T(ctx, `1×1 (${r}) + 5×5`, L - 10, y2 + bh / 2 + 5, { align: 'right', size: 13 });
+    ctx.fillStyle = '#e0b85c'; ctx.fillRect(L, y2, red / mx * bw, bh); ctx.fillStyle = COL.accent; ctx.fillRect(L + red / mx * bw, y2, conv / mx * bw, bh);
+    T(ctx, fmtM(tot), L + tot / mx * bw + 6, y2 + bh / 2 + 5, { size: 13, bold: true });
+    T(ctx, '■ 1×1 reduce   ■ 5×5 on reduced channels', L, y2 + bh + 18, { size: 12, c: COL.muted });
+    out.innerHTML = `Naive: 28·28·${K}·25·${C} = <b>${naive.toLocaleString('en-US')}</b> multiply-adds<br>Bottleneck: 28·28·${r}·${C} + 28·28·${K}·25·${r} = ${red.toLocaleString('en-US')} + ${conv.toLocaleString('en-US')} = <b>${tot.toLocaleString('en-US')}</b> → <b>${(naive / tot).toFixed(1)}× cheaper</b>`;
+  }
+  Object.values(S).forEach(e => e.addEventListener('input', draw)); redraws.push(draw); draw();
+})();
+
+/* ================= 5. ResNet gradient flow ================= */
+(function () {
+  const cv = $('#resC'), out = $('#resOut'), LS = $('#resL'), DS = $('#resD');
+  function draw() {
+    const L = +LS.value, d = +DS.value; $('#resLv').textContent = L; $('#resDv').textContent = fx(d, 2);
+    const r = mulberry32(7), plain = [1], resi = [1];
+    for (let i = 0; i < L; i++) { const f = d * (0.6 + 0.8 * r()), s = r() < 0.5 ? -1 : 1; plain.push(plain[i] * f); resi.push(resi[i] * Math.abs(1 + s * f * 0.5)); }
+    const { ctx, W, H } = fit(cv), Lm = 52, R = 16, Tp = 20, B = 34, pw = W - Lm - R, ph = H - Tp - B, lo = -14, hi = 2;
+    const X = i => Lm + (i / L) * pw, Y = v => Tp + (1 - (Math.log10(Math.max(v, 1e-14)) - lo) / (hi - lo)) * ph;
+    ctx.strokeStyle = '#e3e8f0'; ctx.lineWidth = 1;
+    for (let e = lo; e <= hi; e += 2) { seg(ctx, Lm, Y(10 ** e), Lm + pw, Y(10 ** e)); T(ctx, '10' + (e < 0 ? '⁻' : '') + String(Math.abs(e)).split('').map(c => '⁰¹²³⁴⁵⁶⁷⁸⁹'[+c]).join(''), Lm - 6, Y(10 ** e) + 4, { size: 11.5, c: COL.muted, align: 'right' }); }
+    T(ctx, '← back towards layer 1 (layers passed through, counted from the output)', Lm + pw, H - 8, { size: 12, c: COL.muted, align: 'right' });
+    T(ctx, 'gradient size reaching the layer (log scale)', Lm, Tp - 6, { size: 12, c: COL.muted });
+    [[plain, COL.warm, 'plain'], [resi, COL.accent, 'residual']].forEach(([a, col, nm]) => {
+      ctx.strokeStyle = col; ctx.lineWidth = 2.8; ctx.beginPath(); a.forEach((v, i) => i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v))); ctx.stroke();
+      pill(ctx, `${nm}: ${a[L].toExponential(1).replace('-', '−')}`, clamp(X(L) - 70, Lm + 70, W - 80), clamp(Y(a[L]) - 14, Tp + 10, Tp + ph - 10), { size: 12, bold: true, c: col });
+    });
+    out.innerHTML = `After ${L} layers: plain network gradient ≈ <b>${plain[L].toExponential(2).replace('-', '−')}</b> (product of F′) · residual network ≈ <b>${resi[L].toExponential(2).replace('-', '−')}</b> (product of 1 + F′; here F′ inside residual blocks is drawn at half the size, with random sign)`;
+  }
+  [LS, DS].forEach(e => e.addEventListener('input', draw)); redraws.push(draw); draw();
+})();
+
+/* ================= 6. Weight initialization ================= */
+(function () {
+  const cv = $('#initC'), out = $('#initOut'), act = $('#initAct'); let scheme = 'xavier', cache = null;
+  function simulate() {
+    const n = 128, B = 200, Lyr = 10, r = mulberry32(11), g = gaussRng(r), f = act.value === 'tanh' ? Math.tanh : v => Math.max(0, v);
+    let X = Array.from({ length: B }, () => Float64Array.from({ length: n }, () => g()));
+    const sd = { zero: 0, small: 0.01, large: 1, xavier: Math.sqrt(2 / (n + n)), he: Math.sqrt(2 / n) }[scheme];
+    const layers = [];
+    for (let l = 0; l < Lyr; l++) {
+      const Wm = Array.from({ length: n }, () => Float64Array.from({ length: n }, () => sd * g()));
+      const Y = X.map(x => { const y = new Float64Array(n); for (let j = 0; j < n; j++) { let s = 0; const w = Wm[j]; for (let i = 0; i < n; i++) s += w[i] * x[i]; y[j] = f(s); } return y; });
+      const all = []; Y.forEach(y => y.forEach(v => all.push(v)));
+      const m = all.reduce((a, b) => a + b, 0) / all.length, s = Math.sqrt(all.reduce((a, b) => a + (b - m) ** 2, 0) / all.length);
+      const sat = act.value === 'tanh' ? all.filter(v => Math.abs(v) > 0.95).length / all.length : all.filter(v => v === 0).length / all.length;
+      layers.push({ all, s, sat }); X = Y;
+    }
+    cache = { layers, sd };
+  }
+  function draw() {
+    if (!cache) simulate();
+    const { ctx, W, H } = fit(cv), cols = W < 520 ? 2 : 5, rows = 10 / cols, pw = W / cols, ph = H / rows, tanh = act.value === 'tanh';
+    cache.layers.forEach((Ly, l) => {
+      const ox = (l % cols) * pw, oy = Math.floor(l / cols) * ph, L = ox + 8, R = ox + pw - 8, Tp = oy + 34, Bt = oy + ph - 18;
+      const hi = tanh ? 1 : Math.max(1e-9, Ly.s * 4 || 1e-9), lo = tanh ? -1 : 0, bins = 24, cnt = new Array(bins).fill(0);
+      Ly.all.forEach(v => { const k = Math.min(bins - 1, Math.max(0, Math.floor((v - lo) / (hi - lo) * bins))); cnt[k]++; });
+      const mx = Math.max(...cnt);
+      ctx.fillStyle = COL.accent; cnt.forEach((c, k) => { const h = c / mx * (Bt - Tp); ctx.fillRect(L + k * (R - L) / bins + 0.5, Bt - h, (R - L) / bins - 1, h); });
+      ctx.strokeStyle = COL.ink; ctx.lineWidth = 1; seg(ctx, L, Bt, R, Bt);
+      T(ctx, `layer ${l + 1}`, L, oy + 14, { size: 12, bold: true });
+      T(ctx, `std ${Ly.s < 1e-3 && Ly.s > 0 ? Ly.s.toExponential(1).replace('-', '−') : fx(Ly.s, 3)}`, L, oy + 28, { size: 11.5, c: COL.muted });
+      T(ctx, tanh ? '−1' : '0', L, Bt + 13, { size: 10.5, c: COL.muted }); T(ctx, tanh ? '+1' : (hi < 0.01 ? hi.toExponential(0) : fx(hi, 2)), R, Bt + 13, { size: 10.5, c: COL.muted, align: 'right' });
+    });
+    const last = cache.layers[9], first = cache.layers[0];
+    const verdict = scheme === 'zero' ? 'Every activation is exactly 0: all units are identical and no signal passes.' : last.s < 0.05 * Math.max(first.s, 1e-9) || last.s < 1e-3 ? 'The spread collapses towards 0: vanishing activations and gradients.' : tanh && last.sat > 0.5 ? `${Math.round(last.sat * 100)}% of tanh units are saturated (|a| > 0.95): gradients vanish.` : !tanh && last.s > 20 * first.s ? 'The spread explodes layer after layer.' : 'The spread stays in a healthy range through all 10 layers.';
+    out.innerHTML = `${{ zero: 'Zero init', small: 'Random N(0, 0.01²)', large: 'Random N(0, 1)', xavier: 'Xavier: σ = √(2/(128+128)) = 0.088', he: 'He: σ = √(2/128) = 0.125' }[scheme]} with ${act.value}: std layer 1 = <b>${fx(first.s, 4)}</b>, layer 10 = <b>${last.s < 1e-4 && last.s > 0 ? last.s.toExponential(2).replace('-', '−') : fx(last.s, 4)}</b>. ${verdict}`;
+  }
+  segGroup($('#initPick'), 'i', v => { scheme = v; cache = null; draw(); });
+  act.addEventListener('input', () => { cache = null; draw(); });
+  redraws.push(draw); draw();
+})();
+
+/* ================= 7. BN groups ================= */
+(function () {
+  const D = [[[1, 3, 5, 7], [10, 10, 12, 14]], [[2, 4, 6, 8], [8, 6, 10, 12]]]; // [image][channel][pixels]
+  const box = $('#bnBox'), out = $('#bnOut'), pick = $('#bnPick'); let type = 'bn';
+  const opts = { bn: [['0', 'channel 1'], ['1', 'channel 2']], ln: [['0', 'image 1'], ['1', 'image 2']], in: [['0,0', 'image 1, channel 1'], ['0,1', 'image 1, channel 2'], ['1,0', 'image 2, channel 1'], ['1,1', 'image 2, channel 2']] };
+  function fill() { pick.innerHTML = opts[type].map(([v, l]) => `<option value="${v}">${l}</option>`).join(''); }
+  function inGroup(n, c) { const v = pick.value; if (type === 'bn') return c === +v; if (type === 'ln') return n === +v; const [a, b] = v.split(',').map(Number); return n === a && c === b; }
+  function draw() {
+    let h = '<div style="display:flex;gap:28px;flex-wrap:wrap">';
+    D.forEach((img, n) => { h += `<div><p class="cap" style="font-weight:700;margin:0 0 4px">Image ${n + 1}</p><div style="display:flex;gap:12px">`; img.forEach((ch, c) => { h += `<div><p style="margin:0 0 2px;font-size:13px;color:var(--muted)">channel ${c + 1}</p><table><tbody><tr>${ch.slice(0, 2).map(v => `<td class="${inGroup(n, c) ? 'hl' : ''}">${v}</td>`).join('')}</tr><tr>${ch.slice(2).map(v => `<td class="${inGroup(n, c) ? 'hl' : ''}">${v}</td>`).join('')}</tr></tbody></table></div>`; }); h += '</div></div>'; });
+    box.innerHTML = h + '</div>';
+    const vals = []; D.forEach((img, n) => img.forEach((ch, c) => { if (inGroup(n, c)) vals.push(...ch); }));
+    const m = vals.reduce((a, b) => a + b, 0) / vals.length, v = vals.reduce((a, b) => a + (b - m) ** 2, 0) / vals.length;
+    out.innerHTML = `${{ bn: 'Batch norm', ln: 'Layer norm', in: 'Instance norm' }[type]} pools <b>${vals.length}</b> numbers: (${vals.join(', ')})<br>μ = <b>${fx(m, 3)}</b> &nbsp; σ² = <b>${fx(v, 3)}</b> &nbsp;·&nbsp; normalized: (${vals.map(x => fx((x - m) / Math.sqrt(v + 1e-5), 2)).join(', ')})`;
+  }
+  segGroup($('#bnType'), 't', v => { type = v; fill(); draw(); });
+  pick.addEventListener('input', draw); fill(); draw();
+})();
+
+/* ================= 8. Grid vs random search ================= */
+(function () {
+  const cv = $('#hpoC'), out = $('#hpoOut'), nS = $('#hpoN'); let seed = 1;
+  const acc = (u, d) => 0.55 + 0.38 * Math.exp(-(((u + 2.6) / 0.3) ** 2)) + 0.04 * (1 - ((d - 0.3) / 0.3) ** 2);
+  const U0 = -5, U1 = -1, D0 = 0, D1 = 0.6;
+  function draw() {
+    const n = +nS.value, k = Math.round(Math.sqrt(n)), r = mulberry32(seed);
+    const grid = []; for (let i = 0; i < k; i++) for (let j = 0; j < k; j++) grid.push([U0 + (U1 - U0) * (i + 0.5) / k, D0 + (D1 - D0) * (j + 0.5) / k]);
+    const rand = Array.from({ length: n }, () => [U0 + (U1 - U0) * r(), D0 + (D1 - D0) * r()]);
+    const { ctx, W, H } = fit(cv), stack = W < 520, gap = 18, pw = stack ? W : (W - gap) / 2, ph = stack ? (H - gap) / 2 : H;
+    const best = pts => pts.reduce((b, p) => acc(...p) > acc(...b) ? p : b);
+    [[grid, 'Grid search', COL.accent], [rand, 'Random search', COL.warm]].forEach(([pts, title, col], q) => {
+      const ox = stack ? 0 : q * (pw + gap), oy = stack ? q * (ph + gap) : 0, L = ox + 30, R = ox + pw - 6, Tp = oy + 22, Bt = oy + ph - 40;
+      const X = u => L + (u - U0) / (U1 - U0) * (R - L), Y = d => Bt - (d - D0) / (D1 - D0) * (Bt - Tp);
+      const nx = 60, ny = 30;
+      for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) { const a = acc(U0 + (U1 - U0) * (i + 0.5) / nx, D0 + (D1 - D0) * (j + 0.5) / ny), t = (a - 0.5) / 0.47; ctx.fillStyle = `hsl(${220 - 180 * t},${50 + 30 * t}%,${88 - 38 * t}%)`; ctx.fillRect(L + i * (R - L) / nx, Bt - (j + 1) * (Bt - Tp) / ny, (R - L) / nx + 0.6, (Bt - Tp) / ny + 0.6); }
+      ctx.strokeStyle = COL.ink; ctx.lineWidth = 1; ctx.strokeRect(L, Tp, R - L, Bt - Tp);
+      pts.forEach(p => { ctx.fillStyle = col; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(X(p[0]), Y(p[1]), 5, 0, 7); ctx.fill(); ctx.stroke(); ctx.fillStyle = col; ctx.fillRect(X(p[0]) - 1, Bt + 2, 2, 9); });
+      const b = best(pts); ctx.strokeStyle = COL.ink; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.arc(X(b[0]), Y(b[1]), 9, 0, 7); ctx.stroke();
+      T(ctx, `${title}: best accuracy ${(acc(...b) * 100).toFixed(1)}%`, L, oy + 14, { size: 12.5, bold: true, c: col });
+      T(ctx, 'learning rate (log scale)', (L + R) / 2, oy + ph - 2, { size: 11, c: COL.muted, align: 'center' });
+      [-5, -4, -3, -2, -1].forEach(e => T(ctx, '10' + ['⁻⁵', '⁻⁴', '⁻³', '⁻²', '⁻¹'][e + 5], X(e), Bt + 24, { size: 11, c: COL.muted, align: 'center' }));
+      ctx.save(); ctx.translate(ox + 12, (Tp + Bt) / 2); ctx.rotate(-Math.PI / 2); T(ctx, 'dropout', 0, 0, { size: 11, c: COL.muted, align: 'center' }); ctx.restore();
+    });
+    const bg = best(grid), br = best(rand), dg = new Set(grid.map(p => p[0].toFixed(3))).size;
+    out.innerHTML = `Budget ${n} trials · grid tests <b>${dg}</b> distinct learning rates, random tests <b>${n}</b> · best grid accuracy <b>${(acc(...bg) * 100).toFixed(1)}%</b> at η = ${Math.pow(10, bg[0]).toExponential(1).replace('-', '−')} · best random accuracy <b>${(acc(...br) * 100).toFixed(1)}%</b> at η = ${Math.pow(10, br[0]).toExponential(1).replace('-', '−')} · the true best is ≈ 97.0% at η ≈ 2.5e−3`;
+  }
+  nS.addEventListener('input', draw); $('#hpoNew').addEventListener('click', () => { seed++; draw(); });
+  redraws.push(draw); draw();
+})();
+
+/* ================= Quiz ================= */
+const QUIZ = [
+  { q: 'An autoencoder with linear encoder and decoder trained with squared error learns the same subspace as', o: ['k-means', 'PCA', 'an SVM', 'a GAN'], a: 1, e: 'A linear autoencoder spans the subspace of the top principal components.' },
+  { q: 'Input 32×32, filter 5×5, padding 2, stride 1. The output width is', o: ['28', '30', '32', '34'], a: 2, e: '(32 − 5 + 4)/1 + 1 = 32 ("same" padding).' },
+  { q: 'How many parameters does a conv layer with 64 filters of 3×3 on a 3-channel input have?', o: ['576', '1,728', '1,792', '640'], a: 2, e: '(3·3·3 + 1) × 64 = 28 × 64 = 1,792.' },
+  { q: 'Which network won ILSVRC 2012?', o: ['VGG', 'AlexNet', 'GoogLeNet', 'ResNet'], a: 1, e: 'AlexNet won in 2012 with 15.3% top-5 error.' },
+  { q: 'Three stacked 3×3 conv layers have the same receptive field as one', o: ['5×5', '7×7', '9×9', '6×6'], a: 1, e: 'Receptive field = 2n + 1 = 7 for n = 3.' },
+  { q: 'In an Inception module, 1×1 convolutions are mainly used to', o: ['increase image size', 'reduce the number of channels before 3×3 and 5×5 convs', 'replace pooling', 'add skip connections'], a: 1, e: 'They act as bottlenecks, cutting computation roughly tenfold for the 5×5 branch.' },
+  { q: 'A residual block computes', o: ['y = F(x)', 'y = F(x) · x', 'y = F(x) + x', 'y = x − F(x)'], a: 2, e: 'The shortcut adds the input to the output of the stacked layers.' },
+  { q: 'He initialization for ReLU uses a weight variance of', o: ['1/n_in', '2/(n_in + n_out)', '2/n_in', '0.01'], a: 2, e: 'ReLU halves the variance, so He doubles LeCun\'s 1/n_in.' },
+  { q: 'In a ConvNet, batch normalization computes its mean and variance over', o: ['each pixel separately', 'each channel, across the batch and all positions', 'each image separately', 'the whole dataset at every step'], a: 1, e: 'One mean and variance per channel, over N × H × W.' },
+  { q: 'With 9 trials on 2 hyperparameters, a 3×3 grid search tests how many distinct learning rates?', o: ['1', '3', '9', '81'], a: 1, e: 'Only 3; random search would test 9 different values.' }
+];
+(function () {
+  const body = $('#quizBody'), score = $('#quizScore'); let right = 0, done = 0;
+  function render() {
+    right = 0; done = 0; body.innerHTML = '';
+    QUIZ.forEach((it, qi) => {
+      const d = document.createElement('div'); d.className = 'mcq';
+      d.innerHTML = `<p class="qt"><span>Q${qi + 1}</span>${it.q}</p><div class="opts">${it.o.map((o, i) => `<button type="button" data-i="${i}">${'ABCD'[i]}. ${o}</button>`).join('')}</div><p class="fb" hidden></p>`;
+      const btns = $$('button', d), fb = $('.fb', d);
+      btns.forEach(b => b.addEventListener('click', () => {
+        const i = +b.dataset.i, ok = i === it.a;
+        btns.forEach(x => { x.disabled = true; }); btns[it.a].classList.add('right'); if (!ok) b.classList.add('wrong');
+        fb.hidden = false; fb.className = 'fb ' + (ok ? 'ok' : 'no');
+        fb.innerHTML = `<strong>${ok ? 'Correct.' : 'Not quite. The answer is ' + 'ABCD'[it.a] + '.'}</strong> ${it.e}`;
+        done++; if (ok) right++; show();
+      }));
+      body.appendChild(d);
+    });
+    show();
+  }
+  function show() { score.textContent = `Score ${right} / ${QUIZ.length} · ${done} answered` + (done === QUIZ.length ? (right >= 8 ? ' · Well prepared' : right >= 5 ? ' · Revise the topics you missed' : ' · Go through the unit once more') : ''); }
+  $('#quizReset').addEventListener('click', render); render();
+})();
+
+/* ================= Contents rail ================= */
+(function () {
+  const KEY = 'dl-unit3-revised', boxes = $$('#toc input[type=checkbox]'), prog = $('#prog');
+  let saved = []; try { saved = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (_) { saved = []; }
+  const show = () => { prog.textContent = `${boxes.filter(b => b.checked).length} of ${boxes.length} topics revised`; };
+  boxes.forEach(b => { b.checked = saved.includes(b.id); b.addEventListener('change', () => { try { localStorage.setItem(KEY, JSON.stringify(boxes.filter(x => x.checked).map(x => x.id))); } catch (_) {} show(); }); });
+  show();
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const el = document.getElementById(a.getAttribute('href').slice(1)); if (!el) return; e.preventDefault(); el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' }); }));
+  const links = $$('#toc a'), map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { links.forEach(l => l.classList.remove('on')); const a = map.get(en.target.id); if (a) a.classList.add('on'); } }), { rootMargin: '-15% 0px -75% 0px' });
+    map.forEach((_, id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+  }
+})();
+
+let rt = 0;
+const redrawAll = () => redraws.forEach(fn => fn());
+window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(redrawAll, 120); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll);
+})();
+</script>
+</body>
+</html>

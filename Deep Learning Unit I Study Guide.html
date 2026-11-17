@@ -1,0 +1,2111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deep Learning Unit I Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:wght@600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: a contents rail on the left, one reading column on the right.
+     Every topic repeats the same ten numbered blocks. Light theme only, as requested. */
+  color-scheme: light;
+  --bg:#f3f5f9; --paper:#ffffff; --ink:#18223a; --muted:#57627a; --line:#d6dce8;
+  --accent:#2b54c9; --accent-soft:#e6ecfb;
+  --warm:#c2410c; --warm-soft:#fdeee4;
+  --good:#1b7f4b; --good-soft:#e3f4ea;
+  --mark:#fff1bf;
+  --font-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --font-body:"Atkinson Hyperlegible","Segoe UI",Arial,sans-serif;
+  --font-mono:"JetBrains Mono",Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--font-body)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:3px}
+.shell{display:grid;grid-template-columns:268px minmax(0,1fr)}
+
+/* contents rail */
+.rail{position:sticky;top:0;align-self:start;max-height:100vh;overflow:auto;padding:22px 16px 24px;background:var(--paper);border-right:1px solid var(--line)}
+.rail .brand{font:700 20px/1.2 var(--font-display);margin:0 0 2px}
+.rail .sub{font-size:13px;color:var(--muted);margin:0 0 14px}
+.rail ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.rail li{display:flex;align-items:center;gap:6px}
+.rail a{flex:1;display:block;padding:7px 9px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:15px;line-height:1.3}
+.rail a:hover{background:var(--bg)}
+.rail a.on{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.rail a .n{font:600 12px var(--font-mono);color:var(--muted);margin-right:6px}
+.rail input[type=checkbox]{width:17px;height:17px;accent-color:var(--good);flex:none;margin:0}
+.rail .prog{margin:14px 0 0;font-size:13px;color:var(--muted)}
+.rail .hint{font-size:12px;color:var(--muted);margin:4px 0 0}
+
+main{padding:30px clamp(16px,4vw,52px) 90px;max-width:960px;min-width:0}
+h1{font:700 clamp(30px,5vw,46px)/1.08 var(--font-display);margin:6px 0 10px;text-wrap:balance}
+h2{font:700 clamp(25px,3.6vw,34px)/1.15 var(--font-display);margin:4px 0 0;text-wrap:balance}
+h3,h4{text-wrap:balance}
+p,li{max-width:72ch}
+.eyebrow{font:600 12px var(--font-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin:0}
+.syllabus{color:var(--muted);font-size:15.5px;margin:0 0 14px}
+.inside{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.inside li{font:600 13px var(--font-mono);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 12px}
+.how{margin:18px 0 0;font-size:15.5px}
+.how ol{margin:8px 0 0;padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 16px;counter-reset:b}
+.how li{counter-increment:b;font-size:14.5px}
+.how li::before{content:counter(b);font:600 11px var(--font-mono);background:var(--ink);color:#fff;border-radius:4px;padding:1px 5px;margin-right:7px}
+
+.block{margin-top:44px;scroll-margin-top:70px}
+.topic{margin-top:64px;padding-top:18px;border-top:3px solid var(--ink);scroll-margin-top:60px}
+.sec{margin-top:30px}
+.sec>h3{display:flex;align-items:center;gap:10px;font:700 18px/1.3 var(--font-display);margin:0 0 10px}
+.sec>h3 b{font:600 12px var(--font-mono);color:#fff;background:var(--ink);border-radius:4px;padding:2px 0;width:28px;text-align:center;flex:none}
+.sec h4{font:700 15px var(--font-body);margin:0 0 6px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.sec ol,.sec ul{margin:0;padding-left:22px}
+.sec li{margin:4px 0}
+.sec p{margin:0 0 10px}
+
+.sec-def .def{margin:0;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--ink);border-radius:0 8px 8px 0;padding:14px 18px;font-size:18.5px;line-height:1.5}
+.sec-def mark{background:linear-gradient(transparent 58%,var(--mark) 58%);color:inherit}
+
+.diagram{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto}
+.diagram svg{display:block;width:100%;min-width:600px;height:auto}
+.diagram figcaption,.demo figcaption{font-size:14px;color:var(--muted);margin-top:8px}
+.dg text{font-family:var(--font-body);font-size:13px;fill:var(--ink)}
+.dg .m{fill:var(--muted);font-size:12px}
+.dg .s{font-size:11.5px;fill:var(--muted)}
+.dg .b{font-weight:700}
+.dg .ta{fill:var(--accent)} .dg .tw{fill:var(--warm)} .dg .tg{fill:var(--good)}
+.dg .k{stroke:var(--ink);fill:none;stroke-width:1.6}
+.dg .kl{stroke:#9aa5ba;fill:none;stroke-width:1.3}
+.dg .ka{stroke:var(--accent);fill:none;stroke-width:2.2}
+.dg .kw{stroke:var(--warm);fill:none;stroke-width:2.2}
+.dg .kg{stroke:var(--good);fill:none;stroke-width:2.2}
+.dg .dash{stroke-dasharray:6 5}
+.dg .node{fill:var(--paper);stroke:var(--ink);stroke-width:1.8}
+.dg .box{fill:var(--paper);stroke:var(--ink);stroke-width:1.6}
+.dg .pa{fill:var(--accent)} .dg .pw{fill:var(--warm)}
+.dg a{cursor:pointer}
+.dg a:hover .box{fill:var(--accent-soft)}
+
+.demo{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px}
+.demo canvas{display:block;width:100%;background:#fbfcfe;border:1px solid var(--line);border-radius:6px}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;margin-top:12px}
+.ctl{display:flex;align-items:center;gap:8px;font-size:15px}
+.ctl output,.ctl .val{font:600 14px var(--font-mono);font-variant-numeric:tabular-nums;min-width:44px}
+input[type=range]{accent-color:var(--accent);width:150px}
+select{font:15px var(--font-body);padding:6px 8px;border:1px solid var(--ink);border-radius:6px;background:var(--paper);color:var(--ink)}
+button{font:700 15px var(--font-body);padding:8px 14px;border-radius:6px;border:1.5px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}
+button.ghost{background:var(--paper);color:var(--ink)}
+button:disabled{opacity:.45;cursor:default}
+.readout{margin:12px 0 0;font:14px/1.7 var(--font-mono);font-variant-numeric:tabular-nums;background:var(--bg);border-radius:6px;padding:8px 12px;overflow-x:auto}
+.readout b{color:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;margin-top:10px}
+.legend i{display:inline-block;width:22px;height:4px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.observe{margin:12px 0 0;border-left:4px solid var(--good);background:var(--good-soft);padding:10px 14px;border-radius:0 6px 6px 0;font-size:15.5px;max-width:none}
+.stepbox{margin-top:12px;border:1px solid var(--line);border-radius:6px;padding:12px 14px;background:var(--bg);min-height:118px}
+.stepbox .phase{display:inline-block;font:600 12px var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:#fff;border-radius:4px;padding:2px 8px;margin-right:8px}
+.stepbox .ttl{font-weight:700}
+.stepbox .eq{font:14.5px/1.75 var(--font-mono);margin:8px 0 0;overflow-x:auto;white-space:nowrap}
+.stepbox .why{font-size:15px;margin:8px 0 0;color:var(--muted)}
+
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px}
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:18px}
+.three>div{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px;border-top:4px solid var(--good)}
+.three>div:nth-child(2){border-top-color:var(--warm)}
+.three>div:nth-child(3){border-top-color:var(--accent)}
+.three li{font-size:15.5px}
+
+.tablewrap{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th,td{border-bottom:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+tr:last-child td{border-bottom:0}
+thead th{background:#e9edf5;font-weight:700}
+tbody th{font-weight:700;background:#f6f8fb;width:24%}
+td.num,th.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.formulas{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:4px 16px;overflow-x:auto}
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.sym{margin-top:12px}
+.sym td:first-child{width:92px;white-space:nowrap}
+.worked{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 18px}
+.worked,.two>div,.three>div,.qa,.long,.sec-def .def,.sec-mem,.observe,.sheet .grid>div{overflow-x:auto}
+.worked .given{color:var(--muted);font-size:15.5px}
+.worked ol{padding-left:22px}
+.worked .ans{font-weight:700;border-top:1px dashed var(--line);padding-top:8px;margin:10px 0 0}
+.note{font-size:15px;color:var(--muted);margin-top:10px}
+
+.sec-exam{background:var(--accent-soft);border-radius:8px;padding:16px 18px 18px}
+.qa{margin:0 0 12px;background:var(--paper);border-radius:6px;padding:10px 14px}
+.qa .q{font-weight:700;margin:0 0 4px}
+.qa .q span,.long .q span{font:600 11.5px var(--font-mono);background:var(--accent);color:#fff;border-radius:4px;padding:2px 7px;margin-right:8px;white-space:nowrap}
+.qa .a{margin:0}
+.long{background:var(--paper);border-radius:6px;padding:12px 14px;border:2px solid var(--accent)}
+.long .q{font-weight:700;margin:0 0 8px}
+.long .q span{background:var(--ink)}
+.long ol{padding-left:22px}
+.long .draw{margin:10px 0 0;font-size:15.5px}
+
+.sec-mem{border:2px dashed var(--warm);background:var(--warm-soft);border-radius:8px;padding:14px 18px}
+.sec-mem>h3 b{background:var(--warm)}
+.sec-mem p{margin:0 0 6px}
+
+/* quiz */
+.quiz-top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin:10px 0 16px}
+.score{font:600 15px var(--font-mono)}
+.mcq{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:12px}
+.mcq .qt{font-weight:700;margin:0 0 10px}
+.mcq .qt span{font:600 12px var(--font-mono);color:var(--muted);margin-right:8px}
+.mcq .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+.mcq .opts button{background:var(--paper);color:var(--ink);border:1.5px solid var(--line);text-align:left;font-weight:400;line-height:1.35}
+.mcq .opts button:hover:not(:disabled){border-color:var(--ink)}
+.mcq .opts button:disabled{opacity:1}
+.mcq .opts button.right{background:var(--good-soft);border-color:var(--good);font-weight:700}
+.mcq .opts button.wrong{background:var(--warm-soft);border-color:var(--warm)}
+.mcq .fb{margin:10px 0 0;font-size:15.5px;padding:8px 12px;border-radius:6px}
+.mcq .fb.ok{background:var(--good-soft)} .mcq .fb.no{background:var(--warm-soft)}
+
+/* revision sheet */
+.sheet{background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:18px 20px}
+.sheet .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px 26px}
+.sheet h3{font:700 16px var(--font-display);margin:0 0 4px;color:var(--accent)}
+.sheet ul{margin:0;padding-left:18px}
+.sheet li{font-size:15px;margin:2px 0}
+.sheet .last{margin-top:16px;border-top:1px dashed var(--line);padding-top:12px}
+
+@media (max-width:900px){
+  .shell{display:block}
+  .rail{position:sticky;top:0;z-index:5;max-height:none;padding:8px 12px;border-right:0;border-bottom:1px solid var(--line)}
+  .rail .brand,.rail .sub,.rail .prog,.rail .hint{display:none}
+  .rail ol{flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:2px}
+  .rail li{flex:none}
+  .rail a{white-space:nowrap;font-size:14px;padding:6px 8px}
+}
+</style>
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'},options:{enableMenu:false}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--ink)"/></marker>
+<marker id="ahA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--accent)"/></marker>
+<marker id="ahW" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--warm)"/></marker>
+<marker id="ahG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" style="fill:var(--good)"/></marker>
+</defs></svg>
+
+<div class="shell">
+<nav class="rail" aria-label="Contents">
+  <p class="brand">Deep Learning</p>
+  <p class="sub">Unit I study guide</p>
+  <ol id="toc">
+    <li><a href="#glance">Unit at a glance</a></li>
+    <li><a href="#t-svm"><span class="n">1</span>SVM</a><input type="checkbox" id="rev-1" aria-label="Mark SVM as revised"></li>
+    <li><a href="#t-logreg"><span class="n">2</span>Logistic regression</a><input type="checkbox" id="rev-2" aria-label="Mark logistic regression as revised"></li>
+    <li><a href="#t-shallow"><span class="n">3</span>Shallow network</a><input type="checkbox" id="rev-3" aria-label="Mark shallow network as revised"></li>
+    <li><a href="#t-loss"><span class="n">4</span>Loss functions</a><input type="checkbox" id="rev-4" aria-label="Mark loss functions as revised"></li>
+    <li><a href="#t-backprop"><span class="n">5</span>Backpropagation</a><input type="checkbox" id="rev-5" aria-label="Mark backpropagation as revised"></li>
+    <li><a href="#t-sgd"><span class="n">6</span>Gradient descent, SGD</a><input type="checkbox" id="rev-6" aria-label="Mark gradient descent as revised"></li>
+    <li><a href="#t-uat"><span class="n">7</span>Universal approximation</a><input type="checkbox" id="rev-7" aria-label="Mark universal approximation as revised"></li>
+    <li><a href="#quiz">Self-test quiz</a></li>
+    <li><a href="#revision">Last-minute revision</a></li>
+  </ol>
+  <p class="prog" id="prog">0 of 7 topics revised</p>
+  <p class="hint">Tick a topic when you have revised it. Ticks are remembered in this browser.</p>
+</nav>
+
+<main>
+<header>
+  <p class="eyebrow">Deep Learning · Unit I · 9 hours</p>
+  <h1>Introduction to Machine Learning</h1>
+  <p class="syllabus">Linear models (SVMs and logistic regression) · Intro to neural nets: shallow network · Connect and train a network: loss functions, backpropagation and stochastic gradient descent · Neural networks as universal function approximators.</p>
+  <ul class="inside">
+    <li>7 topics</li><li>7 interactive demos</li><li>21 two-mark answers</li><li>7 long-answer outlines</li><li>10 MCQs</li>
+  </ul>
+  <div class="how">
+    Every topic has the same ten blocks, in the order you would build an answer:
+    <ol><li>Definition</li><li>Diagram</li><li>Demo</li><li>Explanation</li><li>Formulas</li><li>Worked example</li><li>Pros, cons, uses</li><li>Comparison</li><li>Exam corner</li><li>Memory trick</li></ol>
+  </div>
+</header>
+
+<!-- ================= UNIT AT A GLANCE ================= -->
+<section class="block" id="glance">
+  <p class="eyebrow">Concept map</p>
+  <h2>Unit at a glance</h2>
+  <p>The unit tells one story. A linear model draws one straight boundary. A shallow network stacks such units to draw curved boundaries. Three tools train it: a loss function measures the error, backpropagation finds which weights caused it, and SGD corrects them. The universal approximation theorem says why this can work at all.</p>
+  <figure class="diagram">
+    <svg class="dg" viewBox="0 0 880 300" role="img" aria-label="Concept map of Unit I: linear models lead to the shallow network, which is trained in a loop of loss function, backpropagation and SGD; the universal approximation theorem explains what the network can represent.">
+      <rect x="8" y="12" width="174" height="184" rx="10" fill="none" class="kl dash"/>
+      <text x="20" y="32" class="s b">LINEAR MODELS</text>
+      <a href="#t-svm"><rect class="box" x="20" y="44" width="150" height="46" rx="8"/><text x="95" y="63" text-anchor="middle" class="b">1 · SVM</text><text x="95" y="80" text-anchor="middle" class="s">widest-margin line</text></a>
+      <a href="#t-logreg"><rect class="box" x="20" y="134" width="150" height="46" rx="8"/><text x="95" y="153" text-anchor="middle" class="b">2 · Logistic regression</text><text x="95" y="170" text-anchor="middle" class="s">sigmoid gives probability</text></a>
+      <a href="#t-uat"><rect class="box" x="270" y="44" width="150" height="46" rx="8"/><text x="345" y="63" text-anchor="middle" class="b">7 · Universal approx.</text><text x="345" y="80" text-anchor="middle" class="s">what it can represent</text></a>
+      <a href="#t-shallow"><rect class="box" x="270" y="134" width="150" height="46" rx="8"/><text x="345" y="153" text-anchor="middle" class="b">3 · Shallow network</text><text x="345" y="170" text-anchor="middle" class="s">one hidden layer</text></a>
+      <a href="#t-loss"><rect class="box" x="500" y="134" width="150" height="46" rx="8"/><text x="575" y="153" text-anchor="middle" class="b">4 · Loss function</text><text x="575" y="170" text-anchor="middle" class="s">how wrong is ŷ?</text></a>
+      <a href="#t-backprop"><rect class="box" x="720" y="134" width="150" height="46" rx="8"/><text x="795" y="153" text-anchor="middle" class="b">5 · Backpropagation</text><text x="795" y="170" text-anchor="middle" class="s">which weight is to blame?</text></a>
+      <a href="#t-sgd"><rect class="box" x="720" y="234" width="150" height="46" rx="8"/><text x="795" y="253" text-anchor="middle" class="b">6 · SGD</text><text x="795" y="270" text-anchor="middle" class="s">correct weights a little</text></a>
+      <line class="k" x1="172" y1="157" x2="268" y2="157" marker-end="url(#ah)"/><text x="228" y="149" text-anchor="middle" class="s">+ hidden layer</text>
+      <line class="k" x1="345" y1="92" x2="345" y2="132" marker-end="url(#ah)"/><text x="356" y="116" class="s">why one hidden layer can fit any continuous function</text>
+      <line class="ka" x1="422" y1="157" x2="498" y2="157" marker-end="url(#ahA)"/><text x="460" y="149" text-anchor="middle" class="s ta">output ŷ</text>
+      <line class="ka" x1="652" y1="157" x2="718" y2="157" marker-end="url(#ahA)"/><text x="685" y="149" text-anchor="middle" class="s ta">error L</text>
+      <line class="kw" x1="795" y1="182" x2="795" y2="232" marker-end="url(#ahW)"/><text x="785" y="211" text-anchor="end" class="s tw">gradients ∂L/∂w</text>
+      <polyline class="kg" points="718,257 345,257 345,184" marker-end="url(#ahG)"/><text x="530" y="249" text-anchor="middle" class="s tg">update the weights, then repeat for the next batch</text>
+      <text x="530" y="278" text-anchor="middle" class="s">TRAINING LOOP: 3 → 4 → 5 → 6 → 3</text>
+    </svg>
+    <figcaption>Click a box to jump to that topic.</figcaption>
+  </figure>
+</section>
+
+<!-- ================= TOPIC 1: SVM ================= -->
+<section class="topic" id="t-svm">
+  <p class="eyebrow">Topic 1 of 7 · Linear models</p>
+  <h2>Support Vector Machine (SVM)</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">A Support Vector Machine is a supervised linear classifier that finds the hyperplane \(\mathbf{w}\cdot\mathbf{x}+b=0\) separating two classes with the <mark>maximum margin</mark>; the training points closest to the hyperplane are called <mark>support vectors</mark>.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 660 300" role="img" aria-label="SVM diagram: two classes of points separated by a hyperplane with two parallel margin lines; the ringed points on the margin lines are support vectors.">
+        <polygon points="111.6,294.7 382.8,0.9 528.4,5.3 257.2,299.1" style="fill:var(--accent-soft)" opacity=".55"/>
+        <line class="k dash" x1="111.6" y1="294.7" x2="382.8" y2="0.9"/>
+        <line class="k dash" x1="257.2" y1="299.1" x2="528.4" y2="5.3"/>
+        <line class="k" style="stroke-width:2.6" x1="180.8" y1="300.8" x2="456.8" y2="1.8"/>
+        <g class="pw"><circle cx="120" cy="90" r="6.5"/><circle cx="190" cy="60" r="6.5"/><circle cx="230" cy="40" r="6.5"/><circle cx="90" cy="180" r="6.5"/><circle cx="160" cy="150" r="6.5"/><circle cx="279.6" cy="112.7" r="6.5"/></g>
+        <g class="pa"><rect x="463.5" y="223.5" width="13" height="13"/><rect x="513.5" y="153.5" width="13" height="13"/><rect x="423.5" y="263.5" width="13" height="13"/><rect x="553.5" y="233.5" width="13" height="13"/><rect x="493.5" y="83.5" width="13" height="13"/><rect x="341.9" y="193.8" width="13" height="13"/><rect x="437.9" y="89.8" width="13" height="13"/></g>
+        <g class="k" style="stroke-width:2"><circle cx="279.6" cy="112.7" r="12"/><circle cx="348.4" cy="200.3" r="13"/><circle cx="444.4" cy="96.3" r="13"/></g>
+        <text transform="translate(315.6,145.9) rotate(-47.3)" class="b">hyperplane  w·x + b = 0</text>
+        <text transform="translate(360.8,178) rotate(-47.3)" class="m">w·x + b = +1</text>
+        <text transform="translate(294.4,87.8) rotate(-47.3)" class="m">w·x + b = −1</text>
+        <line class="kw" x1="209.8" y1="192.7" x2="286.2" y2="263.3" marker-start="url(#ahW)" marker-end="url(#ahW)"/>
+        <text transform="translate(214,190) rotate(42.7)" x="2" y="-14" class="tw b">margin = 2/‖w‖</text>
+        <line class="k" x1="279.2" y1="194.2" x2="304.2" y2="217.3" marker-end="url(#ah)"/><text x="310" y="212" class="b">w</text>
+        <text x="36" y="34" class="tw b">Class −1  (y = −1)</text>
+        <text x="476" y="293" class="ta b">Class +1  (y = +1)</text>
+        <circle class="k" cx="548" cy="22" r="9"/><circle cx="548" cy="22" r="4.5" style="fill:var(--ink)"/><text x="563" y="26.5" class="m">= support vector</text>
+      </svg>
+      <figcaption>In the exam: draw the solid line first, then two dashed lines parallel to it, then ring the points that touch the dashed lines.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: drag the points</h3>
+    <figure class="demo">
+      <canvas id="svmCanvas" data-ratio="0.625" aria-label="Interactive SVM plot. Drag points to move them."></canvas>
+      <div class="legend">
+        <span><i style="background:var(--accent);width:11px;height:11px;border-radius:0"></i>Class +1</span>
+        <span><i style="background:var(--warm);width:12px;height:12px;border-radius:50%"></i>Class −1</span>
+        <span><i style="background:none;border:2px solid var(--ink);width:14px;height:14px;border-radius:50%;box-sizing:border-box"></i>Ringed = support vector</span>
+        <span><i style="background:var(--accent-soft);width:22px;height:11px;border-radius:0;border:1px dashed var(--ink);box-sizing:border-box"></i>Margin</span>
+      </div>
+      <div class="controls">
+        <label class="ctl" for="svmC">Penalty C <input type="range" id="svmC" min="-1" max="3" step="0.1" value="3"><span class="val" id="svmCLab">1000</span></label>
+        <button class="ghost" id="svmAddP" type="button">Add a blue point</button>
+        <button class="ghost" id="svmAddN" type="button">Add an orange point</button>
+        <button id="svmReset" type="button">Reset</button>
+      </div>
+      <p class="readout" id="svmOut"></p>
+      <p class="observe"><strong>What to observe.</strong> Drag a point that is far from the line: nothing changes. Drag a ringed point: the line moves at once. That is why only support vectors matter. Now drag an orange point into the blue cluster and lower C: the margin widens and the SVM accepts a few violations (soft margin).</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>Plot the two classes as points.</li>
+          <li>Many straight lines can separate them. SVM picks the one that leaves the widest empty road between the classes.</li>
+          <li>The points that touch the edges of the road are the support vectors. Only they decide where the line goes.</li>
+          <li>A new point is classified by the side of the line it falls on.</li>
+          <li>If the classes overlap, a few points are allowed inside the road, and each one pays a penalty C (soft margin).</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li>The classifier is \(\hat y=\operatorname{sign}(\mathbf{w}\cdot\mathbf{x}+b)\) with labels \(y_i\in\{-1,+1\}\).</li>
+          <li>Scale \(\mathbf{w},b\) so the closest points satisfy \(y_i(\mathbf{w}\cdot\mathbf{x}_i+b)=1\). The margin is then \(2/\lVert\mathbf{w}\rVert\).</li>
+          <li>Maximising the margin is the same as minimising \(\tfrac12\lVert\mathbf{w}\rVert^2\) subject to \(y_i(\mathbf{w}\cdot\mathbf{x}_i+b)\ge 1\). This is a convex quadratic program, so it has one global optimum.</li>
+          <li>Soft margin adds slack variables \(\xi_i\) and the penalty \(C\sum\xi_i\). This equals minimising \(\tfrac12\lVert\mathbf{w}\rVert^2\) plus C times the hinge loss.</li>
+          <li>Solving the dual gives multipliers \(\alpha_i\) with \(\mathbf{w}=\sum_i\alpha_i y_i\mathbf{x}_i\). Only support vectors have \(\alpha_i>0\).</li>
+          <li>The dual uses the data only as dot products \(\mathbf{x}_i\cdot\mathbf{x}_j\). Replacing them with a kernel \(K(\mathbf{x}_i,\mathbf{x}_j)\) gives a non-linear SVM (kernel trick).</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\mathbf{w}\cdot\mathbf{x}+b=0\qquad\qquad \hat y=\operatorname{sign}(\mathbf{w}\cdot\mathbf{x}+b)\qquad\qquad \text{margin}=\frac{2}{\lVert\mathbf{w}\rVert}\]
+      \[\textbf{Hard margin:}\quad \min_{\mathbf{w},b}\ \tfrac12\lVert\mathbf{w}\rVert^2\quad\text{subject to}\quad y_i(\mathbf{w}\cdot\mathbf{x}_i+b)\ge 1\]
+      \[\textbf{Soft margin:}\quad \min_{\mathbf{w},b,\xi}\ \tfrac12\lVert\mathbf{w}\rVert^2+C\sum_{i=1}^{N}\xi_i\quad\text{subject to}\quad y_i(\mathbf{w}\cdot\mathbf{x}_i+b)\ge 1-\xi_i,\ \ \xi_i\ge 0\]
+      \[\textbf{Hinge loss:}\quad L=\max\bigl(0,\ 1-y\,(\mathbf{w}\cdot\mathbf{x}+b)\bigr)\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(\mathbf{w}\)</td><td>Weight vector. It is perpendicular (normal) to the hyperplane.</td></tr>
+        <tr><td>\(b\)</td><td>Bias. It shifts the hyperplane away from the origin.</td></tr>
+        <tr><td>\(\mathbf{x}_i,\ y_i\)</td><td>The i-th training point and its label, +1 or −1.</td></tr>
+        <tr><td>\(\lVert\mathbf{w}\rVert\)</td><td>Length of w, \(\sqrt{w_1^2+w_2^2+\dots}\)</td></tr>
+        <tr><td>\(\xi_i\)</td><td>Slack: how far point i is on the wrong side of its margin line (0 if it is fine).</td></tr>
+        <tr><td>\(C\)</td><td>Penalty for margin violations. Large C means few violations are tolerated.</td></tr>
+        <tr><td>\(N\)</td><td>Number of training points.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">Given two training points: \(\mathbf{x}_1=(1,1)\) with \(y_1=-1\) and \(\mathbf{x}_2=(3,3)\) with \(y_2=+1\). Find the maximum-margin hyperplane and classify the point (4, 1).</p>
+      <ol>
+        <li>With one point per class, both are support vectors, so both lie on the margin lines: \(\mathbf{w}\cdot\mathbf{x}_1+b=-1\) and \(\mathbf{w}\cdot\mathbf{x}_2+b=+1\).</li>
+        <li>w points along the line joining the two points, so \(\mathbf{w}=(a,a)\). Then \(2a+b=-1\) and \(6a+b=+1\).</li>
+        <li>Subtract: \(4a=2\), so \(a=0.5\) and \(b=-2\).</li>
+        <li>Hyperplane: \(0.5x_1+0.5x_2-2=0\), that is \(x_1+x_2=4\).</li>
+        <li>Margin \(=2/\lVert\mathbf{w}\rVert\) \(=2/\sqrt{0.5^2+0.5^2}\) \(=2/0.7071=2.828\). Check: the distance between (1,1) and (3,3) is \(\sqrt8=2.828\).</li>
+        <li>Classify (4,1): \(0.5(4)+0.5(1)-2\) \(=+0.5>0\).</li>
+      </ol>
+      <p class="ans">Answer: w = (0.5, 0.5), b = −2, margin = 2.828, and (4, 1) belongs to class +1.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Maximum margin gives good generalisation.</li>
+        <li>Works well in high-dimensional spaces.</li>
+        <li>Solution depends only on support vectors (sparse).</li>
+        <li>Convex problem: one global optimum.</li>
+        <li>Kernel trick handles non-linear data.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>Training is slow on large datasets (cost grows at least quadratically with the number of samples).</li>
+        <li>Sensitive to the choice of C and kernel.</li>
+        <li>Gives no direct probability output.</li>
+        <li>Binary by nature; multi-class needs one-vs-rest or one-vs-one.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Text and document classification.</li>
+        <li>Face detection.</li>
+        <li>Handwritten character recognition.</li>
+        <li>Bioinformatics (protein and gene classification).</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison: hard margin vs soft margin</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>Hard-margin SVM</th><th>Soft-margin SVM</th></tr></thead>
+      <tbody>
+        <tr><th>Assumption</th><td>Data is perfectly linearly separable.</td><td>Data may overlap or contain noise.</td></tr>
+        <tr><th>Constraint</th><td>\(y_i(\mathbf{w}\cdot\mathbf{x}_i+b)\ge 1\)</td><td>\(y_i(\mathbf{w}\cdot\mathbf{x}_i+b)\ge 1-\xi_i\)</td></tr>
+        <tr><th>Slack variables</th><td>None.</td><td>\(\xi_i\ge 0\) for every point.</td></tr>
+        <tr><th>Parameter C</th><td>Not used (equivalent to C → ∞).</td><td>Controls the trade-off between wide margin and few violations.</td></tr>
+        <tr><th>Outliers</th><td>One outlier can change or break the solution.</td><td>Tolerated; the margin stays wide.</td></tr>
+        <tr><th>Overfitting</th><td>High risk on noisy data.</td><td>Lower risk when C is tuned.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>What are support vectors?</p><p class="a">Support vectors are the training points closest to the separating hyperplane, lying on the margin boundaries \(y_i(\mathbf{w}\cdot\mathbf{x}_i+b)=1\). They alone determine w and b; removing any other point does not change the hyperplane.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Define margin. Why is it maximised?</p><p class="a">Margin is the perpendicular distance between the two margin boundaries, equal to \(2/\lVert\mathbf{w}\rVert\). A larger margin leaves more room for unseen points, so the classifier generalises better.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>What is the role of the parameter C in SVM?</p><p class="a">C is the penalty for margin violations. A large C allows few violations and gives a narrow margin (risk of overfitting). A small C gives a wider margin and tolerates more violations (risk of underfitting).</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain the Support Vector Machine as a linear classifier. Derive the maximum-margin formulation and explain the soft margin.</p>
+      <ol>
+        <li><strong>Introduction:</strong> definition, supervised, binary linear classifier.</li>
+        <li><strong>Diagram:</strong> hyperplane, margin lines, support vectors, w.</li>
+        <li><strong>Hyperplane and decision rule:</strong> \(\mathbf{w}\cdot\mathbf{x}+b=0\), sign function.</li>
+        <li><strong>Margin derivation:</strong> distance of a point from the hyperplane is \(|\mathbf{w}\cdot\mathbf{x}+b|/\lVert\mathbf{w}\rVert\); closest points have value 1, so margin \(=2/\lVert\mathbf{w}\rVert\).</li>
+        <li><strong>Hard-margin problem:</strong> minimise \(\tfrac12\lVert\mathbf{w}\rVert^2\) with the constraints.</li>
+        <li><strong>Soft margin:</strong> slack variables, C, hinge loss.</li>
+        <li><strong>Dual and support vectors:</strong> \(\mathbf{w}=\sum\alpha_i y_i\mathbf{x}_i\); mention the kernel trick in two lines.</li>
+        <li><strong>Small numerical example</strong> (the two-point example above).</li>
+        <li><strong>Advantages, limitations, applications.</strong></li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> the margin figure from block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>The widest street.</strong> The hyperplane is the centre line of the widest street you can lay between two neighbourhoods. The houses touching the kerb are the support vectors. C is the fine for building inside the street.</p>
+    <p>Read SVM as <strong>S</strong>treet with <strong>V</strong>ery wide <strong>M</strong>argin.</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 2: LOGISTIC REGRESSION ================= -->
+<section class="topic" id="t-logreg">
+  <p class="eyebrow">Topic 2 of 7 · Linear models</p>
+  <h2>Logistic Regression</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">Logistic regression is a linear classification model that passes the weighted sum \(z=\mathbf{w}\cdot\mathbf{x}+b\) through the <mark>sigmoid function</mark> to give the probability \(P(y=1\mid\mathbf{x})\), and predicts class 1 when this probability is at least 0.5.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 770 230" role="img" aria-label="Logistic regression as a single neuron: inputs times weights are summed with a bias, passed through a sigmoid, giving a probability. On the right, the S-shaped sigmoid curve.">
+        <line class="k" x1="50" y1="45" x2="182.5" y2="103" marker-end="url(#ah)"/><line class="k" x1="50" y1="115" x2="180" y2="115" marker-end="url(#ah)"/><line class="k" x1="50" y1="185" x2="182.5" y2="127" marker-end="url(#ah)"/>
+        <circle class="node" cx="50" cy="45" r="18"/><text x="50" y="49.5" text-anchor="middle">x₁</text>
+        <circle class="node" cx="50" cy="115" r="18"/><text x="50" y="119.5" text-anchor="middle">x₂</text>
+        <text x="50" y="156" text-anchor="middle" class="m">⋮</text>
+        <circle class="node" cx="50" cy="185" r="18"/><text x="50" y="189.5" text-anchor="middle">xₙ</text>
+        <text x="118" y="64" class="ta b">w₁</text><text x="112" y="108" class="ta b">w₂</text><text x="128" y="172" class="ta b">wₙ</text>
+        <text x="210" y="36" text-anchor="middle" class="ta b">bias b</text><line class="k" x1="210" y1="44" x2="210" y2="85" marker-end="url(#ah)"/>
+        <circle class="node" cx="210" cy="115" r="28"/><text x="210" y="122" text-anchor="middle" style="font-size:22px">Σ</text>
+        <text x="210" y="166" text-anchor="middle" class="m">z = w·x + b</text>
+        <line class="k" x1="238" y1="115" x2="288" y2="115" marker-end="url(#ah)"/>
+        <rect class="box" x="290" y="90" width="60" height="50" rx="6"/><text x="320" y="122" text-anchor="middle" style="font-size:20px">σ</text>
+        <text x="320" y="82" text-anchor="middle" class="m">sigmoid</text>
+        <line class="k" x1="350" y1="115" x2="400" y2="115" marker-end="url(#ah)"/>
+        <text x="408" y="119.5" class="b">ŷ = P(y = 1 | x)</text>
+        <text x="290" y="172" class="m">class 1 if ŷ ≥ 0.5, else class 0</text>
+        <line class="k" x1="530" y1="180" x2="752" y2="180" marker-end="url(#ah)"/><line class="k" x1="640" y1="192" x2="640" y2="38" marker-end="url(#ah)"/>
+        <line class="kl dash" x1="640" y1="60" x2="748" y2="60"/><line class="kl dash" x1="610" y1="120" x2="640" y2="120"/>
+        <path class="ka" d="M538,180 C605,180 620,160 640,120 S675,60 742,60"/>
+        <circle cx="640" cy="120" r="4" class="pa"/>
+        <text x="633" y="64" text-anchor="end" class="m">1</text><text x="606" y="124" text-anchor="end" class="m">0.5</text><text x="633" y="195" text-anchor="end" class="m">0</text>
+        <text x="756" y="196" text-anchor="end" class="m">z</text><text x="650" y="44" class="m">σ(z)</text>
+      </svg>
+      <figcaption>Logistic regression is one neuron with a sigmoid activation. Draw the neuron on the left and the S-curve on the right.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: weight and bias sliders</h3>
+    <figure class="demo">
+      <canvas id="lrCanvas" data-ratio="0.5" data-ratio-sm="0.72" aria-label="Sigmoid curve that changes with weight and bias."></canvas>
+      <div class="controls">
+        <label class="ctl" for="lrW">Weight w <input type="range" id="lrW" min="-4" max="4" step="0.1" value="1"><span class="val" id="lrWv"></span></label>
+        <label class="ctl" for="lrB">Bias b <input type="range" id="lrB" min="-6" max="6" step="0.1" value="0"><span class="val" id="lrBv"></span></label>
+        <label class="ctl" for="lrX">Test input x <input type="range" id="lrX" min="-8" max="8" step="0.1" value="2"><span class="val" id="lrXv"></span></label>
+      </div>
+      <p class="readout" id="lrOut"></p>
+      <p class="observe"><strong>What to observe.</strong> The weight w controls how steep the curve is; a negative w flips it. The bias b slides the curve left or right. The decision boundary is always where the curve crosses 0.5, at \(x=-b/w\).</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>Compute a score \(z=\mathbf{w}\cdot\mathbf{x}+b\), as in linear regression.</li>
+          <li>Squash the score with the sigmoid so it lies between 0 and 1.</li>
+          <li>Read the result as the probability of class 1.</li>
+          <li>If it is 0.5 or more, answer class 1; otherwise class 0.</li>
+          <li>Training adjusts the weights until the probabilities agree with the labels of the training examples.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li>Model: \(P(y=1\mid\mathbf{x})=\sigma(\mathbf{w}\cdot\mathbf{x}+b)\). Equivalently, the log-odds are linear in x.</li>
+          <li>\(\sigma(z)=0.5\) exactly when \(z=0\), so the decision boundary is the hyperplane \(\mathbf{w}\cdot\mathbf{x}+b=0\). It is a linear classifier.</li>
+          <li>Parameters are found by maximum likelihood, which is the same as minimising the binary cross-entropy loss. This loss is convex in w.</li>
+          <li>There is no closed-form solution, so gradient descent is used. The gradient is \((\hat y-y)\,\mathbf{x}\).</li>
+          <li>L2 or L1 regularisation is added to avoid overfitting.</li>
+          <li>For more than two classes, sigmoid is replaced by softmax (softmax regression).</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[z=\mathbf{w}\cdot\mathbf{x}+b\qquad\qquad \hat y=\sigma(z)=\frac{1}{1+e^{-z}}\qquad\qquad \sigma'(z)=\sigma(z)\bigl(1-\sigma(z)\bigr)\]
+      \[\textbf{Log-odds:}\quad \ln\frac{\hat y}{1-\hat y}=\mathbf{w}\cdot\mathbf{x}+b\]
+      \[\textbf{Loss (binary cross-entropy):}\quad L=-\bigl[\,y\ln\hat y+(1-y)\ln(1-\hat y)\,\bigr]\]
+      \[\textbf{Gradient and update:}\quad \frac{\partial L}{\partial\mathbf{w}}=(\hat y-y)\,\mathbf{x},\quad \frac{\partial L}{\partial b}=\hat y-y,\qquad \mathbf{w}\leftarrow\mathbf{w}-\eta\,(\hat y-y)\,\mathbf{x}\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(z\)</td><td>Linear score (also called the logit).</td></tr>
+        <tr><td>\(\sigma\)</td><td>Sigmoid (logistic) function. Output is always between 0 and 1.</td></tr>
+        <tr><td>\(\hat y\)</td><td>Predicted probability that the class is 1.</td></tr>
+        <tr><td>\(y\)</td><td>True label, 0 or 1.</td></tr>
+        <tr><td>\(\mathbf{w},\ b\)</td><td>Weights and bias learned in training.</td></tr>
+        <tr><td>\(\eta\)</td><td>Learning rate (step size).</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">Given \(\mathbf{w}=(2,-1)\), \(b=-1\), input \(\mathbf{x}=(2,1)\), true label \(y=1\), learning rate \(\eta=0.1\). Find the prediction, the loss, and the weights after one update.</p>
+      <ol>
+        <li>Score: \(z=2(2)+(-1)(1)-1=2\).</li>
+        <li>Probability: \(\hat y=\sigma(2)\) \(=1/(1+e^{-2})=0.8808\). Since 0.8808 ≥ 0.5, predict class 1.</li>
+        <li>Loss: \(L=-\ln(0.8808)=0.1269\).</li>
+        <li>Error term: \(\hat y-y=0.8808-1=-0.1192\).</li>
+        <li>Gradient: \(\partial L/\partial\mathbf{w}=(-0.1192)(2,1)\) \(=(-0.2384,\,-0.1192)\) and \(\partial L/\partial b=-0.1192\).</li>
+        <li>Update: \(\mathbf{w}=(2,-1)\) \(-\,0.1(-0.2384,-0.1192)\) \(=(2.0238,\,-0.9881)\) and \(b=-1+0.0119=-0.9881\).</li>
+      </ol>
+      <p class="ans">Answer: ŷ = 0.8808 (class 1), loss = 0.1269, new w = (2.0238, −0.9881), new b = −0.9881.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Simple and fast to train.</li>
+        <li>Outputs a probability, not just a label.</li>
+        <li>Weights are easy to interpret (change in log-odds).</li>
+        <li>Convex loss: gradient descent reaches the global minimum.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>Only a linear decision boundary.</li>
+        <li>Needs hand-made features for non-linear data.</li>
+        <li>Affected by outliers and strongly correlated features.</li>
+        <li>Weak on raw images, audio and text.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Spam or not spam.</li>
+        <li>Disease present or absent.</li>
+        <li>Credit default prediction.</li>
+        <li>Output layer of a neural network for binary classification.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison: SVM vs logistic regression</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>SVM</th><th>Logistic regression</th></tr></thead>
+      <tbody>
+        <tr><th>Goal</th><td>Maximise the margin.</td><td>Maximise the likelihood of the labels.</td></tr>
+        <tr><th>Loss</th><td>Hinge loss.</td><td>Log loss (binary cross-entropy).</td></tr>
+        <tr><th>Output</th><td>Class label (sign of the score).</td><td>Probability between 0 and 1.</td></tr>
+        <tr><th>Boundary decided by</th><td>Support vectors only.</td><td>All training points.</td></tr>
+        <tr><th>Far-away correct points</th><td>Zero loss; no effect.</td><td>Small but non-zero loss.</td></tr>
+        <tr><th>Non-linear data</th><td>Kernel trick.</td><td>Feature engineering.</td></tr>
+        <tr><th>Link to neural nets</th><td>Hinge loss can train a linear output layer.</td><td>Exactly one sigmoid neuron.</td></tr>
+      </tbody></table></div>
+    <p class="note">Both are linear classifiers: each learns a boundary of the form w·x + b = 0.</p>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>Why is it called logistic "regression" when it is used for classification?</p><p class="a">Because it fits a linear regression to the log-odds: \(\ln\frac{p}{1-p}=\mathbf{w}\cdot\mathbf{x}+b\). The resulting probability p is then thresholded at 0.5 to give a class.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Write the sigmoid function and state two of its properties.</p><p class="a">\(\sigma(z)=\dfrac{1}{1+e^{-z}}\). Its output lies between 0 and 1 with \(\sigma(0)=0.5\); it is differentiable with \(\sigma'(z)=\sigma(z)(1-\sigma(z))\), whose maximum value is 0.25.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why is mean squared error not used as the loss in logistic regression?</p><p class="a">With a sigmoid output, MSE is non-convex in the weights and its gradient contains \(\sigma'(z)\), which becomes nearly zero when the neuron saturates. Cross-entropy is convex and has the simple gradient \((\hat y-y)\mathbf{x}\).</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain logistic regression with its model, cost function and training procedure. Compare it with SVM.</p>
+      <ol>
+        <li><strong>Introduction:</strong> definition; binary classifier; linear model.</li>
+        <li><strong>Diagram:</strong> single neuron with sigmoid, plus the S-curve.</li>
+        <li><strong>Model:</strong> \(z=\mathbf{w}\cdot\mathbf{x}+b\), \(\hat y=\sigma(z)\), log-odds interpretation.</li>
+        <li><strong>Decision boundary:</strong> \(\hat y=0.5\) when \(z=0\); linear boundary.</li>
+        <li><strong>Cost function:</strong> binary cross-entropy from maximum likelihood; why not MSE.</li>
+        <li><strong>Training:</strong> gradient \((\hat y-y)\mathbf{x}\); gradient-descent update rule; regularisation.</li>
+        <li><strong>Numerical example</strong> (one update, as above).</li>
+        <li><strong>Comparison table with SVM</strong> (4 to 5 rows).</li>
+        <li><strong>Advantages, limitations, applications.</strong></li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> the neuron and S-curve from block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>S-S-P: Score, Squash, Probability.</strong> Compute a linear score, squash it with the S-shaped curve, read it as a probability.</p>
+    <p>The name is misleading on purpose: logistic <em>regression</em> does <em>classification</em>. It regresses the log-odds.</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 3: SHALLOW NETWORK ================= -->
+<section class="topic" id="t-shallow">
+  <p class="eyebrow">Topic 3 of 7 · Intro to neural nets</p>
+  <h2>Shallow Neural Network</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">A shallow neural network is a feed-forward network with <mark>exactly one hidden layer</mark> between the input and output layers; each neuron computes a weighted sum of its inputs plus a bias and applies a non-linear activation function.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 640 264" role="img" aria-label="A shallow network with two inputs, three hidden neurons and one output neuron, fully connected.">
+        <g class="kl"><line x1="90" y1="80" x2="320" y2="50"/><line x1="90" y1="80" x2="320" y2="130"/><line x1="90" y1="80" x2="320" y2="210"/><line x1="90" y1="180" x2="320" y2="50"/><line x1="90" y1="180" x2="320" y2="130"/><line x1="90" y1="180" x2="320" y2="210"/><line x1="320" y1="50" x2="550" y2="130"/><line x1="320" y1="130" x2="550" y2="130"/><line x1="320" y1="210" x2="550" y2="130"/></g>
+        <circle class="node" cx="90" cy="80" r="22"/><text x="90" y="85" text-anchor="middle">x₁</text>
+        <circle class="node" cx="90" cy="180" r="22"/><text x="90" y="185" text-anchor="middle">x₂</text>
+        <g style="fill:var(--accent-soft)"><circle class="node" style="fill:inherit" cx="320" cy="50" r="22"/><circle class="node" style="fill:inherit" cx="320" cy="130" r="22"/><circle class="node" style="fill:inherit" cx="320" cy="210" r="22"/></g>
+        <text x="320" y="55" text-anchor="middle">h₁</text><text x="320" y="135" text-anchor="middle">h₂</text><text x="320" y="215" text-anchor="middle">h₃</text>
+        <circle class="node" cx="550" cy="130" r="22"/><text x="550" y="135" text-anchor="middle">ŷ</text>
+        <text x="205" y="26" text-anchor="middle" class="ta b">W⁽¹⁾, b⁽¹⁾</text><text x="445" y="50" text-anchor="middle" class="ta b">W⁽²⁾, b⁽²⁾</text>
+        <text x="90" y="256" text-anchor="middle" class="m b">Input layer</text><text x="320" y="256" text-anchor="middle" class="m b">Hidden layer (only one)</text><text x="550" y="256" text-anchor="middle" class="m b">Output layer</text>
+        <text x="626" y="208" text-anchor="end" class="m">each neuron: a = g(w·x + b)</text>
+      </svg>
+      <figcaption>A 2-3-1 network. Every input connects to every hidden neuron (fully connected).</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: animated forward pass</h3>
+    <figure class="demo">
+      <canvas id="fpCanvas" data-ratio="0.52" data-ratio-sm="0.86" aria-label="Animated forward pass through a 2-2-1 network."></canvas>
+      <div class="controls">
+        <label class="ctl" for="fpX1">x₁ <input type="range" id="fpX1" min="-2" max="2" step="0.1" value="1"><span class="val" id="fpX1v"></span></label>
+        <label class="ctl" for="fpX2">x₂ <input type="range" id="fpX2" min="-2" max="2" step="0.1" value="0.5"><span class="val" id="fpX2v"></span></label>
+        <label class="ctl" for="fpAct">Hidden activation <select id="fpAct"><option value="sigmoid">Sigmoid</option><option value="tanh">tanh</option><option value="relu">ReLU</option></select></label>
+      </div>
+      <div class="controls">
+        <button id="fpPlay" type="button">Play forward pass</button>
+        <button class="ghost" id="fpStep" type="button">Next step</button>
+        <button class="ghost" id="fpReset" type="button">Reset</button>
+      </div>
+      <div class="stepbox" id="fpCap" aria-live="polite"></div>
+      <p class="observe"><strong>What to observe.</strong> Values move left to right only. Each hidden neuron first gets a sum z, then squashes it to h. Switch to ReLU and make z negative: that neuron outputs 0 and is switched off. The final output stays between 0 and 1 because the output neuron uses a sigmoid. Biases are fixed at b₁ = 0.1, b₂ = −0.2, bₒ = 0.2.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>A neuron multiplies each input by a weight, adds them up, and adds a bias. Call the result z.</li>
+          <li>It passes z through an activation function to get its output.</li>
+          <li>The hidden layer is several neurons looking at the same inputs. Each one learns a different feature.</li>
+          <li>The output neuron combines the hidden outputs into the final answer.</li>
+          <li>One hidden layer makes the network shallow. Two or more make it deep.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li>Layers: input (\(n_x\) units, no computation), hidden (\(n_h\) units), output (\(n_y\) units).</li>
+          <li>Forward propagation: \(\mathbf{z}^{[1]}=W^{[1]}\mathbf{x}+\mathbf{b}^{[1]}\), \(\mathbf{a}^{[1]}=g(\mathbf{z}^{[1]})\), then \(\mathbf{z}^{[2]}=W^{[2]}\mathbf{a}^{[1]}+\mathbf{b}^{[2]}\), \(\hat y=\sigma(\mathbf{z}^{[2]})\).</li>
+          <li>The activation g must be non-linear. With a linear g the two layers collapse into \(W'\mathbf{x}+\mathbf{b}'\), a single linear model.</li>
+          <li>Each hidden unit defines one hyperplane. The output unit combines these half-spaces into a non-linear boundary. XOR cannot be solved by a single-layer perceptron but can be solved with 2 hidden neurons.</li>
+          <li>Number of parameters: \((n_x n_h+n_h)+(n_h n_y+n_y)\).</li>
+          <li>Training needs a loss function, backpropagation and SGD (topics 4 to 6).</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\mathbf{z}^{[1]}=W^{[1]}\mathbf{x}+\mathbf{b}^{[1]}\qquad \mathbf{a}^{[1]}=g\bigl(\mathbf{z}^{[1]}\bigr)\qquad \mathbf{z}^{[2]}=W^{[2]}\mathbf{a}^{[1]}+\mathbf{b}^{[2]}\qquad \hat y=\sigma\bigl(\mathbf{z}^{[2]}\bigr)\]
+      \[\textbf{Activations:}\quad \sigma(z)=\frac{1}{1+e^{-z}}\qquad \tanh(z)=\frac{e^{z}-e^{-z}}{e^{z}+e^{-z}}\qquad \operatorname{ReLU}(z)=\max(0,z)\]
+      \[\textbf{Parameters:}\quad (n_x\,n_h+n_h)+(n_h\,n_y+n_y)\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(\mathbf{x}\)</td><td>Input vector.</td></tr>
+        <tr><td>\(W^{[1]},\mathbf{b}^{[1]}\)</td><td>Weights and biases from input to hidden layer.</td></tr>
+        <tr><td>\(W^{[2]},\mathbf{b}^{[2]}\)</td><td>Weights and biases from hidden to output layer.</td></tr>
+        <tr><td>\(\mathbf{z}^{[l]}\)</td><td>Weighted sums (pre-activations) of layer l.</td></tr>
+        <tr><td>\(\mathbf{a}^{[l]}\)</td><td>Outputs (activations) of layer l.</td></tr>
+        <tr><td>\(g\)</td><td>Hidden activation function (sigmoid, tanh or ReLU).</td></tr>
+        <tr><td>\(n_x,n_h,n_y\)</td><td>Number of input, hidden and output units.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">A 2-2-1 network with sigmoid activations (the same network as the demo). Input \(\mathbf{x}=(1,\,0.5)\). Hidden neuron h₁: weights (0.5, −0.6), bias 0.1. Hidden neuron h₂: weights (0.3, 0.8), bias −0.2. Output neuron: weights (0.7, −0.4), bias 0.2. Find ŷ.</p>
+      <ol>
+        <li>\(z_1=0.5(1)+(-0.6)(0.5)+0.1\) \(=0.3\), so \(h_1=\sigma(0.3)=0.5744\).</li>
+        <li>\(z_2=0.3(1)+0.8(0.5)-0.2\) \(=0.5\), so \(h_2=\sigma(0.5)=0.6225\).</li>
+        <li>\(z_o=0.7(0.5744)\) \(+\,(-0.4)(0.6225)+0.2\) \(=0.4021-0.2490+0.2\) \(=0.3531\).</li>
+        <li>\(\hat y=\sigma(0.3531)=0.5874\).</li>
+        <li>Parameter count: \((2\times2+2)+(2\times1+1)=9\).</li>
+      </ol>
+      <p class="ans">Answer: ŷ = 0.5874, so the network predicts class 1 with 58.7% confidence. It has 9 trainable parameters.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Learns non-linear boundaries (solves XOR).</li>
+        <li>Universal approximator in theory (topic 7).</li>
+        <li>Few parameters: fast to train, needs less data.</li>
+        <li>Easy to analyse and debug.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>May need a very large number of hidden neurons for complex functions.</li>
+        <li>No hierarchy of features (edges, parts, objects).</li>
+        <li>Performs poorly on raw images, speech and text compared with deep networks.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Small tabular classification and regression problems.</li>
+        <li>Function approximation and curve fitting.</li>
+        <li>Simple pattern recognition.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison tables</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Activation</th><th>Formula</th><th>Output range</th><th>Largest slope</th><th>Remember</th></tr></thead>
+      <tbody>
+        <tr><th>Sigmoid</th><td>\(1/(1+e^{-z})\)</td><td>(0, 1)</td><td>0.25</td><td>Saturates; gradients vanish. Used at the output for binary classes.</td></tr>
+        <tr><th>tanh</th><td>\((e^z-e^{-z})/(e^z+e^{-z})\)</td><td>(−1, 1)</td><td>1</td><td>Zero-centred; still saturates.</td></tr>
+        <tr><th>ReLU</th><td>\(\max(0,z)\)</td><td>[0, ∞)</td><td>1</td><td>Cheap, no saturation for z &gt; 0. Neurons can "die" (always output 0).</td></tr>
+      </tbody></table></div>
+    <div class="tablewrap" style="margin-top:12px"><table>
+      <thead><tr><th>Point</th><th>Shallow network</th><th>Deep network</th></tr></thead>
+      <tbody>
+        <tr><th>Hidden layers</th><td>One.</td><td>Two or more.</td></tr>
+        <tr><th>Features</th><td>One level of features.</td><td>Hierarchy of features, simple to complex.</td></tr>
+        <tr><th>Neurons needed</th><td>Can be very many for complex functions.</td><td>Often far fewer for the same function.</td></tr>
+        <tr><th>Training</th><td>Easier; fewer gradient problems.</td><td>Harder; vanishing or exploding gradients.</td></tr>
+        <tr><th>Data and compute</th><td>Small.</td><td>Large.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>What is a shallow neural network?</p><p class="a">A feed-forward neural network that has only one hidden layer between its input and output layers. Each hidden neuron computes \(a=g(\mathbf{w}\cdot\mathbf{x}+b)\) with a non-linear activation g.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why is a non-linear activation function needed?</p><p class="a">Without it, every layer is a linear map and the whole network reduces to a single linear model \(W'\mathbf{x}+\mathbf{b}'\), however many layers it has. Non-linearity lets the network learn curved decision boundaries such as XOR.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>How many trainable parameters does a 3-4-2 network have?</p><p class="a">Input to hidden: \(3\times4+4=16\). Hidden to output: \(4\times2+2=10\). Total = 26 parameters.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain the architecture of a shallow neural network and its forward propagation with a neat diagram. Discuss the common activation functions.</p>
+      <ol>
+        <li><strong>Introduction:</strong> biological inspiration in one line; definition of shallow network.</li>
+        <li><strong>Diagram:</strong> input, one hidden layer, output, with W and b labelled.</li>
+        <li><strong>Single neuron model:</strong> weighted sum, bias, activation.</li>
+        <li><strong>Forward propagation equations</strong> for both layers.</li>
+        <li><strong>Activation functions:</strong> sigmoid, tanh, ReLU with formula, small graph and one property each.</li>
+        <li><strong>Need for non-linearity;</strong> XOR remark.</li>
+        <li><strong>Numerical forward pass</strong> (the 2-2-1 example).</li>
+        <li><strong>Parameter count formula.</strong></li>
+        <li><strong>Shallow vs deep</strong> (3 rows), advantages and limitations.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> the 2-3-1 network from block 2, plus small sketches of the three activation curves.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>Every neuron does three S's: Sum, Squash, Send.</strong> Sum the weighted inputs, squash with the activation, send the result forward.</p>
+    <p>Layers in order: <strong>I-H-O</strong> (Input, Hidden, Output). One H means shallow.</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 4: LOSS FUNCTIONS ================= -->
+<section class="topic" id="t-loss">
+  <p class="eyebrow">Topic 4 of 7 · Connect and train a network</p>
+  <h2>Loss Functions</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">A loss function measures <mark>how far the network's prediction ŷ is from the true target y</mark> for one training example; training means adjusting the weights to minimise the average loss (the cost) over the training set.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 640 190" role="img" aria-label="Training loop: input goes through the network to give a prediction; the loss compares it with the target; the gradient of the loss flows back to update the weights.">
+        <rect class="box" x="20" y="74" width="90" height="40" rx="6"/><text x="65" y="99" text-anchor="middle">Input x</text>
+        <rect class="box" x="150" y="74" width="140" height="40" rx="6" style="fill:var(--accent-soft)"/><text x="220" y="99" text-anchor="middle">Network (weights w)</text>
+        <rect class="box" x="330" y="74" width="110" height="40" rx="6"/><text x="385" y="99" text-anchor="middle">Prediction ŷ</text>
+        <rect class="box" x="480" y="74" width="140" height="40" rx="6" style="fill:var(--warm-soft)"/><text x="550" y="99" text-anchor="middle" class="b">Loss L(y, ŷ)</text>
+        <rect class="box" x="500" y="12" width="100" height="32" rx="6"/><text x="550" y="33" text-anchor="middle">Target y</text>
+        <line class="k" x1="110" y1="94" x2="148" y2="94" marker-end="url(#ah)"/><line class="k" x1="290" y1="94" x2="328" y2="94" marker-end="url(#ah)"/><line class="k" x1="440" y1="94" x2="478" y2="94" marker-end="url(#ah)"/><line class="k" x1="550" y1="44" x2="550" y2="72" marker-end="url(#ah)"/>
+        <polyline class="kw" points="550,114 550,160 220,160 220,117" marker-end="url(#ahW)"/>
+        <text x="385" y="152" text-anchor="middle" class="tw b">gradient ∂L/∂w, then update the weights</text>
+        <text x="385" y="181" text-anchor="middle" class="m">repeat until the loss stops falling</text>
+      </svg>
+      <figcaption>Also practise the two loss curves from the demo below: a shallow bowl for MSE and a steep wall for cross-entropy.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: MSE vs cross-entropy</h3>
+    <figure class="demo">
+      <div class="pair">
+        <canvas id="lossMse" data-ratio="0.72" aria-label="Plot of squared error against prediction."></canvas>
+        <canvas id="lossCe" data-ratio="0.72" aria-label="Plot of cross-entropy against prediction."></canvas>
+      </div>
+      <div class="controls">
+        <span class="ctl">True label
+          <label><input type="radio" name="lossY" id="lossY1" value="1" checked> y = 1</label>
+          <label><input type="radio" name="lossY" id="lossY0" value="0"> y = 0</label>
+        </span>
+        <label class="ctl" for="lossYh">Prediction ŷ <input type="range" id="lossYh" min="0.01" max="0.99" step="0.01" value="0.1"><span class="val" id="lossYhv"></span></label>
+      </div>
+      <div class="tablewrap" style="margin-top:12px"><table>
+        <thead><tr><th></th><th>Squared error (y − ŷ)²</th><th>Cross-entropy</th></tr></thead>
+        <tbody>
+          <tr><th>Loss value</th><td class="num" id="lossV1"></td><td class="num" id="lossV2"></td></tr>
+          <tr><th>Gradient reaching a sigmoid output neuron, ∂L/∂z</th><td class="num" id="lossG1"></td><td class="num" id="lossG2"></td></tr>
+        </tbody></table></div>
+      <p class="readout" id="lossOut"></p>
+      <p class="observe"><strong>What to observe.</strong> Both plots use the same vertical scale. Keep y = 1 and slide ŷ towards 0 (a confident wrong answer). Squared error never exceeds 1 and its gradient shrinks towards 0, so learning stalls. Cross-entropy shoots up and its gradient stays large, so the network corrects itself quickly.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>The network makes a guess ŷ.</li>
+          <li>The loss function turns the mistake into one penalty number: 0 for a perfect guess, larger for a worse guess.</li>
+          <li>Training turns the weights so that the average penalty becomes small.</li>
+          <li>Different tasks use different penalties. Predicting a number uses squared error. Choosing a class uses cross-entropy.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li>Loss \(L(y,\hat y)\) is for one example. Cost \(J(\theta)=\frac1N\sum_i L_i\) is the average over the dataset. The objective may add a regulariser to the cost.</li>
+          <li>MSE is the maximum-likelihood loss when targets have Gaussian noise. It is used with a linear output unit for regression.</li>
+          <li>Cross-entropy is the negative log-likelihood for a Bernoulli output (sigmoid) or a categorical output (softmax).</li>
+          <li>With a sigmoid or softmax output, the cross-entropy gradient with respect to z is simply \(\hat y-y\). MSE carries an extra factor \(\sigma'(z)\), which is close to zero when the neuron saturates.</li>
+          <li>Hinge loss is margin-based and is used by SVMs with labels ±1.</li>
+          <li>A loss must be differentiable (almost everywhere) so that backpropagation can compute gradients.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\textbf{Mean squared error:}\quad \text{MSE}=\frac1N\sum_{i=1}^{N}(y_i-\hat y_i)^2\]
+      \[\textbf{Binary cross-entropy:}\quad \text{BCE}=-\frac1N\sum_{i=1}^{N}\bigl[\,y_i\ln\hat y_i+(1-y_i)\ln(1-\hat y_i)\,\bigr]\]
+      \[\textbf{Categorical cross-entropy:}\quad \text{CCE}=-\sum_{k=1}^{K}y_k\ln\hat y_k\qquad\text{with softmax}\quad \hat y_k=\frac{e^{z_k}}{\sum_{j=1}^{K}e^{z_j}}\]
+      \[\textbf{Hinge loss:}\quad L=\max(0,\ 1-y\,\hat y)\qquad\qquad \textbf{Mean absolute error:}\quad \text{MAE}=\frac1N\sum_{i=1}^{N}|y_i-\hat y_i|\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(y_i\)</td><td>True target of example i (a number for regression; 0 or 1 for binary classes; ±1 for hinge loss).</td></tr>
+        <tr><td>\(\hat y_i\)</td><td>Prediction for example i (a probability for cross-entropy; a raw score for hinge loss).</td></tr>
+        <tr><td>\(N\)</td><td>Number of examples.</td></tr>
+        <tr><td>\(K\)</td><td>Number of classes.</td></tr>
+        <tr><td>\(y_k\)</td><td>1 for the correct class and 0 for the others (one-hot vector).</td></tr>
+        <tr><td>\(z_k\)</td><td>Raw output score of class k before softmax.</td></tr>
+      </tbody></table></div>
+    <p class="note">Some textbooks write the squared error for one example as \(\tfrac12(y-\hat y)^2\). The ½ cancels the 2 on differentiation; the idea is the same.</p>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">Three examples with true labels \(y=(1,0,1)\) and predicted probabilities \(\hat y=(0.9,\,0.2,\,0.6)\). Compute MSE and BCE.</p>
+      <ol>
+        <li>Squared errors: \((1-0.9)^2=0.01\), \((0-0.2)^2=0.04\), \((1-0.6)^2=0.16\).</li>
+        <li>\(\text{MSE}=(0.01+0.04+0.16)/3\) \(=0.21/3=0.07\).</li>
+        <li>Cross-entropy terms: \(-\ln0.9=0.1054\), \(-\ln(1-0.2)\) \(=-\ln0.8=0.2231\), \(-\ln0.6=0.5108\).</li>
+        <li>\(\text{BCE}=\) \((0.1054+0.2231+0.5108)/3\) \(=0.8393/3=0.2798\).</li>
+        <li>Multi-class case: true class is the second of three, \(\mathbf{y}=(0,1,0)\), and \(\hat{\mathbf{y}}=(0.2,0.7,0.1)\). Then \(\text{CCE}=-\ln0.7=0.3567\). Only the probability of the correct class matters.</li>
+      </ol>
+      <p class="ans">Answer: MSE = 0.07, BCE = 0.2798, CCE = 0.3567.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li><strong>MSE:</strong> smooth, easy to differentiate, penalises large errors strongly.</li>
+        <li><strong>Cross-entropy:</strong> large gradient when the prediction is wrong; has a clear probability meaning.</li>
+        <li><strong>Hinge:</strong> ignores points that are already safely correct.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li><strong>MSE:</strong> sensitive to outliers; learns slowly with sigmoid or softmax outputs.</li>
+        <li><strong>Cross-entropy:</strong> undefined at ln 0, so predictions must be clipped; punishes mislabelled data heavily.</li>
+        <li><strong>Hinge:</strong> not differentiable at the kink; gives no probabilities.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li><strong>MSE, MAE:</strong> regression (price, temperature, age).</li>
+        <li><strong>BCE:</strong> two-class problems (spam, disease).</li>
+        <li><strong>CCE:</strong> multi-class problems (digits, objects).</li>
+        <li><strong>Hinge:</strong> SVM and other margin classifiers.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison table</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>MSE</th><th>Binary cross-entropy</th><th>Categorical cross-entropy</th><th>Hinge</th></tr></thead>
+      <tbody>
+        <tr><th>Task</th><td>Regression</td><td>2-class classification</td><td>Multi-class classification</td><td>Margin classification (SVM)</td></tr>
+        <tr><th>Output unit</th><td>Linear</td><td>Sigmoid</td><td>Softmax</td><td>Linear score</td></tr>
+        <tr><th>Target format</th><td>Real number</td><td>0 or 1</td><td>One-hot vector</td><td>−1 or +1</td></tr>
+        <tr><th>Range of loss</th><td>0 to ∞</td><td>0 to ∞</td><td>0 to ∞</td><td>0 to ∞</td></tr>
+        <tr><th>Key behaviour</th><td>Grows with the square of the error</td><td>Explodes for confident wrong answers</td><td>Looks only at the correct class probability</td><td>Zero once the margin exceeds 1</td></tr>
+      </tbody></table></div>
+    <div class="tablewrap" style="margin-top:12px"><table>
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><th>Loss function</th><td>Error on a single training example.</td></tr>
+        <tr><th>Cost function</th><td>Average loss over the whole training set (or a batch).</td></tr>
+        <tr><th>Objective function</th><td>What is actually minimised: cost plus any regularisation term.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>Define a loss function. How does it differ from a cost function?</p><p class="a">A loss function measures the error between the prediction ŷ and the target y for one training example. The cost function is the average of the loss over all training examples, and it is the quantity minimised during training.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why is cross-entropy preferred to MSE for classification?</p><p class="a">With a sigmoid or softmax output, the cross-entropy gradient is \(\hat y-y\), which stays large when the prediction is badly wrong. The MSE gradient contains \(\sigma'(z)\), which is almost zero for saturated neurons, so learning becomes slow.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Write the hinge loss and state where it is used.</p><p class="a">\(L=\max(0,\,1-y\,\hat y)\) with \(y\in\{-1,+1\}\) and \(\hat y\) the raw score. It is the loss of the soft-margin SVM: it is zero for points correctly classified with margin at least 1.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain the loss functions used to train neural networks, with formulas, graphs and suitable applications.</p>
+      <ol>
+        <li><strong>Introduction:</strong> role of the loss in training; loss vs cost vs objective.</li>
+        <li><strong>Diagram:</strong> training loop with the loss block.</li>
+        <li><strong>Regression losses:</strong> MSE and MAE with formulas and when to use each.</li>
+        <li><strong>Classification losses:</strong> binary cross-entropy (with sigmoid) and categorical cross-entropy (with softmax).</li>
+        <li><strong>Hinge loss</strong> for SVM.</li>
+        <li><strong>Graphs:</strong> loss against ŷ for MSE and cross-entropy on the same axes.</li>
+        <li><strong>Why cross-entropy for classification:</strong> the gradient argument.</li>
+        <li><strong>Numerical example</strong> (MSE and BCE for three examples).</li>
+        <li><strong>Comparison table</strong> and conclusion on choosing a loss.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> the training loop from block 2, and the two curves from the demo.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>C goes with C.</strong> <strong>C</strong>lassification uses <strong>C</strong>ross-entropy. Everything else in this unit (predicting a number) uses the squared error.</p>
+    <p>Output pairs: Linear with MSE, Sigmoid with Binary CE, Softmax with Categorical CE. Remember <strong>"L-M, S-B, S-C"</strong>.</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 5: BACKPROPAGATION ================= -->
+<section class="topic" id="t-backprop">
+  <p class="eyebrow">Topic 5 of 7 · Connect and train a network</p>
+  <h2>Backpropagation</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">Backpropagation is the algorithm that computes the gradient of the loss with respect to every weight of a network by applying the <mark>chain rule backwards</mark>, from the output layer to the input layer, reusing each layer's error term δ for the layer before it.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 640 264" role="img" aria-label="A 2-2-1 network with a forward arrow on top carrying activations to the loss, and a backward arrow at the bottom carrying error terms back to the weights.">
+        <line class="ka" x1="60" y1="30" x2="600" y2="30" marker-end="url(#ahA)"/><text x="330" y="21" text-anchor="middle" class="ta b">FORWARD PASS: compute z, h, ŷ, then the loss L</text>
+        <g class="kl"><line x1="90" y1="95" x2="290" y2="95"/><line x1="90" y1="95" x2="290" y2="175"/><line x1="90" y1="175" x2="290" y2="95"/><line x1="90" y1="175" x2="290" y2="175"/><line x1="290" y1="95" x2="470" y2="135"/><line x1="290" y1="175" x2="470" y2="135"/></g>
+        <circle class="node" cx="90" cy="95" r="22"/><text x="90" y="100" text-anchor="middle">x₁</text>
+        <circle class="node" cx="90" cy="175" r="22"/><text x="90" y="180" text-anchor="middle">x₂</text>
+        <circle class="node" cx="290" cy="95" r="22" style="fill:var(--accent-soft)"/><text x="290" y="100" text-anchor="middle">h₁</text>
+        <circle class="node" cx="290" cy="175" r="22" style="fill:var(--accent-soft)"/><text x="290" y="180" text-anchor="middle">h₂</text>
+        <circle class="node" cx="470" cy="135" r="22"/><text x="470" y="140" text-anchor="middle">ŷ</text>
+        <line class="k" x1="492" y1="135" x2="543" y2="135" marker-end="url(#ah)"/>
+        <rect class="box" x="545" y="117" width="62" height="36" rx="6" style="fill:var(--warm-soft)"/><text x="576" y="140" text-anchor="middle" class="b">L(y, ŷ)</text>
+        <text x="185" y="88" text-anchor="middle" class="s">w₁₁</text><text x="185" y="191" text-anchor="middle" class="s">w₂₂</text><text x="126" y="127" class="s">w₂₁</text><text x="126" y="151" class="s">w₁₂</text>
+        <text x="384" y="106" text-anchor="middle" class="s">v₁</text><text x="384" y="173" text-anchor="middle" class="s">v₂</text>
+        <text x="290" y="64" text-anchor="middle" class="tw b">δ₁</text><text x="290" y="215" text-anchor="middle" class="tw b">δ₂</text><text x="470" y="104" text-anchor="middle" class="tw b">δₒ</text>
+        <line class="kw" x1="600" y1="234" x2="60" y2="234" marker-end="url(#ahW)"/><text x="330" y="254" text-anchor="middle" class="tw b">BACKWARD PASS: compute δ, then ∂L/∂w for every weight</text>
+      </svg>
+      <figcaption>Blue arrow on top for the forward pass, orange arrow at the bottom for the backward pass. Mark a δ beside every neuron that is not an input.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: chain rule, one step at a time</h3>
+    <figure class="demo">
+      <canvas id="bpCanvas" data-ratio="0.52" data-ratio-sm="0.92" aria-label="Step-by-step backpropagation on a 2-2-1 network with real numbers."></canvas>
+      <div class="controls">
+        <button class="ghost" id="bpPrev" type="button">Previous</button>
+        <button id="bpNext" type="button">Next step</button>
+        <button class="ghost" id="bpReset" type="button">Start again</button>
+        <span class="ctl"><span class="val" id="bpCount"></span></span>
+      </div>
+      <div class="stepbox" id="bpStep" aria-live="polite"></div>
+      <p class="observe"><strong>What to observe.</strong> Steps 1 to 4 run forward and store every z and h. Steps 5 to 8 run backward: δₒ is computed once and reused for both output weights and both hidden errors. Nothing is recomputed. After the update in step 9, the same input gives a lower loss in step 10.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>Forward pass: feed the input and get the prediction ŷ.</li>
+          <li>Compare ŷ with the target to get the loss.</li>
+          <li>Ask how much each weight contributed to the error. Start with the weights nearest the output.</li>
+          <li>Pass the error backwards. Each hidden neuron receives a share of the blame in proportion to the weight that connects it to the output.</li>
+          <li>Nudge every weight a little in the direction that reduces the error. Repeat with the next example.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li>Forward pass: compute and store \(\mathbf{z}^{[l]}\) and \(\mathbf{a}^{[l]}\) for every layer.</li>
+          <li>Output error: \(\delta^{[L]}=\dfrac{\partial L}{\partial\mathbf{a}^{[L]}}\odot g'(\mathbf{z}^{[L]})\).</li>
+          <li>Backward recursion: \(\delta^{[l]}=\bigl(W^{[l+1]}\bigr)^{\!\top}\delta^{[l+1]}\odot g'(\mathbf{z}^{[l]})\).</li>
+          <li>Gradients: \(\dfrac{\partial L}{\partial W^{[l]}}=\delta^{[l]}\bigl(\mathbf{a}^{[l-1]}\bigr)^{\!\top}\) and \(\dfrac{\partial L}{\partial\mathbf{b}^{[l]}}=\delta^{[l]}\).</li>
+          <li>Update each parameter with gradient descent: \(W\leftarrow W-\eta\,\partial L/\partial W\).</li>
+          <li>Efficiency: every δ is reused, so all gradients cost about one forward plus one backward pass. Perturbing each weight separately would need one forward pass per weight.</li>
+        </ol>
+      </div>
+    </div>
+    <p class="note">Backpropagation is not the same as gradient descent. Backpropagation only <em>computes</em> the gradients; gradient descent (or SGD) <em>uses</em> them to update the weights. The method was made popular by Rumelhart, Hinton and Williams in 1986.</p>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\textbf{Chain rule for one weight:}\quad \frac{\partial L}{\partial w}=\frac{\partial L}{\partial\hat y}\cdot\frac{\partial\hat y}{\partial z}\cdot\frac{\partial z}{\partial w}\]
+      \[\textbf{Output layer:}\quad \delta_o=(\hat y-y)\,\hat y(1-\hat y)\qquad \frac{\partial L}{\partial v_j}=\delta_o\,h_j\]
+      \[\textbf{Hidden layer:}\quad \delta_j=\delta_o\,v_j\,h_j(1-h_j)\qquad \frac{\partial L}{\partial w_{ji}}=\delta_j\,x_i\]
+      \[\textbf{Update:}\quad w\leftarrow w-\eta\,\frac{\partial L}{\partial w}\]
+    </div>
+    <p class="note">The output and hidden formulas above are for sigmoid activations and the loss \(L=\tfrac12(y-\hat y)^2\), which is the case usually asked in exams.</p>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(\delta_o\)</td><td>Error term of the output neuron, \(\partial L/\partial z_o\).</td></tr>
+        <tr><td>\(\delta_j\)</td><td>Error term of hidden neuron j, \(\partial L/\partial z_j\).</td></tr>
+        <tr><td>\(v_j\)</td><td>Weight from hidden neuron j to the output neuron.</td></tr>
+        <tr><td>\(w_{ji}\)</td><td>Weight from input i to hidden neuron j.</td></tr>
+        <tr><td>\(h_j\)</td><td>Output of hidden neuron j.</td></tr>
+        <tr><td>\(\hat y(1-\hat y)\)</td><td>Derivative of the sigmoid at the output neuron.</td></tr>
+        <tr><td>\(\eta\)</td><td>Learning rate.</td></tr>
+        <tr><td>\(\odot\)</td><td>Element-by-element multiplication.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">The 2-2-1 sigmoid network from Topic 3: \(\mathbf{x}=(1,\,0.5)\), target \(y=1\), loss \(L=\tfrac12(y-\hat y)^2\), learning rate \(\eta=0.5\). Perform one complete backpropagation step. These are the same numbers as the demo above.</p>
+      <div class="tablewrap"><table id="bpTable">
+        <thead><tr><th>Stage</th><th>Quantity</th><th>How it is computed</th><th>Value</th></tr></thead>
+        <tbody></tbody></table></div>
+      <p class="ans" id="bpAns"></p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Efficient: all gradients in one forward and one backward pass.</li>
+        <li>General: works for any differentiable network.</li>
+        <li>Simple to implement with matrix operations.</li>
+        <li>The basis of training for almost all deep learning models.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>Vanishing or exploding gradients in deep networks.</li>
+        <li>Needs differentiable activations and labelled data.</li>
+        <li>Sensitive to weight initialisation and learning rate.</li>
+        <li>The loss surface is non-convex, so the global minimum is not guaranteed.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Training multi-layer perceptrons.</li>
+        <li>Training CNNs for images.</li>
+        <li>Training RNNs and LSTMs (backpropagation through time).</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison: forward pass vs backward pass</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>Forward propagation</th><th>Backpropagation</th></tr></thead>
+      <tbody>
+        <tr><th>Direction</th><td>Input layer to output layer.</td><td>Output layer to input layer.</td></tr>
+        <tr><th>What flows</th><td>Activations (signals).</td><td>Error terms δ (gradients).</td></tr>
+        <tr><th>Result</th><td>Prediction ŷ and loss L.</td><td>∂L/∂W and ∂L/∂b for every layer.</td></tr>
+        <tr><th>Main operation</th><td>Weighted sum, then activation g.</td><td>Chain rule: multiply by Wᵀ and by g′.</td></tr>
+        <tr><th>Needs</th><td>Input and current weights.</td><td>Stored z and a from the forward pass, and the loss.</td></tr>
+        <tr><th>Used in</th><td>Training and prediction.</td><td>Training only.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>What is backpropagation?</p><p class="a">Backpropagation is an algorithm that computes the gradient of the loss with respect to every weight in a neural network by applying the chain rule from the output layer back to the input layer. The gradients are then used by gradient descent to update the weights.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>State the chain rule as used in backpropagation.</p><p class="a">\(\dfrac{\partial L}{\partial w}=\dfrac{\partial L}{\partial\hat y}\cdot\dfrac{\partial\hat y}{\partial z}\cdot\dfrac{\partial z}{\partial w}\). The effect of a weight on the loss is the product of the local derivatives along the path from that weight to the loss.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>What is the vanishing gradient problem?</p><p class="a">During backpropagation the gradient is multiplied by \(g'(z)\) at every layer. For the sigmoid this is at most 0.25, so in a deep network the gradient shrinks exponentially and the early layers learn very slowly. ReLU, good initialisation and batch normalisation reduce the problem.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain the backpropagation algorithm with a neat diagram. Derive the weight-update equations for a network with one hidden layer.</p>
+      <ol>
+        <li><strong>Introduction:</strong> purpose; supervised learning; uses the chain rule.</li>
+        <li><strong>Diagram:</strong> network with forward and backward arrows and δ labels.</li>
+        <li><strong>Notation:</strong> weights \(w_{ji}\), \(v_j\); activations; loss \(\tfrac12(y-\hat y)^2\).</li>
+        <li><strong>Forward pass equations.</strong></li>
+        <li><strong>Output layer derivation:</strong> \(\delta_o=(\hat y-y)\hat y(1-\hat y)\), \(\partial L/\partial v_j=\delta_o h_j\).</li>
+        <li><strong>Hidden layer derivation:</strong> \(\delta_j=\delta_o v_j h_j(1-h_j)\), \(\partial L/\partial w_{ji}=\delta_j x_i\).</li>
+        <li><strong>Weight update rule</strong> with the learning rate.</li>
+        <li><strong>Algorithm steps</strong> (initialise, forward, loss, backward, update, repeat until convergence).</li>
+        <li><strong>Numerical example</strong> (one iteration), then limitations: vanishing gradient, local minima.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> the two-arrow network from block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>F-L-B-U: Forward, Loss, Backward, Update.</strong> Say it as "<strong>F</strong>ools <strong>L</strong>earn <strong>B</strong>y <strong>U</strong>pdating".</p>
+    <p><strong>The blame game.</strong> The output makes a mistake. It blames each hidden neuron in proportion to the connecting weight. Each hidden neuron then blames its own inputs the same way.</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 6: SGD ================= -->
+<section class="topic" id="t-sgd">
+  <p class="eyebrow">Topic 6 of 7 · Connect and train a network</p>
+  <h2>Gradient Descent and Stochastic Gradient Descent</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">Gradient descent minimises the loss by repeatedly moving the weights a small step, set by the learning rate η, in the direction opposite to the gradient. <mark>Stochastic gradient descent (SGD)</mark> estimates that gradient from <mark>one randomly chosen training example</mark> (or a small mini-batch) per update instead of the whole dataset.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 640 252" role="img" aria-label="Left: a bowl-shaped loss curve with steps rolling down to the minimum. Right: contour lines of a loss surface with three paths to the minimum: a smooth batch path, a slightly wavy mini-batch path and a zigzag SGD path.">
+        <line class="k" x1="30" y1="230" x2="312" y2="230" marker-end="url(#ah)"/><line class="k" x1="30" y1="230" x2="30" y2="22" marker-end="url(#ah)"/>
+        <text x="312" y="246" text-anchor="end" class="m">weight w</text><text x="38" y="28" class="m">Loss J(w)</text>
+        <path class="k" style="stroke-width:2.2" d="M40,40 Q170,360 300,40"/>
+        <g class="kw"><line x1="60.8" y1="87.1" x2="95" y2="146" marker-end="url(#ahW)"/><line x1="97.2" y1="149.8" x2="123.5" y2="179" marker-end="url(#ahW)"/><line x1="125.8" y1="181.5" x2="144.3" y2="193.5" marker-end="url(#ahW)"/><line x1="146.6" y1="194.8" x2="157.5" y2="198.6" marker-end="url(#ahW)"/></g>
+        <g class="pw"><circle cx="60.8" cy="87.1" r="5"/><circle cx="97.2" cy="149.8" r="4.5"/><circle cx="125.8" cy="181.5" r="4.5"/><circle cx="146.6" cy="194.8" r="4"/><circle cx="159.6" cy="199" r="4"/></g>
+        <text x="70" y="76" class="m">start</text>
+        <text x="170" y="216" text-anchor="middle" class="m">minimum</text>
+        <text x="172" y="112" text-anchor="middle" class="tw b">step = −η × slope</text>
+        <g class="kl"><ellipse cx="480" cy="118" rx="140" ry="95"/><ellipse cx="480" cy="118" rx="105" ry="71"/><ellipse cx="480" cy="118" rx="70" ry="47"/><ellipse cx="480" cy="118" rx="35" ry="24"/></g>
+        <path class="ka" d="M352,68 Q378,122 480,118"/>
+        <polyline class="kg" points="352,68 372,76 392,95 410,91 428,106 446,101 462,114 480,118"/>
+        <polyline class="kw" style="stroke-width:1.8" points="352,68 370,92 382,64 400,104 412,78 428,116 440,92 454,124 464,104 474,126 480,118"/>
+        <circle cx="480" cy="118" r="4.5" style="fill:var(--ink)"/><circle cx="352" cy="68" r="4.5" style="fill:var(--ink)"/>
+        <text x="346" y="58" text-anchor="end" class="m">start</text><text x="489" y="157" class="m">min</text>
+        <line class="ka" x1="352" y1="238" x2="376" y2="238"/><text x="381" y="242.5" class="s">Batch</text>
+        <line class="kg" x1="436" y1="238" x2="460" y2="238"/><text x="465" y="242.5" class="s">Mini-batch</text>
+        <line class="kw" x1="548" y1="238" x2="572" y2="238"/><text x="577" y="242.5" class="s">SGD</text>
+      </svg>
+      <figcaption>Left: gradient descent on a loss curve; the steps shrink as the slope flattens. Right: the three variants on a contour plot. Batch is smooth, SGD zigzags, mini-batch is in between.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: three paths on a loss contour plot</h3>
+    <figure class="demo">
+      <canvas id="gdCanvas" data-ratio="0.62" data-ratio-sm="0.85" aria-label="Animated gradient descent paths for batch, mini-batch and stochastic gradient descent."></canvas>
+      <div class="legend">
+        <span><i style="background:var(--accent)"></i>Batch GD (all 40 examples)</span>
+        <span><i style="background:var(--good)"></i>Mini-batch GD</span>
+        <span><i style="background:var(--warm)"></i>SGD (1 example)</span>
+      </div>
+      <div class="controls">
+        <label class="ctl" for="gdLr">Learning rate η <input type="range" id="gdLr" min="0.005" max="0.2" step="0.005" value="0.03"><span class="val" id="gdLrv"></span></label>
+        <label class="ctl" for="gdM">Mini-batch size <select id="gdM"><option>4</option><option selected>8</option><option>16</option></select></label>
+        <button id="gdPlay" type="button">Play animation</button>
+        <button class="ghost" id="gdNew" type="button">New random run</button>
+      </div>
+      <div class="tablewrap" style="margin-top:12px"><table>
+        <thead><tr><th>Method</th><th>Examples per update</th><th>Updates done</th><th>Examples processed</th><th>Loss now</th></tr></thead>
+        <tbody>
+          <tr><th>Batch GD</th><td class="num">40</td><td class="num" id="gdU0"></td><td class="num" id="gdE0"></td><td class="num" id="gdL0"></td></tr>
+          <tr><th>Mini-batch GD</th><td class="num" id="gdB1"></td><td class="num" id="gdU1"></td><td class="num" id="gdE1"></td><td class="num" id="gdL1"></td></tr>
+          <tr><th>SGD</th><td class="num">1</td><td class="num" id="gdU2"></td><td class="num" id="gdE2"></td><td class="num" id="gdL2"></td></tr>
+        </tbody></table></div>
+      <p class="observe"><strong>What to observe.</strong> The model is a line ŷ = wx + b fitted to 40 noisy points, so the loss surface is a bowl over (w, b). All three methods take the same number of updates. Batch moves smoothly but reads all 40 examples for every step. SGD zigzags and keeps jittering near the minimum, yet it reads 40 times fewer examples. Raise the learning rate and SGD becomes wild first.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>Think of the loss as a hilly landscape. The weights are your position; the height is the error.</li>
+          <li>The gradient points uphill. Step the other way to go down.</li>
+          <li>The learning rate is the length of your step. Too small is slow. Too large overshoots the valley.</li>
+          <li>Batch GD looks at the whole dataset before each step. SGD looks at one random example and steps at once.</li>
+          <li>Mini-batch GD looks at a small group (say 32 examples). It is the method used in practice.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li>Update rule: \(\theta\leftarrow\theta-\eta\,\nabla_\theta J(\theta)\).</li>
+          <li>Batch GD uses the exact gradient over all N examples: one update per epoch, expensive for large N.</li>
+          <li>SGD uses the gradient of one random example. It is an unbiased but noisy estimate of the true gradient: N updates per epoch.</li>
+          <li>Mini-batch GD averages over m examples (commonly 32 to 256). The noise falls as m grows, and the batch can be processed in parallel on a GPU.</li>
+          <li>The noise in SGD helps it leave saddle points and shallow local minima, but the loss fluctuates. A decaying learning rate lets it settle.</li>
+          <li>Data is shuffled every epoch so that batches are random.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\textbf{Update rule:}\quad \theta\leftarrow\theta-\eta\,\nabla_\theta J(\theta)\]
+      \[\textbf{Batch GD:}\quad \nabla_\theta J=\frac1N\sum_{i=1}^{N}\nabla_\theta L_i\]
+      \[\textbf{SGD:}\quad \nabla_\theta J\approx\nabla_\theta L_i\quad(\text{one random example } i)\]
+      \[\textbf{Mini-batch GD:}\quad \nabla_\theta J\approx\frac1m\sum_{i\in B}\nabla_\theta L_i\]
+      \[\textbf{Updates per epoch}=\frac{N}{\text{batch size}}\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(\theta\)</td><td>All trainable parameters (weights and biases).</td></tr>
+        <tr><td>\(\eta\)</td><td>Learning rate: the step size.</td></tr>
+        <tr><td>\(J(\theta)\)</td><td>Cost: average loss over the training set.</td></tr>
+        <tr><td>\(\nabla_\theta J\)</td><td>Gradient: vector of partial derivatives of J with respect to each parameter.</td></tr>
+        <tr><td>\(L_i\)</td><td>Loss on training example i.</td></tr>
+        <tr><td>\(N\)</td><td>Number of training examples.</td></tr>
+        <tr><td>\(B,\ m\)</td><td>A randomly chosen mini-batch and its size.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">Part A. Minimise \(J(w)=(w-3)^2\) by gradient descent starting from \(w_0=0\) with \(\eta=0.1\). Part B. A dataset has 1000 examples. How many updates per epoch for batch GD, mini-batch GD with batch size 50, and SGD?</p>
+      <ol>
+        <li>Gradient: \(dJ/dw=2(w-3)\).</li>
+        <li>Step 1: gradient at \(w_0=0\) is \(-6\). \(w_1=0-0.1(-6)=0.6\).</li>
+        <li>Step 2: gradient at 0.6 is \(-4.8\). \(w_2=0.6+0.48=1.08\).</li>
+        <li>Step 3: gradient at 1.08 is \(-3.84\). \(w_3=1.08+0.384=1.464\).</li>
+        <li>Each step closes 20% of the remaining distance to 3, so w converges to the minimum at \(w=3\).</li>
+        <li>Part B: batch GD makes \(1000/1000=1\) update per epoch; mini-batch makes \(1000/50=20\); SGD makes \(1000/1=1000\).</li>
+      </ol>
+      <p class="ans">Answer: w goes 0 → 0.6 → 1.08 → 1.464 → … → 3. Updates per epoch: 1 (batch), 20 (mini-batch of 50), 1000 (SGD).</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Advantages, disadvantages, applications (of SGD)</h3>
+    <div class="three">
+      <div><h4>Advantages</h4><ul>
+        <li>Each update is cheap and fast.</li>
+        <li>Needs little memory; works with very large or streaming data.</li>
+        <li>Starts improving after seeing only a few examples.</li>
+        <li>Noise helps escape saddle points and shallow local minima.</li></ul></div>
+      <div><h4>Disadvantages</h4><ul>
+        <li>Noisy path; the loss fluctuates.</li>
+        <li>Does not settle exactly at the minimum with a fixed learning rate.</li>
+        <li>One example at a time cannot use GPU parallelism.</li>
+        <li>Sensitive to the learning rate.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Training almost all deep networks (as mini-batch SGD).</li>
+        <li>Online learning where data arrives continuously.</li>
+        <li>Base of the optimisers Momentum, RMSProp and Adam (Unit IV).</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison: batch vs stochastic vs mini-batch</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Point</th><th>Batch GD</th><th>Stochastic GD</th><th>Mini-batch GD</th></tr></thead>
+      <tbody>
+        <tr><th>Examples per update</th><td>All N</td><td>1</td><td>m (commonly 32 to 256)</td></tr>
+        <tr><th>Updates per epoch</th><td>1</td><td>N</td><td>N / m</td></tr>
+        <tr><th>Path to minimum</th><td>Smooth</td><td>Very noisy zigzag</td><td>Slightly noisy</td></tr>
+        <tr><th>Cost of one update</th><td>High</td><td>Very low</td><td>Low</td></tr>
+        <tr><th>Memory</th><td>Whole dataset</td><td>One example</td><td>One mini-batch</td></tr>
+        <tr><th>GPU parallelism</th><td>Yes, if it fits in memory</td><td>No</td><td>Yes</td></tr>
+        <tr><th>Near the minimum</th><td>Settles</td><td>Keeps oscillating</td><td>Small oscillation</td></tr>
+        <tr><th>Used in practice</th><td>Small datasets only</td><td>Online learning</td><td>The standard choice</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>What is the learning rate? What happens if it is too large or too small?</p><p class="a">The learning rate η is the step size used in the update \(w\leftarrow w-\eta\,\partial L/\partial w\). If it is too large, the updates overshoot the minimum and may diverge. If it is too small, training is very slow and may get stuck.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Differentiate epoch, batch size and iteration.</p><p class="a">An epoch is one full pass over the training set. Batch size is the number of examples used for one weight update. An iteration is one weight update. Iterations per epoch = N / batch size.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Why is SGD called "stochastic"?</p><p class="a">Because each update uses a randomly chosen example (or mini-batch), so the gradient is a random, noisy estimate of the true gradient. It is correct on average but varies from step to step.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain gradient descent and its variants (batch, stochastic and mini-batch) with diagrams. Compare them.</p>
+      <ol>
+        <li><strong>Introduction:</strong> optimisation in training; idea of moving against the gradient.</li>
+        <li><strong>Diagram 1:</strong> loss curve with steps towards the minimum.</li>
+        <li><strong>Update rule</strong> and the role of the learning rate (too small, too large).</li>
+        <li><strong>Batch gradient descent:</strong> formula, working, merits and demerits.</li>
+        <li><strong>Stochastic gradient descent:</strong> formula, algorithm steps (shuffle, pick one, update), merits and demerits.</li>
+        <li><strong>Mini-batch gradient descent:</strong> formula, typical sizes, why it is preferred.</li>
+        <li><strong>Diagram 2:</strong> contour plot with the three paths.</li>
+        <li><strong>Epoch, batch size, iteration</strong> with a small calculation.</li>
+        <li><strong>Comparison table</strong> and conclusion.</li>
+      </ol>
+      <p class="draw"><strong>Diagrams to draw:</strong> both figures from block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>Coming down a foggy hill.</strong> Batch GD surveys the whole hill before each step: sure but slow. SGD asks one random passer-by and steps at once: quick but wobbly. Mini-batch asks a small group: the sensible middle.</p>
+    <p>Order by noise: <strong>B &lt; M &lt; S</strong>, the same as alphabetical order.</p>
+  </div>
+</section>
+
+<!-- ================= TOPIC 7: UNIVERSAL APPROXIMATION ================= -->
+<section class="topic" id="t-uat">
+  <p class="eyebrow">Topic 7 of 7 · What a network can represent</p>
+  <h2>Neural Networks as Universal Function Approximators</h2>
+
+  <div class="sec sec-def"><h3><b>1</b>One-line definition</h3>
+    <p class="def">The universal approximation theorem states that a feed-forward network with <mark>a single hidden layer</mark> containing a finite number of neurons and a non-linear (non-polynomial) activation can approximate <mark>any continuous function</mark> on a closed and bounded domain to any desired accuracy.</p>
+  </div>
+
+  <div class="sec"><h3><b>2</b>Diagram to draw</h3>
+    <figure class="diagram">
+      <svg class="dg" viewBox="0 0 670 246" role="img" aria-label="Left: a network with one input, N hidden sigmoid neurons and a summing output. Right: a smooth target curve approximated by a staircase made from the hidden neurons.">
+        <g class="kl"><line x1="50" y1="120" x2="190" y2="40"/><line x1="50" y1="120" x2="190" y2="96"/><line x1="50" y1="120" x2="190" y2="200"/><line x1="190" y1="40" x2="320" y2="120"/><line x1="190" y1="96" x2="320" y2="120"/><line x1="190" y1="200" x2="320" y2="120"/></g>
+        <circle class="node" cx="50" cy="120" r="20"/><text x="50" y="125" text-anchor="middle">x</text>
+        <g style="fill:var(--accent-soft)"><circle class="node" style="fill:inherit" cx="190" cy="40" r="20"/><circle class="node" style="fill:inherit" cx="190" cy="96" r="20"/><circle class="node" style="fill:inherit" cx="190" cy="200" r="20"/></g>
+        <text x="190" y="45" text-anchor="middle">σ</text><text x="190" y="101" text-anchor="middle">σ</text><text x="190" y="205" text-anchor="middle">σ</text>
+        <text x="190" y="154" text-anchor="middle" class="m" style="font-size:18px">⋮</text>
+        <circle class="node" cx="320" cy="120" r="22"/><text x="320" y="127" text-anchor="middle" style="font-size:19px">Σ</text>
+        <line class="k" x1="342" y1="120" x2="372" y2="120" marker-end="url(#ah)"/><text x="377" y="124.5" class="b">F(x)</text>
+        <text x="190" y="240" text-anchor="middle" class="m b">N hidden neurons</text>
+        <text x="262" y="66" class="s">v₁</text><text x="262" y="186" class="s">v<tspan dy="3" style="font-size:9px">N</tspan></text>
+        <line class="k" x1="420" y1="210" x2="662" y2="210" marker-end="url(#ah)"/><line class="k" x1="420" y1="210" x2="420" y2="22" marker-end="url(#ah)"/>
+        <path class="ka" style="stroke-width:1.8" d="M430,210 V150.4 H465 V92.7 H500 V63.9 H570 V92.7 H605 V150.4 H640 V210"/>
+        <path class="k" style="stroke-width:2.4" d="M430,190 C500,17 570,17 640,190"/>
+        <text x="556" y="26" class="b">target f(x)</text>
+        <text x="556" y="42" class="ta b">network F(x)</text>
+        <text x="662" y="226" text-anchor="end" class="m">x</text>
+        <text x="535" y="240" text-anchor="middle" class="m">more neurons → finer steps → smaller error</text>
+      </svg>
+      <figcaption>Left: one hidden layer of N neurons feeding a sum. Right: the network output follows the target curve in steps.</figcaption>
+    </figure>
+  </div>
+
+  <div class="sec sec-demo"><h3><b>3</b>Interactive demo: add neurons one by one</h3>
+    <figure class="demo">
+      <canvas id="uaCanvas" data-ratio="0.6" data-ratio-sm="0.9" aria-label="A target curve and a one-hidden-layer network approximation that improves as neurons are added."></canvas>
+      <div class="legend">
+        <span><i style="background:var(--ink)"></i>Target function f(x)</span>
+        <span><i style="background:var(--accent)"></i>Network output F(x)</span>
+        <span><i style="background:var(--warm)"></i>Each neuron's weighted output</span>
+      </div>
+      <div class="controls">
+        <button id="uaAdd" type="button">Add one neuron</button>
+        <label class="ctl" for="uaN">Hidden neurons N <input type="range" id="uaN" min="1" max="40" step="1" value="6"><span class="val" id="uaNv"></span></label>
+        <label class="ctl" for="uaType">Neuron type <select id="uaType"><option value="sig">Sigmoid (smooth steps)</option><option value="relu">ReLU (line pieces)</option></select></label>
+        <label class="ctl" for="uaF">Target <select id="uaF"><option value="sine">Sine wave</option><option value="bump">Single bump</option><option value="wig">Wiggly curve</option></select></label>
+      </div>
+      <p class="readout" id="uaOut"></p>
+      <p class="observe"><strong>What to observe.</strong> With 1 or 2 neurons the blue curve is a poor fit. Each neuron you add contributes one more step (sigmoid) or one more bend (ReLU), and the maximum error falls. With enough neurons the two curves are indistinguishable. In this demo the weights are set by a formula, not learned: the theorem only promises that such weights exist.</p>
+    </figure>
+  </div>
+
+  <div class="sec"><h3><b>4</b>Step-by-step explanation</h3>
+    <div class="two">
+      <div><h4>In simple words</h4>
+        <ol>
+          <li>One sigmoid neuron with a large weight looks like a step: 0 on the left, 1 on the right.</li>
+          <li>Subtract two steps placed side by side and you get a bump: a short tower.</li>
+          <li>Give each tower its own height and stand many towers next to each other. Together they trace any smooth curve, like a bar chart.</li>
+          <li>Narrower towers need more neurons and give a smaller error.</li>
+          <li>So one hidden layer with enough neurons can copy any continuous function as closely as you like.</li>
+        </ol>
+      </div>
+      <div><h4>Technical version</h4>
+        <ol>
+          <li>The network has the form \(F(\mathbf{x})=\sum_{i=1}^{N}v_i\,\sigma(\mathbf{w}_i\cdot\mathbf{x}+b_i)\): one hidden layer and a linear output.</li>
+          <li>Theorem: for any continuous f on a compact set K and any \(\varepsilon\gt 0\), there is such an F with \(|F(\mathbf{x})-f(\mathbf{x})|\lt\varepsilon\) for all x in K.</li>
+          <li>Cybenko (1989) proved it for sigmoidal activations. Hornik (1991) showed that the multilayer architecture, not the particular activation, gives the property. Leshno and co-authors (1993) showed it holds exactly when the activation is not a polynomial, which includes ReLU.</li>
+          <li>It is an existence result. It does not say how many neurons are needed, how to find the weights, or how well the network will generalise.</li>
+          <li>The number of neurons needed can be extremely large. Deep networks can represent many functions with far fewer neurons, which is the motivation for depth (Unit II).</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>5</b>Key formulas</h3>
+    <div class="formulas">
+      \[\textbf{Network:}\quad F(\mathbf{x})=\sum_{i=1}^{N}v_i\,\sigma(\mathbf{w}_i\cdot\mathbf{x}+b_i)\]
+      \[\textbf{Theorem:}\quad \forall\,\varepsilon\gt 0\ \ \exists\,N,\ v_i,\ \mathbf{w}_i,\ b_i\ \ \text{such that}\quad |F(\mathbf{x})-f(\mathbf{x})|\lt\varepsilon\quad\text{for all }\mathbf{x}\in K\]
+      \[\textbf{Bump from two neurons:}\quad \sigma\bigl(s(x-a)\bigr)-\sigma\bigl(s(x-b)\bigr)\approx\begin{cases}1 &amp; a\lt x\lt b\\ 0 &amp; \text{otherwise}\end{cases}\qquad(s\text{ large})\]
+    </div>
+    <div class="tablewrap sym"><table>
+      <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>\(f\)</td><td>The target: any continuous function.</td></tr>
+        <tr><td>\(F\)</td><td>The function computed by the network.</td></tr>
+        <tr><td>\(N\)</td><td>Number of hidden neurons.</td></tr>
+        <tr><td>\(\mathbf{w}_i,\ b_i\)</td><td>Input weights and bias of hidden neuron i.</td></tr>
+        <tr><td>\(v_i\)</td><td>Output weight of hidden neuron i (the height of its step).</td></tr>
+        <tr><td>\(\varepsilon\)</td><td>The allowed error, as small as you wish.</td></tr>
+        <tr><td>\(K\)</td><td>A compact (closed and bounded) region of inputs, such as [0, 1].</td></tr>
+        <tr><td>\(s\)</td><td>Steepness of the sigmoid. Larger s gives a sharper step.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec"><h3><b>6</b>Worked example</h3>
+    <div class="worked">
+      <p class="given">Build a bump on the interval (0.4, 0.6) from two sigmoid neurons with steepness \(s=100\), then use bumps to approximate \(f(x)=x^2\) on [0, 1].</p>
+      <ol>
+        <li>Bump: \(B(x)=\sigma\bigl(100(x-0.4)\bigr)\) \(-\,\sigma\bigl(100(x-0.6)\bigr)\).</li>
+        <li>Inside, at \(x=0.5\): \(\sigma(10)-\sigma(-10)\) \(=0.99995-0.00005\) \(=0.9999\approx1\).</li>
+        <li>Outside, at \(x=0.2\): \(\sigma(-20)-\sigma(-40)\approx0\).</li>
+        <li>Split [0, 1] into 5 intervals of width 0.2 with centres 0.1, 0.3, 0.5, 0.7, 0.9. Use one bump per interval: \(5\times2=10\) hidden neurons.</li>
+        <li>Set each bump's height to f at the centre: \(0.01,\ 0.09,\ 0.25,\ 0.49,\ 0.81\).</li>
+        <li>Check at \(x=0.52\): the network gives 0.25 and the true value is \(0.52^2=0.2704\). Error 0.02.</li>
+        <li>Using 50 intervals (100 neurons) makes each step ten times narrower, and the error falls about ten times.</li>
+      </ol>
+      <p class="ans">Answer: two neurons make one bump; 10 neurons give a 5-step approximation of x²; more neurons give a smaller error.</p>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>7</b>Significance, limitations, applications</h3>
+    <div class="three">
+      <div><h4>Significance</h4><ul>
+        <li>Gives the theoretical reason neural networks are so flexible.</li>
+        <li>Needs only one hidden layer and a non-linear activation.</li>
+        <li>Works for any continuous function, with no assumption on its form.</li></ul></div>
+      <div><h4>Limitations</h4><ul>
+        <li>Existence only: it gives no training method.</li>
+        <li>Does not say how many neurons; the number may be impractically large.</li>
+        <li>Says nothing about generalisation to unseen data.</li>
+        <li>Covers continuous functions on bounded domains only.</li></ul></div>
+      <div><h4>Applications</h4><ul>
+        <li>Function approximation and regression.</li>
+        <li>Modelling unknown non-linear systems (control, time series).</li>
+        <li>Justifies using networks as general-purpose models in vision, speech and language.</li></ul></div>
+    </div>
+  </div>
+
+  <div class="sec"><h3><b>8</b>Comparison tables</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>The theorem guarantees</th><th>The theorem does not guarantee</th></tr></thead>
+      <tbody>
+        <tr><td>A network that approximates f exists.</td><td>That SGD and backpropagation will find it.</td></tr>
+        <tr><td>One hidden layer is enough.</td><td>That one hidden layer is efficient.</td></tr>
+        <tr><td>A finite number of neurons suffices.</td><td>A small or known number of neurons.</td></tr>
+        <tr><td>Small error on the training region K.</td><td>Small error on new data outside what was seen.</td></tr>
+      </tbody></table></div>
+    <div class="tablewrap" style="margin-top:12px"><table>
+      <thead><tr><th>Point</th><th>Wide shallow network</th><th>Deep network</th></tr></thead>
+      <tbody>
+        <tr><th>Can approximate any continuous function?</th><td>Yes.</td><td>Yes.</td></tr>
+        <tr><th>Neurons needed for complex functions</th><td>Can grow exponentially.</td><td>Often far fewer.</td></tr>
+        <tr><th>How it builds the function</th><td>Adds many simple pieces side by side.</td><td>Composes features layer by layer.</td></tr>
+      </tbody></table></div>
+  </div>
+
+  <div class="sec sec-exam"><h3><b>9</b>Exam corner</h3>
+    <div class="qa"><p class="q"><span>2 marks</span>State the universal approximation theorem.</p><p class="a">A feed-forward neural network with one hidden layer, a finite number of neurons and a non-linear activation function can approximate any continuous function on a compact domain to any desired accuracy ε.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>Does the theorem tell us how to train the network?</p><p class="a">No. It is an existence theorem. It guarantees that suitable weights exist but gives neither the number of neurons required nor a method to find the weights, and it says nothing about generalisation.</p></div>
+    <div class="qa"><p class="q"><span>2 marks</span>If a shallow network is a universal approximator, why are deep networks used?</p><p class="a">A shallow network may need an exponentially large number of neurons for complex functions. Deep networks reuse features layer by layer, so they represent the same functions with far fewer parameters and generalise better in practice.</p></div>
+    <div class="long"><p class="q"><span>13 / 15 marks</span>Explain neural networks as universal function approximators. State the theorem, give the intuition behind it and discuss its limitations.</p>
+      <ol>
+        <li><strong>Introduction:</strong> networks as function approximators \(y=F(\mathbf{x};\theta)\).</li>
+        <li><strong>Statement of the theorem</strong> with the formula for F and the ε condition; mention Cybenko (1989) and Hornik (1991).</li>
+        <li><strong>Diagram:</strong> single-hidden-layer network and the staircase fit.</li>
+        <li><strong>Intuition:</strong> steep sigmoid is a step; two steps make a bump; a sum of bumps traces the curve.</li>
+        <li><strong>Role of non-linearity:</strong> a linear network can only produce linear functions.</li>
+        <li><strong>Numerical illustration</strong> (bump example for x²).</li>
+        <li><strong>Limitations:</strong> existence only, number of neurons unknown, no guarantee on learning or generalisation.</li>
+        <li><strong>Width vs depth:</strong> why deep networks are preferred.</li>
+        <li><strong>Conclusion:</strong> the theorem explains representational power, not learnability.</li>
+      </ol>
+      <p class="draw"><strong>Diagram to draw:</strong> the network and staircase from block 2.</p>
+    </div>
+  </div>
+
+  <div class="sec sec-mem"><h3><b>10</b>Memory trick</h3>
+    <p><strong>LEGO bricks.</strong> With enough small bricks you can build any shape. Each hidden neuron is one brick; more bricks give a smoother shape.</p>
+    <p>For the limitations remember <strong>E-N-T</strong>: <strong>E</strong>xistence only, <strong>N</strong>umber of neurons unknown, <strong>T</strong>raining not guaranteed.</p>
+  </div>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section class="topic" id="quiz">
+  <p class="eyebrow">Self-test</p>
+  <h2>Ten-question quiz</h2>
+  <div class="quiz-top">
+    <p class="score" id="quizScore" aria-live="polite">Score 0 / 10 · 0 answered</p>
+    <button class="ghost" id="quizReset" type="button">Reset quiz</button>
+  </div>
+  <div id="quizBody"></div>
+</section>
+
+<!-- ================= REVISION ================= -->
+<section class="topic" id="revision">
+  <p class="eyebrow">Read this last</p>
+  <h2>Last-minute revision</h2>
+  <div class="sheet" style="margin-top:16px">
+    <div class="grid">
+      <div><h3>1 · SVM</h3><ul>
+        <li>Linear classifier with the maximum margin.</li>
+        <li>Hyperplane \(\mathbf{w}\cdot\mathbf{x}+b=0\); margin \(2/\lVert\mathbf{w}\rVert\).</li>
+        <li>Minimise \(\tfrac12\lVert\mathbf{w}\rVert^2\) s.t. \(y_i(\mathbf{w}\cdot\mathbf{x}_i+b)\ge1\).</li>
+        <li>Support vectors: points on the margin; they alone fix the line.</li>
+        <li>Soft margin: slack \(\xi_i\), penalty C, hinge loss.</li></ul></div>
+      <div><h3>2 · Logistic regression</h3><ul>
+        <li>\(\hat y=\sigma(\mathbf{w}\cdot\mathbf{x}+b)\), \(\sigma(z)=1/(1+e^{-z})\).</li>
+        <li>Output is \(P(y=1\mid\mathbf{x})\); class 1 if ≥ 0.5.</li>
+        <li>Loss: binary cross-entropy; gradient \((\hat y-y)\mathbf{x}\).</li>
+        <li>One sigmoid neuron. Linear boundary.</li></ul></div>
+      <div><h3>3 · Shallow network</h3><ul>
+        <li>Exactly one hidden layer.</li>
+        <li>\(\mathbf{a}^{[1]}=g(W^{[1]}\mathbf{x}+\mathbf{b}^{[1]})\), \(\hat y=\sigma(W^{[2]}\mathbf{a}^{[1]}+\mathbf{b}^{[2]})\).</li>
+        <li>Non-linear g is essential; otherwise the net is linear.</li>
+        <li>Parameters: \((n_xn_h+n_h)+(n_hn_y+n_y)\).</li>
+        <li>Sigmoid (0,1), tanh (−1,1), ReLU max(0,z).</li></ul></div>
+      <div><h3>4 · Loss functions</h3><ul>
+        <li>Loss: one example. Cost: average. Objective: cost + regulariser.</li>
+        <li>MSE \(=\frac1N\sum(y-\hat y)^2\) for regression.</li>
+        <li>BCE \(=-[y\ln\hat y+(1-y)\ln(1-\hat y)]\) for 2 classes.</li>
+        <li>CCE \(=-\sum y_k\ln\hat y_k\) with softmax.</li>
+        <li>Cross-entropy gradient \(\hat y-y\): no slowdown.</li></ul></div>
+      <div><h3>5 · Backpropagation</h3><ul>
+        <li>Chain rule applied from output back to input.</li>
+        <li>\(\delta_o=(\hat y-y)\hat y(1-\hat y)\); \(\partial L/\partial v_j=\delta_oh_j\).</li>
+        <li>\(\delta_j=\delta_ov_jh_j(1-h_j)\); \(\partial L/\partial w_{ji}=\delta_jx_i\).</li>
+        <li>Steps: Forward, Loss, Backward, Update.</li>
+        <li>Problem: vanishing gradient (sigmoid slope ≤ 0.25).</li></ul></div>
+      <div><h3>6 · Gradient descent, SGD</h3><ul>
+        <li>\(\theta\leftarrow\theta-\eta\nabla_\theta J\).</li>
+        <li>Batch: all N, smooth, 1 update per epoch.</li>
+        <li>SGD: 1 example, noisy, N updates per epoch.</li>
+        <li>Mini-batch: m examples, N/m updates; used in practice.</li>
+        <li>η too large diverges; too small is slow.</li></ul></div>
+      <div><h3>7 · Universal approximation</h3><ul>
+        <li>One hidden layer + non-linear activation + enough neurons can approximate any continuous function on a compact set.</li>
+        <li>\(F(\mathbf{x})=\sum v_i\sigma(\mathbf{w}_i\cdot\mathbf{x}+b_i)\), \(|F-f|\lt\varepsilon\).</li>
+        <li>Cybenko 1989; Hornik 1991.</li>
+        <li>Limits: Existence only, Number unknown, Training not guaranteed.</li></ul></div>
+      <div><h3>Seven diagrams to practise</h3><ul>
+        <li>SVM: hyperplane, two margin lines, ringed support vectors.</li>
+        <li>Logistic regression: single neuron and S-curve.</li>
+        <li>Shallow network: 2-3-1 with W and b labels.</li>
+        <li>Training loop with the loss block; MSE and cross-entropy curves.</li>
+        <li>Backpropagation: forward arrow, backward arrow, δ labels.</li>
+        <li>Loss bowl with steps; contour plot with three paths.</li>
+        <li>One-hidden-layer network with staircase fit.</li></ul></div>
+    </div>
+    <p class="last"><strong>Four mnemonics:</strong> SVM is the widest street · every neuron does Sum, Squash, Send · training is Forward, Loss, Backward, Update · universal approximation limits are E-N-T.</p>
+  </div>
+</section>
+
+</main>
+</div>
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const COL = { ink: cssv('--ink'), muted: cssv('--muted'), line: cssv('--line'), accent: cssv('--accent'), warm: cssv('--warm'), good: cssv('--good'), paper: cssv('--paper'), aSoft: cssv('--accent-soft'), wSoft: cssv('--warm-soft'), gSoft: cssv('--good-soft') };
+const FONT = '"Atkinson Hyperlegible","Segoe UI",Arial,sans-serif';
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const sig = z => 1 / (1 + Math.exp(-z));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const fx = (v, d = 3) => (Math.abs(v) < 0.5 * Math.pow(10, -d) ? 0 : v).toFixed(d).replace('-', '−');
+const sh = v => String(+v.toFixed(4)).replace('-', '−');
+const redraws = [];
+
+function fit(cv) {
+  const dpr = window.devicePixelRatio || 1;
+  const W = cv.clientWidth || 600;
+  let r = +cv.dataset.ratio || 0.6;
+  if (W < 480 && cv.dataset.ratioSm) r = +cv.dataset.ratioSm;
+  const H = Math.round(W * r);
+  cv.style.height = H + 'px';
+  const pw = Math.round(W * dpr), ph = Math.round(H * dpr);
+  if (cv.width !== pw || cv.height !== ph) { cv.width = pw; cv.height = ph; }
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  ctx.setLineDash([]); ctx.globalAlpha = 1;
+  return { ctx, W, H };
+}
+function T(ctx, s, x, y, o = {}) {
+  ctx.font = `${o.bold ? '700 ' : ''}${o.size || 13}px ${FONT}`;
+  ctx.fillStyle = o.c || COL.ink; ctx.textAlign = o.align || 'left'; ctx.textBaseline = o.base || 'alphabetic';
+  ctx.fillText(s, x, y);
+}
+function pill(ctx, s, x, y, o = {}) {
+  const size = o.size || 12;
+  ctx.font = `${o.bold ? '700 ' : ''}${size}px ${FONT}`;
+  const w = ctx.measureText(s).width + 8, h = size + 6;
+  ctx.fillStyle = o.bg || 'rgba(251,252,254,0.94)'; ctx.fillRect(x - w / 2, y - h / 2, w, h);
+  ctx.fillStyle = o.c || COL.ink; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(s, x, y + 0.5);
+}
+function head(ctx, x, y, ang, size = 9) {
+  ctx.beginPath(); ctx.moveTo(x, y);
+  ctx.lineTo(x - size * Math.cos(ang - 0.42), y - size * Math.sin(ang - 0.42));
+  ctx.lineTo(x - size * Math.cos(ang + 0.42), y - size * Math.sin(ang + 0.42));
+  ctx.closePath(); ctx.fillStyle = ctx.strokeStyle; ctx.fill();
+}
+function seg(ctx, x1, y1, x2, y2) { ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); }
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+/* ================= 1. SVM ================= */
+(function () {
+  const cv = $('#svmCanvas'), out = $('#svmOut'), cS = $('#svmC'), cLab = $('#svmCLab');
+  const XW = 16, YH = 10;
+  const seed = () => [[10.2, 6.8, 1], [11.6, 5.2, 1], [12.6, 7.8, 1], [9.6, 8.6, 1], [13.4, 6.2, 1], [8.8, 6.0, 1], [3.2, 3.2, -1], [4.8, 1.6, -1], [2.4, 5.2, -1], [5.8, 3.8, -1], [4.0, 2.4, -1], [6.6, 1.9, -1]];
+  let pts = seed(), drag = -1;
+
+  // Soft-margin linear SVM solved exactly by SMO (maximal violating pair).
+  function solve(C) {
+    const n = pts.length, a = new Float64Array(n);
+    let w0 = 0, w1 = 0, m = 0, M = 0;
+    const scan = () => {
+      m = -Infinity; M = Infinity; let i = -1, j = -1;
+      for (let t = 0; t < n; t++) {
+        const p = pts[t], y = p[2], v = y - (w0 * p[0] + w1 * p[1]);
+        const up = (y > 0 && a[t] < C - 1e-9) || (y < 0 && a[t] > 1e-9);
+        const low = (y > 0 && a[t] > 1e-9) || (y < 0 && a[t] < C - 1e-9);
+        if (up && v > m) { m = v; i = t; }
+        if (low && v < M) { M = v; j = t; }
+      }
+      return [i, j];
+    };
+    for (let it = 0; it < 30000; it++) {
+      const [i, j] = scan();
+      if (i < 0 || j < 0 || m - M < 1e-6) break;
+      const pi = pts[i], pj = pts[j], yi = pi[2], yj = pj[2];
+      const eta = (pi[0] - pj[0]) ** 2 + (pi[1] - pj[1]) ** 2;
+      if (eta < 1e-12) break;
+      let L, H;
+      if (yi !== yj) { L = Math.max(0, a[j] - a[i]); H = Math.min(C, C + a[j] - a[i]); }
+      else { L = Math.max(0, a[i] + a[j] - C); H = Math.min(C, a[i] + a[j]); }
+      const ajn = clamp(a[j] + yj * (M - m) / eta, L, H), ain = a[i] + yi * yj * (a[j] - ajn);
+      const di = ain - a[i], dj = ajn - a[j];
+      if (Math.abs(dj) < 1e-14) break;
+      w0 += yi * di * pi[0] + yj * dj * pj[0]; w1 += yi * di * pi[1] + yj * dj * pj[1];
+      a[i] = ain; a[j] = ajn;
+    }
+    scan();
+    let bs = 0, bn = 0;
+    for (let t = 0; t < n; t++) if (a[t] > 1e-7 && a[t] < C - 1e-7) { bs += pts[t][2] - (w0 * pts[t][0] + w1 * pts[t][1]); bn++; }
+    const b = bn ? bs / bn : (isFinite(m) && isFinite(M) ? (m + M) / 2 : 0);
+    return { w0, w1, b, a };
+  }
+
+  function draw() {
+    const { ctx, W, H } = fit(cv), s = W / XW, X = x => x * s, Y = y => H - y * s;
+    const C = Math.pow(10, +cS.value);
+    cLab.textContent = (C >= 10 ? String(Math.round(C)) : C.toFixed(1)) + (C >= 999 ? ' (almost hard margin)' : '');
+    const { w0, w1, b, a } = solve(C), nw = Math.hypot(w0, w1);
+    ctx.strokeStyle = '#e9edf4'; ctx.lineWidth = 1;
+    for (let gx = 2; gx < XW; gx += 2) seg(ctx, X(gx), 0, X(gx), H);
+    for (let gy = 2; gy < YH; gy += 2) seg(ctx, 0, Y(gy), W, Y(gy));
+    if (nw > 1e-9) {
+      const ends = c => Math.abs(w1) >= Math.abs(w0)
+        ? [[-2, (c - b + 2 * w0) / w1], [XW + 2, (c - b - w0 * (XW + 2)) / w1]]
+        : [[(c - b + 2 * w1) / w0, -2], [(c - b - w1 * (YH + 2)) / w0, YH + 2]];
+      const p = ends(1), q = ends(-1), z = ends(0);
+      ctx.globalAlpha = 0.6; ctx.fillStyle = COL.aSoft; ctx.beginPath();
+      ctx.moveTo(X(p[0][0]), Y(p[0][1])); ctx.lineTo(X(p[1][0]), Y(p[1][1])); ctx.lineTo(X(q[1][0]), Y(q[1][1])); ctx.lineTo(X(q[0][0]), Y(q[0][1])); ctx.closePath(); ctx.fill();
+      ctx.globalAlpha = 1; ctx.strokeStyle = COL.ink; ctx.lineWidth = 1.4; ctx.setLineDash([6, 5]);
+      seg(ctx, X(p[0][0]), Y(p[0][1]), X(p[1][0]), Y(p[1][1])); seg(ctx, X(q[0][0]), Y(q[0][1]), X(q[1][0]), Y(q[1][1]));
+      ctx.setLineDash([]); ctx.lineWidth = 2.8; seg(ctx, X(z[0][0]), Y(z[0][1]), X(z[1][0]), Y(z[1][1]));
+      // normal vector w, drawn from the point of the hyperplane nearest the data centre
+      let cx = 0, cy = 0; pts.forEach(q2 => { cx += q2[0]; cy += q2[1]; }); cx /= pts.length; cy /= pts.length;
+      const d = (w0 * cx + w1 * cy + b) / (nw * nw), fx0 = cx - d * w0, fy0 = cy - d * w1;
+      const tx = fx0 + 1.4 * w0 / nw, ty = fy0 + 1.4 * w1 / nw;
+      ctx.lineWidth = 2; seg(ctx, X(fx0), Y(fy0), X(tx), Y(ty));
+      head(ctx, X(tx), Y(ty), Math.atan2(Y(ty) - Y(fy0), X(tx) - X(fx0)));
+      T(ctx, 'w', X(tx) + 6, Y(ty) + 14, { bold: true, size: 14 });
+    }
+    let nsv = 0, mis = 0;
+    pts.forEach((p, t) => {
+      const x = X(p[0]), y = Y(p[1]);
+      if (p[2] > 0) { ctx.fillStyle = COL.accent; ctx.fillRect(x - 6.5, y - 6.5, 13, 13); }
+      else { ctx.fillStyle = COL.warm; ctx.beginPath(); ctx.arc(x, y, 7, 0, 7); ctx.fill(); }
+      if (a[t] > 1e-6) { nsv++; ctx.strokeStyle = COL.ink; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x, y, 13, 0, 7); ctx.stroke(); }
+      if (p[2] * (w0 * p[0] + w1 * p[1] + b) < 0) mis++;
+    });
+    out.innerHTML = nw > 1e-9
+      ? `w = (${fx(w0, 2)}, ${fx(w1, 2)}) &nbsp; b = ${fx(b, 2)} &nbsp;·&nbsp; margin 2/‖w‖ = <b>${fx(2 / nw, 2)}</b> &nbsp;·&nbsp; support vectors: <b>${nsv}</b>` + (mis ? ` &nbsp;·&nbsp; misclassified points: <b>${mis}</b>` : '')
+      : 'No separating line found. Move the points apart.';
+  }
+  const pos = e => { const r = cv.getBoundingClientRect(), s = r.width / XW; return [(e.clientX - r.left) / s, (r.height - (e.clientY - r.top)) / s]; };
+  cv.style.touchAction = 'none'; cv.style.cursor = 'grab';
+  cv.addEventListener('pointerdown', e => {
+    const [x, y] = pos(e); let best = -1, bd = 1.1;
+    pts.forEach((p, i) => { const d = Math.hypot(p[0] - x, p[1] - y); if (d < bd) { bd = d; best = i; } });
+    if (best >= 0) { drag = best; try { cv.setPointerCapture(e.pointerId); } catch (_) {} e.preventDefault(); }
+  });
+  cv.addEventListener('pointermove', e => { if (drag < 0) return; const [x, y] = pos(e); pts[drag][0] = clamp(x, 0.4, XW - 0.4); pts[drag][1] = clamp(y, 0.4, YH - 0.4); draw(); });
+  ['pointerup', 'pointercancel'].forEach(t => cv.addEventListener(t, () => { drag = -1; }));
+  cS.addEventListener('input', draw);
+  const add = c => { if (pts.length >= 26) return; pts.push(c > 0 ? [9 + Math.random() * 6, 4.5 + Math.random() * 4.8, 1] : [1 + Math.random() * 6, 0.8 + Math.random() * 4.8, -1]); draw(); };
+  $('#svmAddP').addEventListener('click', () => add(1));
+  $('#svmAddN').addEventListener('click', () => add(-1));
+  $('#svmReset').addEventListener('click', () => { pts = seed(); cS.value = 3; draw(); });
+  redraws.push(draw); draw();
+})();
+
+/* ================= 2. Logistic regression ================= */
+(function () {
+  const cv = $('#lrCanvas'), wS = $('#lrW'), bS = $('#lrB'), xS = $('#lrX'), out = $('#lrOut');
+  function draw() {
+    const { ctx, W, H } = fit(cv), w = +wS.value, b = +bS.value, x0 = +xS.value;
+    $('#lrWv').textContent = fx(w, 1); $('#lrBv').textContent = fx(b, 1); $('#lrXv').textContent = fx(x0, 1);
+    const L = 46, R = 16, Tp = 20, B = 38, pw = W - L - R, ph = H - Tp - B;
+    const X = x => L + (x + 8) / 16 * pw, Y = p => Tp + (1 - p) * ph;
+    // class regions
+    const one = COL.aSoft, zero = COL.wSoft;
+    let xb = null;
+    if (w !== 0) {
+      xb = -b / w; const xc = clamp(xb, -8, 8);
+      ctx.fillStyle = w > 0 ? zero : one; ctx.fillRect(X(-8), Tp, X(xc) - X(-8), ph);
+      ctx.fillStyle = w > 0 ? one : zero; ctx.fillRect(X(xc), Tp, X(8) - X(xc), ph);
+      const lw = X(xc) - X(-8), rw = X(8) - X(xc);
+      if (lw > 96) T(ctx, w > 0 ? 'predict class 0' : 'predict class 1', X(-8) + 8, Tp + 16, { size: 12, c: w > 0 ? COL.warm : COL.accent, bold: true });
+      if (rw > 96) T(ctx, w > 0 ? 'predict class 1' : 'predict class 0', X(8) - 8, Tp + 16, { size: 12, c: w > 0 ? COL.accent : COL.warm, bold: true, align: 'right' });
+    } else { ctx.fillStyle = sig(b) >= 0.5 ? one : zero; ctx.fillRect(L, Tp, pw, ph); }
+    ctx.strokeStyle = '#d5dbe7'; ctx.lineWidth = 1;
+    for (let gx = -8; gx <= 8; gx += 2) { seg(ctx, X(gx), Tp, X(gx), Tp + ph); T(ctx, String(gx).replace('-', '−'), X(gx), Tp + ph + 16, { size: 12, c: COL.muted, align: 'center' }); }
+    [0, 0.5, 1].forEach(p => { seg(ctx, L, Y(p), L + pw, Y(p)); T(ctx, String(p), L - 8, Y(p) + 4, { size: 12, c: COL.muted, align: 'right' }); });
+    T(ctx, 'input x', L + pw, H - 6, { size: 12, c: COL.muted, align: 'right' });
+    T(ctx, 'ŷ = σ(wx + b)', L + 4, Tp - 6, { size: 12, c: COL.muted });
+    ctx.strokeStyle = COL.muted; ctx.setLineDash([5, 5]); seg(ctx, L, Y(0.5), L + pw, Y(0.5)); ctx.setLineDash([]);
+    // curve
+    ctx.strokeStyle = COL.accent; ctx.lineWidth = 3; ctx.beginPath();
+    for (let i = 0; i <= 240; i++) { const x = -8 + 16 * i / 240, y = Y(sig(w * x + b)); i ? ctx.lineTo(X(x), y) : ctx.moveTo(X(x), y); }
+    ctx.stroke();
+    if (xb !== null && xb > -8 && xb < 8) {
+      ctx.strokeStyle = COL.ink; ctx.lineWidth = 1.6; ctx.setLineDash([6, 4]); seg(ctx, X(xb), Tp, X(xb), Tp + ph); ctx.setLineDash([]);
+      pill(ctx, 'boundary x = −b/w = ' + fx(xb, 2), clamp(X(xb), L + 84, L + pw - 84), Tp + ph - 12, { size: 12, bold: true });
+    }
+    const z = w * x0 + b, p0 = sig(z);
+    ctx.strokeStyle = COL.ink; ctx.lineWidth = 1.2; seg(ctx, X(x0), Y(p0), X(x0), Tp + ph);
+    ctx.fillStyle = COL.ink; ctx.beginPath(); ctx.arc(X(x0), Y(p0), 6, 0, 7); ctx.fill();
+    pill(ctx, 'ŷ = ' + fx(p0, 3), clamp(X(x0), L + 40, L + pw - 40), clamp(Y(p0) - 18, Tp + 30, Tp + ph - 30), { size: 12.5, bold: true });
+    out.innerHTML = `z = w·x + b = (${fx(w, 1)})(${fx(x0, 1)}) + (${fx(b, 1)}) = <b>${fx(z, 2)}</b> &nbsp;·&nbsp; ŷ = σ(z) = <b>${fx(p0, 3)}</b> &nbsp;·&nbsp; prediction: <b>class ${p0 >= 0.5 ? 1 : 0}</b>` + (xb !== null ? ` &nbsp;·&nbsp; boundary at x = ${fx(xb, 2)}` : ' &nbsp;·&nbsp; w = 0, so the output ignores x');
+  }
+  [wS, bS, xS].forEach(el => el.addEventListener('input', draw));
+  redraws.push(draw); draw();
+})();
+
+/* ================= shared 2-2-1 network ================= */
+const NET = { w11: 0.5, w12: -0.6, b1: 0.1, w21: 0.3, w22: 0.8, b2: -0.2, v1: 0.7, v2: -0.4, bo: 0.2 };
+const EDGES = { w11: ['x1', 'h1'], w12: ['x2', 'h1'], w21: ['x1', 'h2'], w22: ['x2', 'h2'], v1: ['h1', 'o'], v2: ['h2', 'o'] };
+const ELAB = { w11: 'w₁₁', w12: 'w₁₂', w21: 'w₂₁', w22: 'w₂₂', v1: 'v₁', v2: 'v₂' };
+const NLAB = { x1: 'x₁', x2: 'x₂', h1: 'h₁', h2: 'h₂', o: 'ŷ' };
+function forward(p, x1, x2, g = sig) {
+  const z1 = p.w11 * x1 + p.w12 * x2 + p.b1, z2 = p.w21 * x1 + p.w22 * x2 + p.b2, h1 = g(z1), h2 = g(z2), zo = p.v1 * h1 + p.v2 * h2 + p.bo;
+  return { z1, z2, h1, h2, zo, yh: sig(zo) };
+}
+function drawNet(ctx, W, H, o) {
+  const r = clamp(H * 0.085, 20, 30);
+  const n = { x1: [W * 0.12, H * 0.29], x2: [W * 0.12, H * 0.71], h1: [W * 0.5, H * 0.29], h2: [W * 0.5, H * 0.71], o: [W * 0.86, H * 0.5] };
+  const ec = o.edgeCol || {};
+  for (const k in EDGES) {
+    const A = n[EDGES[k][0]], B = n[EDGES[k][1]], c = ec[k];
+    ctx.strokeStyle = c || '#b4bdcd'; ctx.lineWidth = c ? 3 : 1.6; seg(ctx, A[0], A[1], B[0], B[1]);
+    if (c) {
+      const ang = Math.atan2(B[1] - A[1], B[0] - A[0]);
+      if (o.back) head(ctx, A[0] + (r + 3) * Math.cos(ang), A[1] + (r + 3) * Math.sin(ang), ang + Math.PI, 11);
+      else head(ctx, B[0] - (r + 3) * Math.cos(ang), B[1] - (r + 3) * Math.sin(ang), ang, 11);
+    }
+  }
+  if (o.pulse) for (const k of o.pulse.edges) {
+    const A = n[EDGES[k][0]], B = n[EDGES[k][1]], t = o.pulse.t;
+    ctx.fillStyle = COL.accent; ctx.beginPath(); ctx.arc(A[0] + (B[0] - A[0]) * t, A[1] + (B[1] - A[1]) * t, 7, 0, 7); ctx.fill();
+  }
+  const lc = o.labCol || {};
+  for (const k in EDGES) {
+    const A = n[EDGES[k][0]], B = n[EDGES[k][1]];
+    let t = 0.5, dy = 0;
+    if (k === 'w11') dy = -12; else if (k === 'w22') dy = 12; else if (k === 'w21' || k === 'w12') t = 0.3; else t = 0.4;
+    pill(ctx, `${ELAB[k]} = ${fx(o.vals[k], lc[k] ? 3 : 2)}`, A[0] + (B[0] - A[0]) * t, A[1] + (B[1] - A[1]) * t + dy, { size: 12, c: lc[k] || COL.muted, bold: !!lc[k] });
+  }
+  const fill = o.fill || {}, tags = o.tags || {};
+  for (const k in n) {
+    const [x, y] = n[k];
+    ctx.fillStyle = fill[k] || COL.paper; ctx.strokeStyle = COL.ink; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); ctx.stroke();
+    T(ctx, NLAB[k], x, y + 1, { align: 'center', base: 'middle', bold: true, size: 15 });
+    const tg = tags[k] || [], above = (k === 'x1' || k === 'h1');
+    tg.forEach((g, i) => {
+      const ty = above ? y - r - 8 - (tg.length - 1 - i) * 15 : y + r + 16 + i * 15;
+      T(ctx, g.t, x, ty, { align: 'center', size: 12.5, c: g.c || COL.ink, bold: !!g.b });
+    });
+  }
+}
+const stepHTML = (phase, col, title, eq, why) => `<span class="phase" style="background:${col}">${phase}</span><span class="ttl">${title}</span><p class="eq">${eq.join('<br>')}</p><p class="why">${why}</p>`;
+
+/* ================= 3. Forward pass ================= */
+(function () {
+  const cv = $('#fpCanvas'), cap = $('#fpCap'), s1 = $('#fpX1'), s2 = $('#fpX2'), act = $('#fpAct');
+  const G = { sigmoid: sig, tanh: Math.tanh, relu: z => Math.max(0, z) }, GN = { sigmoid: 'σ', tanh: 'tanh', relu: 'ReLU' };
+  let stage = 4, anim = 1, raf = 0, timer = 0;
+  function draw() {
+    const { ctx, W, H } = fit(cv), x1 = +s1.value, x2 = +s2.value, gn = GN[act.value], f = forward(NET, x1, x2, G[act.value]);
+    $('#fpX1v').textContent = fx(x1, 1); $('#fpX2v').textContent = fx(x2, 1);
+    const done = s => stage > s || (stage === s && anim >= 1);
+    const tags = { x1: [{ t: 'x₁ = ' + fx(x1, 1) }], x2: [{ t: 'x₂ = ' + fx(x2, 1) }] };
+    if (done(1)) { tags.h1 = [{ t: 'z₁ = ' + fx(f.z1) }]; tags.h2 = [{ t: 'z₂ = ' + fx(f.z2) }]; }
+    if (done(2)) { tags.h1.push({ t: 'h₁ = ' + fx(f.h1), c: COL.accent, b: 1 }); tags.h2.push({ t: 'h₂ = ' + fx(f.h2), c: COL.accent, b: 1 }); }
+    if (done(3)) tags.o = [{ t: 'zₒ = ' + fx(f.zo) }];
+    if (done(4)) tags.o.push({ t: 'ŷ = ' + fx(f.yh), c: COL.accent, b: 1 });
+    const edgeCol = {}, fill = {};
+    if (stage === 1) ['w11', 'w12', 'w21', 'w22'].forEach(k => edgeCol[k] = COL.accent);
+    if (stage === 3) ['v1', 'v2'].forEach(k => edgeCol[k] = COL.accent);
+    if (stage === 0) fill.x1 = fill.x2 = COL.aSoft;
+    if (stage === 1 || stage === 2) fill.h1 = fill.h2 = COL.aSoft;
+    if (stage >= 3) fill.o = COL.aSoft;
+    const pulse = (stage === 1 || stage === 3) && anim < 1 ? { edges: Object.keys(edgeCol), t: anim } : null;
+    drawNet(ctx, W, H, { vals: NET, edgeCol, tags, fill, pulse });
+    const P = v => '(' + fx(v, 1) + ')', Q = v => '(' + sh(v) + ')';
+    const caps = [
+      ['Inputs enter the network', [`x₁ = ${fx(x1, 1)} &nbsp;&nbsp; x₂ = ${fx(x2, 1)}`], 'The input layer does no computation. It only passes the values on.'],
+      ['Hidden layer: weighted sums', [`z₁ = w₁₁x₁ + w₁₂x₂ + b₁ = ${Q(NET.w11)}${P(x1)} + ${Q(NET.w12)}${P(x2)} + ${Q(NET.b1)} = <b>${fx(f.z1)}</b>`, `z₂ = w₂₁x₁ + w₂₂x₂ + b₂ = ${Q(NET.w21)}${P(x1)} + ${Q(NET.w22)}${P(x2)} + ${Q(NET.b2)} = <b>${fx(f.z2)}</b>`], 'Each hidden neuron multiplies every input by its weight, adds them, and adds its bias.'],
+      ['Hidden layer: activation', [`h₁ = ${gn}(z₁) = ${gn}(${fx(f.z1)}) = <b>${fx(f.h1)}</b>`, `h₂ = ${gn}(z₂) = ${gn}(${fx(f.z2)}) = <b>${fx(f.h2)}</b>`], 'The activation bends the straight-line sum. This non-linearity is what lets the network draw curved boundaries.'],
+      ['Output neuron: weighted sum', [`zₒ = v₁h₁ + v₂h₂ + bₒ = ${Q(NET.v1)}(${fx(f.h1)}) + ${Q(NET.v2)}(${fx(f.h2)}) + ${Q(NET.bo)} = <b>${fx(f.zo)}</b>`], 'The output neuron treats the hidden outputs as its inputs.'],
+      ['Output: activation and decision', [`ŷ = σ(zₒ) = σ(${fx(f.zo)}) = <b>${fx(f.yh)}</b>`, `Decision: ŷ ${f.yh >= 0.5 ? '≥' : '&lt;'} 0.5, so predict <b>class ${f.yh >= 0.5 ? 1 : 0}</b>`], 'The forward pass is complete. Training would now compare ŷ with the target.']
+    ];
+    const c = caps[stage];
+    cap.innerHTML = stepHTML(`Step ${stage + 1} of 5`, COL.accent, c[0], c[1], c[2]);
+  }
+  function go(s) {
+    stage = s; cancelAnimationFrame(raf);
+    if (!reduced && (s === 1 || s === 3)) {
+      const t0 = performance.now(); anim = 0;
+      const tick = now => { anim = Math.min(1, (now - t0) / 750); draw(); if (anim < 1) raf = requestAnimationFrame(tick); };
+      raf = requestAnimationFrame(tick);
+    } else { anim = 1; draw(); }
+  }
+  $('#fpPlay').addEventListener('click', () => { clearInterval(timer); go(0); timer = setInterval(() => { if (stage >= 4) { clearInterval(timer); return; } go(stage + 1); }, 1400); });
+  $('#fpStep').addEventListener('click', () => { clearInterval(timer); go(stage >= 4 ? 0 : stage + 1); });
+  $('#fpReset').addEventListener('click', () => { clearInterval(timer); s1.value = 1; s2.value = 0.5; act.value = 'sigmoid'; go(4); });
+  [s1, s2, act].forEach(el => el.addEventListener('input', draw));
+  redraws.push(draw); draw();
+})();
+
+/* ================= 4. Loss functions ================= */
+(function () {
+  const c1 = $('#lossMse'), c2 = $('#lossCe'), yh = $('#lossYh');
+  const mse = (y, p) => (y - p) ** 2, ce = (y, p) => -(y * Math.log(p) + (1 - y) * Math.log(1 - p));
+  function plot(cv, fn, title, col, y, p) {
+    const { ctx, W, H } = fit(cv), L = 38, R = 14, Tp = 32, B = 36, pw = W - L - R, ph = H - Tp - B, YM = 5;
+    const X = v => L + v * pw, Y = v => Tp + (1 - Math.min(v, YM) / YM) * ph;
+    ctx.strokeStyle = '#e3e8f0'; ctx.lineWidth = 1;
+    for (let g = 0; g <= YM; g++) { seg(ctx, L, Y(g), L + pw, Y(g)); T(ctx, String(g), L - 7, Y(g) + 4, { size: 12, c: COL.muted, align: 'right' }); }
+    [0, 0.25, 0.5, 0.75, 1].forEach(g => { seg(ctx, X(g), Tp, X(g), Tp + ph); T(ctx, String(g), X(g), Tp + ph + 16, { size: 12, c: COL.muted, align: 'center' }); });
+    T(ctx, title, L, 20, { bold: true, size: 14, c: col });
+    T(ctx, 'prediction ŷ', L + pw, H - 5, { size: 12, c: COL.muted, align: 'right' });
+    ctx.save(); ctx.beginPath(); ctx.rect(L, Tp - 2, pw, ph + 4); ctx.clip();
+    ctx.strokeStyle = col; ctx.lineWidth = 3; ctx.beginPath();
+    for (let i = 0; i <= 200; i++) { const v = 0.004 + 0.992 * i / 200; i ? ctx.lineTo(X(v), Y(fn(y, v))) : ctx.moveTo(X(v), Y(fn(y, v))); }
+    ctx.stroke(); ctx.restore();
+    const val = fn(y, p);
+    ctx.strokeStyle = COL.ink; ctx.lineWidth = 1.2; ctx.setLineDash([4, 4]); seg(ctx, X(p), Y(val), X(p), Tp + ph); ctx.setLineDash([]);
+    ctx.fillStyle = COL.ink; ctx.beginPath(); ctx.arc(X(p), Y(val), 6, 0, 7); ctx.fill();
+    pill(ctx, 'loss = ' + fx(val, 3), clamp(X(p), L + 46, L + pw - 46), clamp(Y(val) - 18, Tp + 10, Tp + ph - 12), { size: 12.5, bold: true });
+    T(ctx, 'target y = ' + y, X(y) + (y ? -6 : 6), Tp + 16, { size: 12, c: COL.good, bold: true, align: y ? 'right' : 'left' });
+  }
+  function draw() {
+    const y = +$('input[name=lossY]:checked').value, p = +yh.value;
+    $('#lossYhv').textContent = fx(p, 2);
+    plot(c1, mse, 'Squared error', COL.accent, y, p); plot(c2, ce, 'Cross-entropy', COL.warm, y, p);
+    const m = mse(y, p), c = ce(y, p), g1 = 2 * (p - y) * p * (1 - p), g2 = p - y, err = Math.abs(p - y);
+    $('#lossV1').textContent = fx(m, 4); $('#lossV2').textContent = fx(c, 4);
+    $('#lossG1').textContent = fx(g1, 4); $('#lossG2').textContent = fx(g2, 4);
+    const ratio = `Cross-entropy loss is <b>${fx(c / m, 1)}×</b> the squared error and its gradient is <b>${fx(Math.abs(g2 / g1), 1)}×</b> larger.`;
+    $('#lossOut').innerHTML = (err > 0.8 ? 'Confident and wrong. ' : err < 0.2 ? 'Nearly right: both losses and both gradients are small. ' : 'Unsure prediction. ') + ratio;
+  }
+  [yh, $('#lossY1'), $('#lossY0')].forEach(el => el.addEventListener('input', draw));
+  redraws.push(draw); draw();
+})();
+
+/* ================= 5. Backpropagation ================= */
+(function () {
+  const cv = $('#bpCanvas'), box = $('#bpStep'), cnt = $('#bpCount');
+  const x1 = 1, x2 = 0.5, y = 1, eta = 0.5, P = NET;
+  const f = forward(P, x1, x2), L = 0.5 * (y - f.yh) ** 2;
+  const dyh = f.yh - y, sp = f.yh * (1 - f.yh), dO = dyh * sp;
+  const s1 = f.h1 * (1 - f.h1), s2 = f.h2 * (1 - f.h2), d1 = dO * P.v1 * s1, d2 = dO * P.v2 * s2;
+  const g = { w11: d1 * x1, w12: d1 * x2, b1: d1, w21: d2 * x1, w22: d2 * x2, b2: d2, v1: dO * f.h1, v2: dO * f.h2, bo: dO };
+  const Q = {}; for (const k in P) Q[k] = P[k] - eta * g[k];
+  const f2 = forward(Q, x1, x2), L2 = 0.5 * (y - f2.yh) ** 2;
+  const n4 = v => fx(v, 4), q = v => '(' + sh(v) + ')', p4 = v => '(' + fx(v, 4) + ')';
+  const FW = COL.accent, BW = COL.warm, UP = COL.good;
+  const upd = (name, k) => `${name}: ${sh(P[k])} → <b>${n4(Q[k])}</b>`;
+  const S = [
+    { ph: 'Forward', c: FW, t: 'Hidden neuron h₁', eq: [`z₁ = w₁₁x₁ + w₁₂x₂ + b₁ = ${q(P.w11)}${q(x1)} + ${q(P.w12)}${q(x2)} + ${q(P.b1)} = <b>${n4(f.z1)}</b>`, `h₁ = σ(z₁) = 1 / (1 + e<sup>−z₁</sup>) = <b>${n4(f.h1)}</b>`], why: 'Weighted sum, then sigmoid. Both z₁ and h₁ are stored; the backward pass needs them.', e: ['w11', 'w12'], fill: ['h1'] },
+    { ph: 'Forward', c: FW, t: 'Hidden neuron h₂', eq: [`z₂ = w₂₁x₁ + w₂₂x₂ + b₂ = ${q(P.w21)}${q(x1)} + ${q(P.w22)}${q(x2)} + ${q(P.b2)} = <b>${n4(f.z2)}</b>`, `h₂ = σ(z₂) = <b>${n4(f.h2)}</b>`], why: 'The same computation for the second hidden neuron.', e: ['w21', 'w22'], fill: ['h2'] },
+    { ph: 'Forward', c: FW, t: 'Output neuron', eq: [`zₒ = v₁h₁ + v₂h₂ + bₒ = ${q(P.v1)}${p4(f.h1)} + ${q(P.v2)}${p4(f.h2)} + ${q(P.bo)} = <b>${n4(f.zo)}</b>`, `ŷ = σ(zₒ) = <b>${n4(f.yh)}</b>`], why: 'The prediction is 0.5874 but the target is 1. The network is wrong by about 0.41.', e: ['v1', 'v2'], fill: ['o'] },
+    { ph: 'Loss', c: COL.ink, t: 'Measure the error', eq: [`L = ½(y − ŷ)² = ½(${sh(y)} − ${n4(f.yh)})² = <b>${n4(L)}</b>`], why: 'One number that says how wrong the network is. Everything after this step asks how to make it smaller.', e: [], fill: ['o'] },
+    { ph: 'Backward', c: BW, t: 'Output error δₒ', eq: [`∂L/∂ŷ = ŷ − y = ${n4(f.yh)} − ${sh(y)} = ${n4(dyh)}`, `∂ŷ/∂zₒ = ŷ(1 − ŷ) = ${p4(f.yh)}${p4(1 - f.yh)} = ${n4(sp)}`, `δₒ = ∂L/∂zₒ = ${p4(dyh)}${p4(sp)} = <b>${n4(dO)}</b>`], why: 'Chain rule: multiply the two local derivatives. δₒ is the error signal of the output neuron.', e: [], fill: ['o'], back: 1 },
+    { ph: 'Backward', c: BW, t: 'Gradients of the output weights', eq: [`∂L/∂v₁ = δₒ · h₁ = ${p4(dO)}${p4(f.h1)} = <b>${n4(g.v1)}</b>`, `∂L/∂v₂ = δₒ · h₂ = ${p4(dO)}${p4(f.h2)} = <b>${n4(g.v2)}</b>`, `∂L/∂bₒ = δₒ = <b>${n4(g.bo)}</b>`], why: 'Because zₒ = v₁h₁ + v₂h₂ + bₒ, the derivative of zₒ with respect to v₁ is simply h₁.', e: ['v1', 'v2'], fill: [], back: 1 },
+    { ph: 'Backward', c: BW, t: 'Hidden errors δ₁ and δ₂', eq: [`δ₁ = δₒ · v₁ · h₁(1 − h₁) = ${p4(dO)}${q(P.v1)}${p4(s1)} = <b>${n4(d1)}</b>`, `δ₂ = δₒ · v₂ · h₂(1 − h₂) = ${p4(dO)}${q(P.v2)}${p4(s2)} = <b>${n4(d2)}</b>`], why: 'δₒ is reused, not recomputed. Each hidden neuron gets blame in proportion to its outgoing weight, times its own sigmoid slope.', e: ['v1', 'v2'], fill: ['h1', 'h2'], back: 1 },
+    { ph: 'Backward', c: BW, t: 'Gradients of the hidden weights', eq: [`∂L/∂w₁₁ = δ₁x₁ = <b>${n4(g.w11)}</b> &nbsp;&nbsp; ∂L/∂w₁₂ = δ₁x₂ = <b>${n4(g.w12)}</b> &nbsp;&nbsp; ∂L/∂b₁ = δ₁ = <b>${n4(g.b1)}</b>`, `∂L/∂w₂₁ = δ₂x₁ = <b>${n4(g.w21)}</b> &nbsp;&nbsp; ∂L/∂w₂₂ = δ₂x₂ = <b>${n4(g.w22)}</b> &nbsp;&nbsp; ∂L/∂b₂ = δ₂ = <b>${n4(g.b2)}</b>`], why: 'Each weight gradient is the error of the neuron it feeds, times the input it carries.', e: ['w11', 'w12', 'w21', 'w22'], fill: [], back: 1 },
+    { ph: 'Update', c: UP, t: `Gradient-descent step with η = ${eta}`, eq: [`new weight = old weight − η × gradient`, `e.g. v₁ = ${sh(P.v1)} − ${eta} × ${p4(g.v1)} = ${n4(Q.v1)}`, `${upd('v₁', 'v1')} &nbsp;&nbsp; ${upd('v₂', 'v2')} &nbsp;&nbsp; ${upd('bₒ', 'bo')}`, `${upd('w₁₁', 'w11')} &nbsp;&nbsp; ${upd('w₁₂', 'w12')} &nbsp;&nbsp; ${upd('b₁', 'b1')}`, `${upd('w₂₁', 'w21')} &nbsp;&nbsp; ${upd('w₂₂', 'w22')} &nbsp;&nbsp; ${upd('b₂', 'b2')}`], why: 'A negative gradient means increasing the weight lowers the loss, so the weight goes up.', e: Object.keys(EDGES), fill: [], upd: 1 },
+    { ph: 'Check', c: UP, t: 'Forward pass again with the new weights', eq: [`ŷ = <b>${n4(f2.yh)}</b> &nbsp; (before: ${n4(f.yh)})`, `L = <b>${n4(L2)}</b> &nbsp; (before: ${n4(L)})`], why: 'The prediction moved towards the target 1 and the loss fell. Repeating these steps many times is training.', e: [], fill: ['o'], upd: 1 }
+  ];
+  let k = 0;
+  function draw() {
+    const { ctx, W, H } = fit(cv), s = S[k], n = k + 1, ff = n >= 10 ? f2 : f, fc = n >= 10 ? UP : COL.ink;
+    const tags = { x1: [{ t: 'x₁ = ' + sh(x1) }], x2: [{ t: 'x₂ = ' + sh(x2) }], h1: [], h2: [], o: [] };
+    if (n >= 1) tags.h1.push({ t: 'z₁ = ' + n4(ff.z1), c: fc }, { t: 'h₁ = ' + n4(ff.h1), c: fc, b: 1 });
+    if (n >= 2) tags.h2.push({ t: 'z₂ = ' + n4(ff.z2), c: fc }, { t: 'h₂ = ' + n4(ff.h2), c: fc, b: 1 });
+    if (n >= 3) tags.o.push({ t: 'ŷ = ' + n4(ff.yh), c: fc, b: 1 });
+    if (n >= 4) tags.o.push({ t: 'L = ' + n4(n >= 10 ? L2 : L), c: fc });
+    if (n >= 5 && n < 10) tags.o.push({ t: 'δₒ = ' + n4(dO), c: BW, b: 1 });
+    if (n >= 7 && n < 10) { tags.h1.unshift({ t: 'δ₁ = ' + n4(d1), c: BW, b: 1 }); tags.h2.push({ t: 'δ₂ = ' + n4(d2), c: BW, b: 1 }); }
+    const edgeCol = {}, fill = {}, labCol = {};
+    s.e.forEach(e => edgeCol[e] = s.c);
+    s.fill.forEach(v => fill[v] = s.back ? COL.wSoft : s.upd ? COL.gSoft : COL.aSoft);
+    if (n >= 9) Object.keys(EDGES).forEach(e => labCol[e] = UP);
+    drawNet(ctx, W, H, { vals: n >= 9 ? Q : P, edgeCol, tags, fill, labCol, back: !!s.back });
+    T(ctx, 'target y = ' + sh(y), W - 10, 20, { align: 'right', size: 12.5, c: COL.good, bold: true });
+    box.innerHTML = stepHTML(s.ph, s.c, s.t, s.eq, s.why);
+    cnt.textContent = `Step ${n} of ${S.length}`;
+    $('#bpPrev').disabled = k === 0; $('#bpNext').disabled = k === S.length - 1;
+  }
+  $('#bpNext').addEventListener('click', () => { if (k < S.length - 1) { k++; draw(); } });
+  $('#bpPrev').addEventListener('click', () => { if (k > 0) { k--; draw(); } });
+  $('#bpReset').addEventListener('click', () => { k = 0; draw(); });
+  redraws.push(draw); draw();
+
+  // worked-example table, built from the same numbers as the demo
+  const rows = [
+    ['Forward', 'z₁', 'w₁₁x₁ + w₁₂x₂ + b₁', f.z1], ['', 'h₁', 'σ(z₁)', f.h1], ['', 'z₂', 'w₂₁x₁ + w₂₂x₂ + b₂', f.z2], ['', 'h₂', 'σ(z₂)', f.h2], ['', 'zₒ', 'v₁h₁ + v₂h₂ + bₒ', f.zo], ['', 'ŷ', 'σ(zₒ)', f.yh],
+    ['Loss', 'L', '½(y − ŷ)²', L],
+    ['Backward', 'δₒ', '(ŷ − y) · ŷ(1 − ŷ)', dO], ['', '∂L/∂v₁', 'δₒ · h₁', g.v1], ['', '∂L/∂v₂', 'δₒ · h₂', g.v2], ['', '∂L/∂bₒ', 'δₒ', g.bo],
+    ['', 'δ₁', 'δₒ · v₁ · h₁(1 − h₁)', d1], ['', 'δ₂', 'δₒ · v₂ · h₂(1 − h₂)', d2],
+    ['', '∂L/∂w₁₁', 'δ₁ · x₁', g.w11], ['', '∂L/∂w₁₂', 'δ₁ · x₂', g.w12], ['', '∂L/∂b₁', 'δ₁', g.b1], ['', '∂L/∂w₂₁', 'δ₂ · x₁', g.w21], ['', '∂L/∂w₂₂', 'δ₂ · x₂', g.w22], ['', '∂L/∂b₂', 'δ₂', g.b2]
+  ];
+  const names = { v1: 'v₁', v2: 'v₂', bo: 'bₒ', w11: 'w₁₁', w12: 'w₁₂', b1: 'b₁', w21: 'w₂₁', w22: 'w₂₂', b2: 'b₂' };
+  Object.keys(names).forEach((key, i) => rows.push([i ? '' : 'Update', 'new ' + names[key], `${sh(P[key])} − ${eta} × (${n4(g[key])})`, Q[key]]));
+  rows.push(['Check', 'new ŷ', 'forward pass with new weights', f2.yh], ['', 'new L', '½(y − ŷ)²', L2]);
+  $('#bpTable tbody').innerHTML = rows.map(r => `<tr><th>${r[0]}</th><td>${r[1]}</td><td>${r[2]}</td><td class="num">${n4(r[3])}</td></tr>`).join('');
+  $('#bpAns').textContent = `Answer: after one update the prediction rises from ${n4(f.yh)} to ${n4(f2.yh)} and the loss falls from ${n4(L)} to ${n4(L2)}.`;
+})();
+
+/* ================= 6. Gradient descent variants ================= */
+(function () {
+  const cv = $('#gdCanvas'), lr = $('#gdLr'), mSel = $('#gdM');
+  const N = 40, TT = 150, rnd = mulberry32(11);
+  const gauss = () => { let u = 0; while (u === 0) u = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd()); };
+  const D = []; for (let i = 0; i < N; i++) { const x = -1.5 + 4 * rnd(); D.push([x, 2 * x + 1 + 1.1 * gauss()]); }
+  let sx = 0, sy = 0, sxx = 0, sxy = 0; D.forEach(([x, y]) => { sx += x; sy += y; sxx += x * x; sxy += x * y; });
+  const A00 = sxx / N, A01 = sx / N, A11 = 1;
+  const wS = (N * sxy - sx * sy) / (N * sxx - sx * sx), bS = (sy - wS * sx) / N;
+  const loss = (w, b) => { let s = 0; for (const [x, y] of D) { const e = w * x + b - y; s += e * e; } return s / N; };
+  const LS = loss(wS, bS), start = [-1.6, -2.4], V = { w0: -2.4, w1: 4.4, b0: -3.2, b1: 3.6 };
+  const tr = A00 + A11, det = A00 * A11 - A01 * A01, rt = Math.sqrt(Math.max(0, tr * tr / 4 - det)), l1 = tr / 2 + rt, l2 = tr / 2 - rt;
+  let u1 = Math.abs(A01) < 1e-9 ? [1, 0] : [A01, l1 - A00]; { const h = Math.hypot(u1[0], u1[1]); u1 = [u1[0] / h, u1[1] / h]; }
+  const u2 = [-u1[1], u1[0]], cmax = loss(start[0], start[1]) - LS;
+  const all = [...Array(N).keys()];
+  const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  let paths, shown = TT, raf = 0;
+  function simulate() {
+    const eta = +lr.value, m = +mSel.value;
+    const mk = bs => {
+      let th = start.slice(), order = [], ptr = 0; const p = [th.slice()];
+      for (let t = 0; t < TT; t++) {
+        let idx;
+        if (bs >= N) idx = all; else { idx = []; for (let c = 0; c < bs; c++) { if (ptr >= order.length) { order = shuffle(all.slice()); ptr = 0; } idx.push(order[ptr++]); } }
+        let gw = 0, gb = 0; for (const i of idx) { const e = th[0] * D[i][0] + th[1] - D[i][1]; gw += 2 * e * D[i][0]; gb += 2 * e; }
+        th = [th[0] - eta * gw / idx.length, th[1] - eta * gb / idx.length];
+        if (!isFinite(th[0]) || Math.abs(th[0]) > 60 || Math.abs(th[1]) > 60) { p.diverged = true; break; }
+        p.push(th.slice());
+      }
+      p.bs = bs; return p;
+    };
+    paths = [mk(N), mk(m), mk(1)];
+  }
+  function draw() {
+    const { ctx, W, H } = fit(cv), L = 44, R = 12, Tp = 12, B = 36, pw = W - L - R, ph = H - Tp - B;
+    const X = w => L + (w - V.w0) / (V.w1 - V.w0) * pw, Y = b => Tp + (1 - (b - V.b0) / (V.b1 - V.b0)) * ph;
+    $('#gdLrv').textContent = fx(+lr.value, 2); $('#gdB1').textContent = mSel.value;
+    ctx.strokeStyle = '#e3e8f0'; ctx.lineWidth = 1;
+    for (let g = Math.ceil(V.w0); g <= V.w1; g++) { seg(ctx, X(g), Tp, X(g), Tp + ph); T(ctx, String(g).replace('-', '−'), X(g), Tp + ph + 16, { size: 12, c: COL.muted, align: 'center' }); }
+    for (let g = Math.ceil(V.b0); g <= V.b1; g++) { seg(ctx, L, Y(g), L + pw, Y(g)); T(ctx, String(g).replace('-', '−'), L - 7, Y(g) + 4, { size: 12, c: COL.muted, align: 'right' }); }
+    T(ctx, 'weight w', L + pw, H - 5, { size: 12, c: COL.muted, align: 'right' });
+    T(ctx, 'bias b', L + 6, Tp + 14, { size: 12, c: COL.muted });
+    ctx.save(); ctx.beginPath(); ctx.rect(L, Tp, pw, ph); ctx.clip();
+    ctx.strokeStyle = '#9aa5ba'; ctx.lineWidth = 1.1;
+    for (let c = 1; c <= 11; c++) {
+      const lev = cmax * (c / 7) ** 2, r1 = Math.sqrt(lev / l1), r2 = Math.sqrt(lev / l2);
+      ctx.beginPath();
+      for (let i = 0; i <= 72; i++) { const a = i / 72 * 2 * Math.PI, w = wS + r1 * Math.cos(a) * u1[0] + r2 * Math.sin(a) * u2[0], b = bS + r1 * Math.cos(a) * u1[1] + r2 * Math.sin(a) * u2[1]; i ? ctx.lineTo(X(w), Y(b)) : ctx.moveTo(X(w), Y(b)); }
+      ctx.stroke();
+    }
+    const cols = [COL.accent, COL.good, COL.warm], k = Math.floor(shown);
+    [2, 1, 0].forEach(pi => {
+      const p = paths[pi], u = Math.min(k, p.length - 1);
+      ctx.strokeStyle = cols[pi]; ctx.lineWidth = pi === 2 ? 1.5 : 2.8; ctx.lineJoin = 'round'; ctx.beginPath();
+      for (let i = 0; i <= u; i++) i ? ctx.lineTo(X(p[i][0]), Y(p[i][1])) : ctx.moveTo(X(p[i][0]), Y(p[i][1]));
+      ctx.stroke();
+      ctx.fillStyle = cols[pi]; ctx.beginPath(); ctx.arc(X(p[u][0]), Y(p[u][1]), 5.5, 0, 7); ctx.fill();
+    });
+    ctx.fillStyle = COL.ink; ctx.beginPath(); ctx.arc(X(start[0]), Y(start[1]), 5, 0, 7); ctx.fill();
+    T(ctx, 'start', X(start[0]) + 9, Y(start[1]) + 16, { size: 12.5, bold: true });
+    // minimum marker
+    ctx.strokeStyle = COL.ink; ctx.lineWidth = 2.2; const mx = X(wS), my = Y(bS);
+    seg(ctx, mx - 6, my - 6, mx + 6, my + 6); seg(ctx, mx - 6, my + 6, mx + 6, my - 6);
+    pill(ctx, 'minimum', mx + 44, my - 30, { size: 12.5, bold: true });
+    ctx.strokeStyle = COL.ink; ctx.lineWidth = 1; seg(ctx, mx + 6, my - 6, mx + 20, my - 22);
+    ctx.restore();
+    paths.forEach((p, pi) => {
+      const u = Math.min(k, p.length - 1);
+      $('#gdU' + pi).textContent = u; $('#gdE' + pi).textContent = u * p.bs;
+      $('#gdL' + pi).textContent = p.diverged && u === p.length - 1 ? 'diverged' : fx(loss(p[u][0], p[u][1]), 3);
+    });
+  }
+  function play() {
+    cancelAnimationFrame(raf);
+    if (reduced) { shown = TT; draw(); return; }
+    shown = 0; let last = performance.now();
+    const tick = now => { shown = Math.min(TT, shown + (now - last) / 1000 * 20); last = now; draw(); if (shown < TT) raf = requestAnimationFrame(tick); };
+    raf = requestAnimationFrame(tick);
+  }
+  const fresh = () => { cancelAnimationFrame(raf); simulate(); shown = TT; draw(); };
+  lr.addEventListener('input', fresh); mSel.addEventListener('input', fresh);
+  $('#gdNew').addEventListener('click', fresh);
+  $('#gdPlay').addEventListener('click', play);
+  simulate(); redraws.push(draw); draw();
+})();
+
+/* ================= 7. Universal approximation ================= */
+(function () {
+  const cv = $('#uaCanvas'), nS = $('#uaN'), typ = $('#uaType'), fSel = $('#uaF'), out = $('#uaOut');
+  const TG = {
+    sine: x => 0.5 + 0.38 * Math.sin(2 * Math.PI * x),
+    bump: x => 0.1 + 0.8 * Math.exp(-(((x - 0.5) / 0.13) ** 2)),
+    wig: x => 0.5 + 0.25 * Math.sin(2 * Math.PI * x) + 0.15 * Math.sin(6 * Math.PI * x + 0.5)
+  };
+  function build(fn, N, type) {
+    const h = 1 / N, parts = [], centres = [], base = fn(0);
+    if (type === 'sig') {
+      const s = 7 * N;
+      for (let k = 1; k <= N; k++) { const d = fn(k * h) - fn((k - 1) * h), c = (k - 0.5) * h; centres.push(c); parts.push(x => d * sig(s * (x - c))); }
+    } else {
+      let prev = 0;
+      for (let k = 0; k < N; k++) { const m = (fn((k + 1) * h) - fn(k * h)) / h, d = m - prev, c = k * h; prev = m; centres.push(c); parts.push(x => d * Math.max(0, x - c)); }
+    }
+    return { base, parts, centres, F: x => { let s = base; for (const p of parts) s += p(x); return s; } };
+  }
+  function draw() {
+    const { ctx, W, H } = fit(cv), N = +nS.value, fn = TG[fSel.value], net = build(fn, N, typ.value);
+    $('#uaNv').textContent = N;
+    const L = 40, R = 12, Tp = 12, B = 30, pw = W - L - R, total = H - Tp - B, gap = 26, mh = Math.round((total - gap) * 0.7), sh2 = total - gap - mh, sy0 = Tp + mh + gap;
+    const X = x => L + x * pw, Y = v => Tp + (1 - v / 1.05) * mh;
+    ctx.strokeStyle = '#e3e8f0'; ctx.lineWidth = 1;
+    [0, 0.25, 0.5, 0.75, 1].forEach(g => { seg(ctx, X(g), Tp, X(g), Tp + mh); seg(ctx, X(g), sy0, X(g), sy0 + sh2); T(ctx, String(g), X(g), H - 12, { size: 12, c: COL.muted, align: 'center' }); seg(ctx, L, Y(g), L + pw, Y(g)); T(ctx, String(g), L - 7, Y(g) + 4, { size: 12, c: COL.muted, align: 'right' }); });
+    T(ctx, 'input x', L + pw, H - 1, { size: 12, c: COL.muted, align: 'right', base: 'bottom' });
+    const xs = []; for (let i = 0; i <= 400; i++) xs.push(i / 400);
+    const curve = (f, yMap, col, lw) => { ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.beginPath(); xs.forEach((x, i) => i ? ctx.lineTo(X(x), yMap(f(x))) : ctx.moveTo(X(x), yMap(f(x)))); ctx.stroke(); };
+    ctx.save(); ctx.beginPath(); ctx.rect(L, Tp, pw, mh); ctx.clip();
+    curve(fn, Y, COL.ink, 3); curve(net.F, Y, COL.accent, 2.6);
+    ctx.restore();
+    ctx.fillStyle = COL.accent; net.centres.forEach(c => ctx.fillRect(X(c) - 1, Tp + mh - 7, 2, 7));
+    // strip: weighted output of each neuron
+    let mx = 1e-9; net.parts.forEach(p => xs.forEach(x => { mx = Math.max(mx, Math.abs(p(x))); }));
+    const YS = v => sy0 + sh2 / 2 - v / mx * (sh2 / 2 - 3);
+    ctx.strokeStyle = COL.muted; ctx.lineWidth = 1; seg(ctx, L, YS(0), L + pw, YS(0));
+    ctx.save(); ctx.beginPath(); ctx.rect(L, sy0, pw, sh2); ctx.clip(); ctx.globalAlpha = N > 16 ? 0.55 : 0.85;
+    net.parts.forEach(p => curve(p, YS, COL.warm, 1.4));
+    ctx.restore(); ctx.globalAlpha = 1;
+    T(ctx, 'each neuron\'s weighted output (they add up to the blue curve)', L + 4, sy0 - 7, { size: 12, c: COL.warm, bold: true });
+    T(ctx, '0', L - 7, YS(0) + 4, { size: 12, c: COL.muted, align: 'right' });
+    let emax = 0, esum = 0; xs.forEach(x => { const e = Math.abs(net.F(x) - fn(x)); emax = Math.max(emax, e); esum += e; });
+    out.innerHTML = `Hidden neurons N = <b>${N}</b> &nbsp;·&nbsp; maximum error = <b>${fx(emax, 3)}</b> &nbsp;·&nbsp; average error = <b>${fx(esum / xs.length, 3)}</b>`;
+  }
+  [nS, typ, fSel].forEach(el => el.addEventListener('input', draw));
+  $('#uaAdd').addEventListener('click', () => { nS.value = Math.min(40, +nS.value + 1); draw(); });
+  redraws.push(draw); draw();
+})();
+
+/* ================= Quiz ================= */
+(function () {
+  const QUIZ = [
+    { q: 'In an SVM, the support vectors are', o: ['all the training points', 'the training points closest to the hyperplane', 'only the misclassified points', 'the points farthest from the hyperplane'], a: 1, e: 'Support vectors lie on the margin boundaries, closest to the hyperplane. They alone decide w and b.' },
+    { q: 'The margin of a hard-margin SVM equals', o: ['‖w‖', '1 / ‖w‖²', '2 / ‖w‖', '2‖w‖'], a: 2, e: 'The margin lines are w·x + b = ±1, and the distance between them is 2/‖w‖.' },
+    { q: 'Making the penalty C very large in a soft-margin SVM gives', o: ['a narrow margin with few violations', 'a wide margin with many violations', 'no change at all', 'a non-linear boundary'], a: 0, e: 'Large C punishes every violation heavily, so the SVM behaves almost like a hard-margin SVM.' },
+    { q: 'The value of the sigmoid function at z = 0 is', o: ['0', '0.25', '1', '0.5'], a: 3, e: 'σ(0) = 1/(1 + e⁰) = 1/2. This is why the decision boundary is at z = 0.' },
+    { q: 'Logistic regression is trained by minimising', o: ['hinge loss', 'binary cross-entropy', 'mean absolute error', 'the margin'], a: 1, e: 'Maximum likelihood for a sigmoid output gives the binary cross-entropy (log loss).' },
+    { q: 'If every activation function in a multi-layer network is linear, the network is equivalent to', o: ['a deep network', 'a single linear model', 'a universal approximator', 'an SVM with a kernel'], a: 1, e: 'A composition of linear maps is linear: W₂(W₁x + b₁) + b₂ = W′x + b′.' },
+    { q: 'A fully connected 4-5-3 network (with biases) has how many trainable parameters?', o: ['35', '38', '43', '60'], a: 2, e: '(4×5 + 5) + (5×3 + 3) = 25 + 18 = 43.' },
+    { q: 'Backpropagation computes gradients using', o: ['the chain rule of calculus', 'random search', 'the kernel trick', 'matrix inversion'], a: 0, e: 'It multiplies local derivatives along the path from each weight to the loss, moving backwards layer by layer.' },
+    { q: 'A training set has 1000 examples and the batch size is 100. How many weight updates happen in one epoch?', o: ['1', '100', '1000', '10'], a: 3, e: 'Updates per epoch = N / batch size = 1000 / 100 = 10.' },
+    { q: 'The universal approximation theorem guarantees that', o: ['SGD always finds the best weights', 'a deep network is always better than a shallow one', 'a one-hidden-layer network that approximates any continuous function exists', 'the network will generalise to new data'], a: 2, e: 'It is an existence result only. It says nothing about training, the number of neurons, or generalisation.' }
+  ];
+  const body = $('#quizBody'), score = $('#quizScore');
+  let right = 0, done = 0;
+  function render() {
+    right = 0; done = 0; body.innerHTML = '';
+    QUIZ.forEach((it, qi) => {
+      const d = document.createElement('div'); d.className = 'mcq';
+      d.innerHTML = `<p class="qt"><span>Q${qi + 1}</span>${it.q}</p><div class="opts">${it.o.map((o, i) => `<button type="button" data-i="${i}">${'ABCD'[i]}. ${o}</button>`).join('')}</div><p class="fb" hidden></p>`;
+      const btns = $$('button', d), fb = $('.fb', d);
+      btns.forEach(b => b.addEventListener('click', () => {
+        const i = +b.dataset.i, ok = i === it.a;
+        btns.forEach(x => { x.disabled = true; }); btns[it.a].classList.add('right'); if (!ok) b.classList.add('wrong');
+        fb.hidden = false; fb.className = 'fb ' + (ok ? 'ok' : 'no');
+        fb.innerHTML = `<strong>${ok ? 'Correct.' : 'Not quite. The answer is ' + 'ABCD'[it.a] + '.'}</strong> ${it.e}`;
+        done++; if (ok) right++; show();
+      }));
+      body.appendChild(d);
+    });
+    show();
+  }
+  function show() { score.textContent = `Score ${right} / ${QUIZ.length} · ${done} answered` + (done === QUIZ.length ? (right >= 8 ? ' · Well prepared' : right >= 5 ? ' · Revise the topics you missed' : ' · Go through the unit once more') : ''); }
+  $('#quizReset').addEventListener('click', render);
+  render();
+})();
+
+/* ================= Contents rail ================= */
+(function () {
+  const KEY = 'dl-unit1-revised', boxes = $$('#toc input[type=checkbox]'), prog = $('#prog');
+  let saved = [];
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (_) { saved = []; }
+  const show = () => { prog.textContent = `${boxes.filter(b => b.checked).length} of ${boxes.length} topics revised`; };
+  boxes.forEach(b => { b.checked = saved.includes(b.id); b.addEventListener('change', () => { try { localStorage.setItem(KEY, JSON.stringify(boxes.filter(x => x.checked).map(x => x.id))); } catch (_) {} show(); }); });
+  show();
+  $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const el = document.getElementById(a.getAttribute('href').slice(1)); if (!el) return;
+    e.preventDefault(); el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+  }));
+  const links = $$('#toc a'), map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { links.forEach(l => l.classList.remove('on')); const a = map.get(en.target.id); if (a) a.classList.add('on'); } }), { rootMargin: '-15% 0px -75% 0px' });
+    map.forEach((_, id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+  }
+})();
+
+let rt = 0;
+const redrawAll = () => redraws.forEach(fn => fn());
+window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(redrawAll, 120); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll);
+})();
+</script>
+</body>
+</html>
